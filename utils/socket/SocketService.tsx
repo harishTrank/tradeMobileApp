@@ -2,7 +2,7 @@ import io from "socket.io-client";
 
 export const nodeURL = "http://localhost:5000";
 // export const nodeURL = "http://13.127.239.118:5000";
-// const socket = io("http://192.168.0.127:5000");
+
 const socket = io(nodeURL);
 
 const connectSocket = () => {

@@ -5,13 +5,13 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
+  FlatList,
 } from "react-native";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
 import theme from "../../../../utils/theme";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { MaterialIcons, Feather } from "@expo/vector-icons";
 import FilterModal from "./Component/FilterModal";
-import { FlatList } from "react-native-gesture-handler";
 import { useTradeHistory } from "../../../../hooks/TradeCoin/query";
 import dayjs from "dayjs";
 import SearchComponent from "../../../ReUseComponents/SearchComponent";

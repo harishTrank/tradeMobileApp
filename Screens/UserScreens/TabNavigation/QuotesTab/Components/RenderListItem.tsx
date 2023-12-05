@@ -57,9 +57,11 @@ const RenderListItem = ({ item, modalizeRef, setTradeCoinSelected }: any) => {
           <Text style={styles.name}>
             {item?.Exchange === "NSE"
               ? `NSE ${item?.InstrumentIdentifier}`
-              : `${item?.Exchange} ${
-                  item?.InstrumentIdentifier?.split("_")?.[1]
-                }, ${dateManager(item?.InstrumentIdentifier)}`}
+              : `${
+                  item?.InstrumentIdentifier.includes("MINI") ? "MINI" : "MCX"
+                } ${item?.InstrumentIdentifier?.split("_")?.[1]}, ${dateManager(
+                  item?.InstrumentIdentifier
+                )}`}
           </Text>
         </View>
         <Text

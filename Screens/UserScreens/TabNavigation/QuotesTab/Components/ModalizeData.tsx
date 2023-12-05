@@ -194,6 +194,7 @@ const ModalizeData = ({
   }, [selectedCoinData?.SellPrice]);
   // --------------------------------
 
+  // socket fluctuations handlers -------
   useEffect(() => {
     subscribeToGetOneData((data: any) => {
       setSelectedCoinData(data);
@@ -204,6 +205,7 @@ const ModalizeData = ({
       setSelectedCoinData({});
     };
   }, []);
+  // --------------------------------
 
   return (
     <>
