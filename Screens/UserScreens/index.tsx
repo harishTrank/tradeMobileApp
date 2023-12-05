@@ -24,6 +24,7 @@ import AddScriptsScreen from "./AddScriptsScreen";
 import { useAtom } from "jotai";
 import { userLoginGlobalFlag } from "../../JotaiStore";
 import CoinDetailsScreen from "./CoinDetailsScreen";
+import AddSymbolListScreen from "./AddSymbolListScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -40,6 +41,11 @@ const UserScreens = () => {
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="TabNavigation" component={TabNavigation} />
       <Stack.Screen name="AddScriptsScreen" component={AddScriptsScreen} />
+      <Stack.Screen
+        name="AddSymbolListScreen"
+        component={AddSymbolListScreen}
+      />
+
       <Stack.Screen
         name="ForgotPasswordScreen"
         component={ForgotPasswordScreen}

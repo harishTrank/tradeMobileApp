@@ -104,9 +104,12 @@ const ModalizeData = ({
     const body = {
       identifer: selectedCoinData?.InstrumentIdentifier,
       trade_type: currentButtonState.toUpperCase(),
-      coin_name: `${selectedCoinData?.Exchange || ""} ${
-        selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
-      } ${dateManager(selectedCoinData?.InstrumentIdentifier) || ""}`,
+      coin_name:
+        selectedCoinData?.Exchange === "NSE"
+          ? `NSE ${selectedCoinData?.InstrumentIdentifier}`
+          : `${selectedCoinData?.Exchange || ""} ${
+              selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
+            }, ${dateManager(selectedCoinData?.InstrumentIdentifier) || ""}`,
       ex_change: selectedCoinData.Exchange,
       action: type,
       quantity: currentQuantity,
@@ -176,11 +179,15 @@ const ModalizeData = ({
               ) : (
                 <Feather name="chevrons-up" size={15} color={"green"} />
               )}
-              <Text style={styles.name}>{`${selectedCoinData?.Exchange || ""} ${
-                selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
-              }, ${
-                dateManager(selectedCoinData?.InstrumentIdentifier) || ""
-              }`}</Text>
+              <Text style={styles.name}>
+                {selectedCoinData?.Exchange === "NSE"
+                  ? `NSE ${selectedCoinData?.InstrumentIdentifier}`
+                  : `${selectedCoinData?.Exchange || ""} ${
+                      selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
+                    }, ${
+                      dateManager(selectedCoinData?.InstrumentIdentifier) || ""
+                    }`}
+              </Text>
             </View>
             <Text
               style={[

@@ -78,7 +78,7 @@ const QuotesTab = ({ navigation }: any) => {
       <FullScreenLoader loading={loading} />
       <CustomTabFund navigation={navigation} title={"Marketwatch"} />
       <TouchableOpacity
-        onPress={() => navigation.navigate("AddScriptsScreen")}
+        onPress={() => navigation.navigate("AddSymbolListScreen")}
         style={styles.searchBox}
       >
         <View style={styles.searchChildBox}>

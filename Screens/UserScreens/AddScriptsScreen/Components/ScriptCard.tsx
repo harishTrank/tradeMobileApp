@@ -21,6 +21,7 @@ const ScriptCard = ({
   deleteCoinApi,
   tradeCoinData,
   setTradeCoinData,
+  scriptType,
 }: any) => {
   const [checkBoxValue, setCheckBoxValue]: any = useState(
     tradeCoinData.includes(item?.InstrumentIdentifier)
@@ -85,9 +86,13 @@ const ScriptCard = ({
             <FontAwesome5 name="check" size={15} color={"green"} />
           )}
         </TouchableOpacity>
-        <Text style={styles.titleStyle}>{`${item?.Exchange} ${
-          item?.InstrumentIdentifier?.split("_")?.[1]
-        }, ${dateManager(item?.InstrumentIdentifier)}`}</Text>
+        <Text style={styles.titleStyle}>
+          {scriptType === "NSE"
+            ? `NSE ${item?.InstrumentIdentifier}`
+            : `${scriptType} ${
+                item?.InstrumentIdentifier?.split("_")?.[1]
+              }, ${dateManager(item?.InstrumentIdentifier)}`}
+        </Text>
       </View>
       <TouchableOpacity onPress={viewBottomSheet}>
         <Entypo name="chevron-right" size={24} color="black" />

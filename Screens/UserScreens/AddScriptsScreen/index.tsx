@@ -33,7 +33,7 @@ import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 
-const AddScriptsScreen = ({ navigation }: any) => {
+const AddScriptsScreen = ({ navigation, route }: any) => {
   const [searchText, setSearchText]: any = useState("");
   const [tradeCoin, setTradeCoin]: any = useState([]);
   const [, setTradeCoinSelected]: any = useAtom(tradeSelectedCoinGlobal);
@@ -67,7 +67,7 @@ const AddScriptsScreen = ({ navigation }: any) => {
   const refetchDetailsAndData = () => {
     setLoading(true);
     axios
-      .get(`${nodeURL}/api/tradeCoin`)
+      .get(`${nodeURL}/api/tradeCoin?coinType=${route.params?.coinType}`)
       .then((res: any) => {
         setLoading(false);
         setTradeCoin(res.data?.response);
@@ -92,7 +92,7 @@ const AddScriptsScreen = ({ navigation }: any) => {
       <ScriptHeader
         refreshController={refetchDetailsAndData}
         navigation={navigation}
-        title={"Add Scripts"}
+        title={route.params?.coinType}
       />
 
       <View style={styles.searchBox}>
@@ -106,6 +106,7 @@ const AddScriptsScreen = ({ navigation }: any) => {
               maxWidth: width * 0.6,
             }}
             autoCorrect={false}
+            autoCapitalize="none"
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -118,11 +119,15 @@ const AddScriptsScreen = ({ navigation }: any) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={tradeCoin.filter((filterItem: any) => {
-          return `${filterItem?.Exchange} ${
-            filterItem?.InstrumentIdentifier?.split("_")?.[1]
-          }, ${dateManager(filterItem?.InstrumentIdentifier)}`
-            .toLowerCase()
-            .includes(searchText.toLowerCase());
+          return filterItem?.Exchange === "NSE"
+            ? `NSE ${filterItem?.InstrumentIdentifier}`
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+            : `${filterItem?.Exchange} ${
+                filterItem?.InstrumentIdentifier?.split("_")?.[1]
+              }, ${dateManager(filterItem?.InstrumentIdentifier)}`
+                .toLowerCase()
+                .includes(searchText.toLowerCase());
         })}
         keyExtractor={(item) => item?.InstrumentIdentifier}
         renderItem={({ item, index }) => (
@@ -135,6 +140,7 @@ const AddScriptsScreen = ({ navigation }: any) => {
             addCoinApi={addCoinApi}
             deleteCoinApi={deleteCoinApi}
             setTradeCoinData={setTradeCoinData}
+            scriptType={route.params?.coinType}
           />
         )}
       />

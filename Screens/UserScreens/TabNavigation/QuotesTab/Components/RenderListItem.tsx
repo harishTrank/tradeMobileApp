@@ -54,9 +54,13 @@ const RenderListItem = ({ item, modalizeRef, setTradeCoinSelected }: any) => {
           ) : (
             <Feather name="chevrons-up" size={15} color={"green"} />
           )}
-          <Text style={styles.name}>{`${item?.Exchange} ${
-            item?.InstrumentIdentifier?.split("_")?.[1]
-          }, ${dateManager(item?.InstrumentIdentifier)}`}</Text>
+          <Text style={styles.name}>
+            {item?.Exchange === "NSE"
+              ? `NSE ${item?.InstrumentIdentifier}`
+              : `${item?.Exchange} ${
+                  item?.InstrumentIdentifier?.split("_")?.[1]
+                }, ${dateManager(item?.InstrumentIdentifier)}`}
+          </Text>
         </View>
         <Text
           style={[
