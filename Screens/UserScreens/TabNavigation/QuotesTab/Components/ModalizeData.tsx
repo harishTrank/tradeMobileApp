@@ -21,6 +21,11 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useBuySellTradeCoin } from "../../../../../hooks/TradeCoin/mutation";
 import FullScreenLoader from "../../../../ReUseComponents/FullScreenLoader";
 import * as Network from "expo-network";
+import {
+  getOneData,
+  getOneDataOff,
+  subscribeToGetOneData,
+} from "../../../../../utils/socket/SocketService";
 // import {
 //   getOneData,
 //   getOneDataOff,
@@ -86,7 +91,9 @@ const ModalizeData = ({
 }: any) => {
   dayjs.extend(relativeTime);
 
-  const [selectedCoinData]: any = useAtom(tradeSelectedCoinGlobal);
+  const [selectedCoinData, setSelectedCoinData]: any = useAtom(
+    tradeSelectedCoinGlobal
+  );
   const [currentButtonState, setCurrentButtonState]: any = useState("Market");
   const [currentQuantity, setCurrentQuantity]: any = useState(1);
   const [currentPrice, setCurrentPrice]: any = useState(
@@ -167,6 +174,37 @@ const ModalizeData = ({
         messageModalize.current?.open();
       });
   };
+
+  // color fluctuation managers
+  const [currentBuyColor, setCurrentBuyColor]: any = useState(
+    theme.colors.white
+  );
+  const [currentSellColor, setCurrentSellColor]: any = useState(
+    theme.colors.white
+  );
+
+  useEffect(() => {
+    setCurrentBuyColor(selectedCoinData?.buyColor);
+    setTimeout(() => setCurrentBuyColor(theme.colors.white), 1000);
+  }, [selectedCoinData?.BuyPrice]);
+
+  useEffect(() => {
+    setCurrentSellColor(selectedCoinData?.sellColor);
+    setTimeout(() => setCurrentSellColor(theme.colors.white), 1000);
+  }, [selectedCoinData?.SellPrice]);
+  // --------------------------------
+
+  useEffect(() => {
+    subscribeToGetOneData((data: any) => {
+      setSelectedCoinData(data);
+    });
+    getOneData({ identifier: selectedCoinData?.InstrumentIdentifier });
+    return () => {
+      getOneDataOff();
+      setSelectedCoinData({});
+    };
+  }, []);
+
   return (
     <>
       <View>
@@ -202,7 +240,9 @@ const ModalizeData = ({
           </View>
 
           <View style={styles.priceBoxParent}>
-            <View style={styles.priceCard}>
+            <View
+              style={[styles.priceCard, { backgroundColor: currentBuyColor }]}
+            >
               <Text style={styles.priceBoxFirst}>
                 {Number(selectedCoinData?.BuyPrice)?.toFixed(2)}
               </Text>
@@ -210,7 +250,10 @@ const ModalizeData = ({
                 {`L: ${Number(selectedCoinData?.Low)?.toFixed(2)}`}
               </Text>
             </View>
-            <View style={styles.priceCard}>
+
+            <View
+              style={[styles.priceCard, { backgroundColor: currentSellColor }]}
+            >
               <Text style={styles.priceBoxFirst}>
                 {Number(selectedCoinData?.SellPrice)?.toFixed(2)}
               </Text>
@@ -414,7 +457,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   priceCard: {
-    backgroundColor: theme.colors.white,
     marginHorizontal: 5,
     paddingVertical: 7,
     paddingHorizontal: 23,

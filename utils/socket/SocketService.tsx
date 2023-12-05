@@ -42,6 +42,7 @@ const getOneData = (data: any) => {
 };
 const getOneDataOff = () => {
   socket.emit("getOneDataOff");
+  socket.off("getOneDataSend");
 };
 // ---------------------------------------------
 
