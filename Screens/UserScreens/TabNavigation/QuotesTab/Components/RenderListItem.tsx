@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import theme from "../../../../../utils/theme";
 import { Feather } from "@expo/vector-icons";
-import { dateManager } from "../../../UserUtils";
+import { dateManager, miniList } from "../../../UserUtils";
 import {
   connectSocket,
   disconnectSocket,
@@ -58,7 +58,11 @@ const RenderListItem = ({ item, modalizeRef, setTradeCoinSelected }: any) => {
             {item?.Exchange === "NSE"
               ? `NSE ${item?.InstrumentIdentifier}`
               : `${
-                  item?.InstrumentIdentifier.includes("MINI") ? "MINI" : "MCX"
+                  miniList.find((itemObj) =>
+                    item?.InstrumentIdentifier.includes(itemObj)
+                  )
+                    ? "MINI"
+                    : "MCX"
                 } ${item?.InstrumentIdentifier?.split("_")?.[1]}, ${dateManager(
                   item?.InstrumentIdentifier
                 )}`}
