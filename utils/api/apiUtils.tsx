@@ -1,9 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "axios";
 import queryString from "querystring";
+import { Alert } from "react-native";
 
 export const hostname = () => {
-  let hostUrl = "http://13.127.239.118:8000/api";
+  let hostUrl = "http://13.232.101.55:8000/api";
   // let hostUrl = "http://192.168.0.148:8000/api";
   // let hostUrl = "http://192.168.1.122:8000/api";
 
@@ -158,6 +159,7 @@ export const callApi = (
       .catch((err) => {
         if (!err.response) {
           reject(err);
+          Alert.alert("Server TimeOut.");
           // if (!getPageQuery().redirect) {
           //   // history.push(
           //   //   `/server-unreachable?${stringify({
