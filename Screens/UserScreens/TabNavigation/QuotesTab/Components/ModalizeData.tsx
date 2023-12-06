@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -26,11 +26,6 @@ import {
   getOneDataOff,
   subscribeToGetOneData,
 } from "../../../../../utils/socket/SocketService";
-// import {
-//   getOneData,
-//   getOneDataOff,
-//   subscribeToGetOneData,
-// } from "../../../../../utils/socket/SocketService";
 
 const button = ["Market", "Limit", "SL"];
 
