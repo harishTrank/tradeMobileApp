@@ -17,7 +17,7 @@ const TabNavigation = ({ navigation }: any) => {
   return (
     <Tab.Navigator
       initialRouteName="QuotesTabScreen"
-      activeColor={theme.colors.blue}
+      activeColor={theme.colors.primary}
       inactiveColor={theme.colors.secondary}
       barStyle={{
         backgroundColor: theme.colors.lightGrey,
@@ -34,7 +34,7 @@ const TabNavigation = ({ navigation }: any) => {
             <Feather
               name="bookmark"
               size={24}
-              color={focused ? theme.colors.blue : theme.colors.secondary}
+              color={focused ? theme.colors.primary : theme.colors.secondary}
             />
           ),
         }}
@@ -48,7 +48,7 @@ const TabNavigation = ({ navigation }: any) => {
             <AntDesign
               name="book"
               size={24}
-              color={focused ? theme.colors.blue : theme.colors.secondary}
+              color={focused ? theme.colors.primary : theme.colors.secondary}
             />
           ),
         }}
@@ -62,7 +62,7 @@ const TabNavigation = ({ navigation }: any) => {
             <Ionicons
               name="md-briefcase-outline"
               size={24}
-              color={focused ? theme.colors.blue : theme.colors.secondary}
+              color={focused ? theme.colors.primary : theme.colors.secondary}
             />
           ),
         }}
@@ -76,7 +76,7 @@ const TabNavigation = ({ navigation }: any) => {
             <MaterialCommunityIcons
               name="account-outline"
               size={24}
-              color={focused ? theme.colors.blue : theme.colors.secondary}
+              color={focused ? theme.colors.primary : theme.colors.secondary}
             />
           ),
         }}

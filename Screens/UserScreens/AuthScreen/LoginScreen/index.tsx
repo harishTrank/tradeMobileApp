@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
   },
   headImage: {
-    height: "20%",
-    width: "40%",
+    height: "22%",
+    width: "35%",
     resizeMode: "contain",
     alignSelf: "center",
     marginTop: height * 0.05,
