@@ -212,12 +212,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10,
     borderRadius: 10,
-    width: "95%",
+    width: "90%",
   },
   secondBox: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
+    marginBottom: 20,
   },
   headingDate: {
     ...theme.font.fontMedium,
@@ -227,8 +228,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   dateBox: {
-    flexDirection: "row",
-    justifyContent: "space-around",
     alignItems: "center",
   },
   datePersonalBox: {
@@ -238,8 +237,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 2,
     borderColor: theme.colors.lightGrey,
-    width: width * 0.42,
-    marginTop: 20,
+    width: width * 0.75,
+    marginBottom: 10,
   },
   dateText: {
     ...theme.font.fontRegular,
@@ -258,9 +257,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   dropDownStyle: {
-    width: width * 0.42,
+    width: width * 0.75,
     borderColor: theme.colors.lightGrey,
-    marginVertical: 15,
+    marginBottom: 10,
   },
 });
 
