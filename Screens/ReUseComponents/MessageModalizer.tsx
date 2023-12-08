@@ -9,7 +9,6 @@ const MessageModalizer = ({
   message,
   messageModalize,
   insufficientFlag,
-  positionListApi,
 }: any) => {
   const closeHandler = () => {
     messageModalize.current?.close();
@@ -45,11 +44,12 @@ const MessageModalizer = ({
           <CustomButton title={"Add Funds"} style={{ width: "48%" }} />
         </View>
       ) : (
-        <CustomButton
-          onPress={closeHandler}
-          title={"Close"}
-          style={styles.closeBtnStyle}
-        />
+        <></>
+        // <CustomButton
+        //   onPress={closeHandler}
+        //   title={"Close"}
+        //   style={styles.closeBtnStyle}
+        // />
       )}
     </View>
   );

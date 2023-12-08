@@ -22,7 +22,7 @@ export const dropDownData = [
 ];
 
 export const dropDownData2 = {
-  exchange: [{ name: "MCX" }, { name: "NFO" }],
+  exchange: [{ name: "MCX" }, { name: "MINI" }, { name: "NSE" }],
   selectScript: [
     { name: "ABB Nov 30" },
     { name: "AARTIIND Nov 30" },

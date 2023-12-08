@@ -118,6 +118,7 @@ const PositionTab = ({ navigation }: any) => {
       />
 
       <FlatList
+        showsVerticalScrollIndicator={false}
         data={positionListApi.data?.response || []}
         keyExtractor={(item: any) => item?.identifer}
         renderItem={({ item }: any) => (
