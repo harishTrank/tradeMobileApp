@@ -26,10 +26,10 @@ const RanderComponent = ({
   const profitLossHandler = () => {
     return (
       item?.total_quantity > 0
-        ? (socketResponse?.BuyPrice - item?.avg_price) *
+        ? (socketResponse?.BuyPrice - item?.avg_buy_price) *
           item?.total_quantity *
           socketResponse?.QuotationLot
-        : (item?.avg_price - socketResponse?.SellPrice) *
+        : (item?.avg_sell_price - socketResponse?.SellPrice) *
           Math.abs(item?.total_quantity) *
           socketResponse?.QuotationLot
     ).toFixed(2);
@@ -68,7 +68,11 @@ const RanderComponent = ({
       </View>
 
       <View style={styles.itemSecondRow}>
-        <Text style={styles.smallText}>{item?.avg_price?.toFixed(2)}</Text>
+        <Text style={styles.smallText}>
+          {item?.total_quantity > 0
+            ? item?.avg_buy_price?.toFixed(2)
+            : item?.avg_sell_price?.toFixed(2)}
+        </Text>
         <Entypo
           name="arrow-long-right"
           size={20}

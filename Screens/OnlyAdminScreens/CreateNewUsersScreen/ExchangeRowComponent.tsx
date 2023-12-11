@@ -15,10 +15,30 @@ const ExchangeRowComponent = ({
 }: any) => {
   const exchangeAllowanceHandler = (key: any, type: any) => {
     setExchangeAllowance((oldValue: any) => {
-      return {
-        ...oldValue,
-        [key]: { ...oldValue[key], [type]: !oldValue[key][type] },
-      };
+      return type === "first"
+        ? {
+            ...oldValue,
+            [key]: {
+              [type]: !oldValue[key][type],
+              second: !oldValue[key][type],
+              third: !oldValue[key][type],
+            },
+          }
+        : type === "second"
+        ? {
+            ...oldValue,
+            [key]: {
+              ...oldValue[key],
+              second: !oldValue[key].second,
+            },
+          }
+        : {
+            ...oldValue,
+            [key]: {
+              ...oldValue[key],
+              third: !oldValue[key].third,
+            },
+          };
     });
   };
   return (
@@ -34,12 +54,14 @@ const ExchangeRowComponent = ({
         <CheckBoxComponent
           value={exchangeAllowance[type].second}
           setValue={() => exchangeAllowanceHandler(type, "second")}
+          disabled={!exchangeAllowance[type].first}
         />
       </View>
       <View style={styles.centerSecond}>
         <CheckBoxComponent
           value={exchangeAllowance[type].third}
           setValue={() => exchangeAllowanceHandler(type, "third")}
+          disabled={!exchangeAllowance[type].first}
         />
       </View>
       {/* 

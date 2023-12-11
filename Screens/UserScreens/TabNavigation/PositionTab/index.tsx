@@ -62,10 +62,10 @@ const PositionTab = ({ navigation }: any) => {
         );
         return (
           item?.total_quantity > 0
-            ? (findSocketVal?.BuyPrice - item?.avg_price) *
+            ? (findSocketVal?.BuyPrice - item?.avg_buy_price) *
               item?.total_quantity *
               findSocketVal?.QuotationLot
-            : (item?.avg_price - findSocketVal?.SellPrice) *
+            : (item?.avg_sell_price - findSocketVal?.SellPrice) *
               Math.abs(item?.total_quantity) *
               findSocketVal?.QuotationLot
         ).toFixed(2);
@@ -146,6 +146,7 @@ const PositionTab = ({ navigation }: any) => {
         })
         .catch(() => {});
     });
+    setTotalBalance(0.0);
     setLoading(false);
   };
   // ------------------------------------

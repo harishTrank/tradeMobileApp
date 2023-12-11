@@ -133,7 +133,6 @@ const ModalizeData = ({
         setInsufficientFlag(false);
         setModalizeMessage("Sell price must higher than high price.");
         messageModalize.current?.open();
-        setTimeout(() => messageModalize.current?.close(), 2000);
         return;
       } else if (type === "BUY" && currentPrice >= selectedCoinData.BuyPrice) {
         setScreenLoader(false);
@@ -141,7 +140,6 @@ const ModalizeData = ({
         setInsufficientFlag(false);
         setModalizeMessage("Buy price must lower than low price.");
         messageModalize.current?.open();
-        setTimeout(() => messageModalize.current?.close(), 2000);
         return;
       }
     }
@@ -161,7 +159,6 @@ const ModalizeData = ({
           positionListApi?.refetch();
         }
         messageModalize.current?.open();
-        setTimeout(() => messageModalize.current?.close(), 2000);
         return;
       })
       .catch(() => {
@@ -170,7 +167,6 @@ const ModalizeData = ({
         setErrorFlag(true);
         setModalizeMessage("Insufficient balance.");
         messageModalize.current?.open();
-        setTimeout(() => messageModalize.current?.close(), 2000);
       });
   };
 

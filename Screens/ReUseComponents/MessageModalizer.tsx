@@ -13,6 +13,12 @@ const MessageModalizer = ({
   const closeHandler = () => {
     messageModalize.current?.close();
   };
+
+  useEffect(() => {
+    if (!insufficientFlag) {
+      setTimeout(() => messageModalize.current?.close(), 1500);
+    }
+  }, []);
   return (
     <View>
       <View style={styles.content}>

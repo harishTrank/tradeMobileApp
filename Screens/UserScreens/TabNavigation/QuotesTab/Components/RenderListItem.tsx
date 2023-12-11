@@ -80,13 +80,13 @@ const RenderListItem = ({ item, modalizeRef, setTradeCoinSelected }: any) => {
 
       <View style={styles.priceBoxParent}>
         <HistoryCard
-          first={Number(item?.BuyPrice)?.toFixed(1)}
-          second={`L: ${Number(item?.Low)?.toFixed(1)}`}
+          first={Number(item?.BuyPrice)?.toFixed(2)}
+          second={`L: ${Number(item?.Low)?.toFixed(2)}`}
           colorComp={buyColor}
         />
         <HistoryCard
-          first={Number(item?.SellPrice)?.toFixed(1)}
-          second={`H: ${Number(item?.High)?.toFixed(1)}`}
+          first={Number(item?.SellPrice)?.toFixed(2)}
+          second={`H: ${Number(item?.High)?.toFixed(2)}`}
           colorComp={sellColor}
         />
       </View>

@@ -25,7 +25,7 @@ const inputFields = [
   { key: "remark", name: "Remark", required: false },
 ];
 
-const tradeLimitList = ["MCX", "NSE", "SGX", "OTHERS", "MINI"];
+const tradeLimitList = ["MCX", "NSE", "MINI"];
 const CreateNewUsersScreen = ({ navigation }: any) => {
   const [userType, setUserType]: any = useState("Client");
   const [fullScreenLoader, setFullScreenLoader]: any = useState(false);
@@ -41,11 +41,9 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
     remark: "",
   });
   const [exchangeAllowance, setExchangeAllowance]: any = useState({
-    mcx: { first: false, second: true, third: false },
-    nse: { first: false, second: true, third: false },
-    sgx: { first: false, second: true, third: false },
-    others: { first: false, second: true, third: false },
-    mini: { first: false, second: true, third: false },
+    mcx: { first: false, second: false, third: false },
+    nse: { first: false, second: false, third: false },
+    mini: { first: false, second: false, third: false },
   });
 
   const [addMaster, setAddMaster]: any = useState(false);
@@ -53,8 +51,6 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
   const [tradeLimit, setTradeLimit]: any = useState({
     mcx: false,
     nse: false,
-    sgx: false,
-    others: false,
     mini: false,
   });
 
@@ -102,9 +98,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
             remark: personalDetails.remark,
             mcx: tradeLimit.mcx,
             nse: tradeLimit.nse,
-            sgx: tradeLimit.sgx,
             mini: tradeLimit.mini,
-            others: tradeLimit.others,
             add_master: addMaster,
             change_password: changePassword,
             exchange_data: [
@@ -119,18 +113,6 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
                 exchange: exchangeAllowance.nse.first,
                 symbols: exchangeAllowance.nse.second,
                 turnover: exchangeAllowance.nse.third,
-              },
-              {
-                symbol_name: "sgx",
-                exchange: exchangeAllowance.sgx.first,
-                symbols: exchangeAllowance.sgx.second,
-                turnover: exchangeAllowance.sgx.third,
-              },
-              {
-                symbol_name: "others",
-                exchange: exchangeAllowance.others.first,
-                symbols: exchangeAllowance.others.second,
-                turnover: exchangeAllowance.others.third,
               },
               {
                 symbol_name: "mini",
@@ -153,7 +135,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
           setFullScreenLoader(false);
           return Toast.show({
             type: "error",
-            text1: "User name must be unique.",
+            text1: err.data?.message,
           });
         });
     }
@@ -218,16 +200,6 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
               <ExchangeRowComponent
                 exchangeAllowance={exchangeAllowance}
                 setExchangeAllowance={setExchangeAllowance}
-                type={"sgx"}
-              />
-              <ExchangeRowComponent
-                exchangeAllowance={exchangeAllowance}
-                setExchangeAllowance={setExchangeAllowance}
-                type={"others"}
-              />
-              <ExchangeRowComponent
-                exchangeAllowance={exchangeAllowance}
-                setExchangeAllowance={setExchangeAllowance}
                 type={"mini"}
               />
             </View>
@@ -242,6 +214,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
               {tradeLimitList.map((itemValue: any) => (
                 <View key={itemValue} style={styles.tradeLimitRow}>
                   <CheckBoxComponent
+                    disabled={!exchangeAllowance[itemValue.toLowerCase()].first}
                     value={tradeLimit[itemValue.toLowerCase()]}
                     setValue={(value: any) => {
                       setTradeLimit((oldValue: any) => {
