@@ -16,7 +16,7 @@ import theme from "../../../utils/theme";
 import axios from "axios";
 import { nodeURL } from "../../../utils/socket/SocketService";
 import { useAtom } from "jotai";
-import { selectedCoinList } from "../../../JotaiStore";
+import { currentUserData, selectedCoinList } from "../../../JotaiStore";
 
 const { width }: any = Dimensions.get("window");
 
@@ -25,9 +25,14 @@ const AddSymbolListScreen = ({ navigation }: any) => {
   const [coinTypeListning, setCoinTypeListning]: any = useState([]);
   const [loading, setLoading]: any = useState(false);
   const [tradeCoinData] = useAtom(selectedCoinList);
+  const [userProfileData] = useAtom(currentUserData);
   const screenFocusedCase = () => {
     axios
-      .get(`${nodeURL}/api/tradeCoin/length`)
+      .get(
+        `${nodeURL}/api/tradeCoin/length?coinList=${JSON.stringify(
+          userProfileData?.exchange
+        )}`
+      )
       .then((res: any) => {
         setLoading(false);
         setCoinTypeListning(res.data);

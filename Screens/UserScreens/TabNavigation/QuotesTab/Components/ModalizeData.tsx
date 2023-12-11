@@ -103,6 +103,24 @@ const ModalizeData = ({
   const buySellHandler = async (type: any) => {
     const currentMobileIP = await Network.getIpAddressAsync();
     setScreenLoader(true);
+
+    if (currentButtonState.toUpperCase() === "SL") {
+      if (type === "BUY" && currentPrice > selectedCoinData.BuyPrice) {
+        setScreenLoader(false);
+        setErrorFlag(true);
+        setInsufficientFlag(false);
+        setModalizeMessage("Price key must lower than buy price.");
+        messageModalize.current?.open();
+        return;
+      } else if (type === "SELL" && currentPrice < selectedCoinData.SellPrice) {
+        setScreenLoader(false);
+        setErrorFlag(true);
+        setInsufficientFlag(false);
+        setModalizeMessage("Price key must higher than sell price.");
+        messageModalize.current?.open();
+        return;
+      }
+    }
     const body = {
       identifer: selectedCoinData?.InstrumentIdentifier,
       trade_type: currentButtonState.toUpperCase(),

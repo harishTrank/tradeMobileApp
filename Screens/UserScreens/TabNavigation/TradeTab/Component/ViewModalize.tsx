@@ -15,15 +15,16 @@ const ViewModalize = () => {
     coin_name: particularCoinHistory?.response?.coin_name,
     created_at: particularCoinHistory?.response?.updated_at,
   };
+
   return (
     <View>
       <ListItemCard item={item} />
-
       <View style={styles.tableBox}>
         <View style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}>
           <Text style={styles.basicText}>UserName:</Text>
           <Text style={styles.basicText}>{particularCoinHistory?.user}</Text>
         </View>
+
         <View style={styles.row}>
           <Text style={styles.basicText}>OrderTime:</Text>
           <Text style={styles.basicText}>
@@ -71,6 +72,13 @@ const ViewModalize = () => {
           <Text style={styles.basicText}>Order Method:</Text>
           <Text style={styles.basicText}>
             {(particularCoinHistory?.response?.order_method).toUpperCase()}
+          </Text>
+        </View>
+
+        <View style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}>
+          <Text style={styles.basicText}>TradeType:</Text>
+          <Text style={styles.basicText}>
+            {particularCoinHistory?.response?.trade_type}
           </Text>
         </View>
       </View>
