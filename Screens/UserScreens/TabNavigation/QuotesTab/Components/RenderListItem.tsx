@@ -9,12 +9,6 @@ import {
 import theme from "../../../../../utils/theme";
 import { Feather } from "@expo/vector-icons";
 import { dateManager, miniList } from "../../../UserUtils";
-import {
-  connectSocket,
-  disconnectSocket,
-  getOneData,
-  subscribeToGetOneData,
-} from "../../../../../utils/socket/SocketService";
 
 const { width }: any = Dimensions.get("window");
 

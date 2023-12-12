@@ -11,6 +11,8 @@ import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import Toast from "react-native-toast-message";
 import { useAddNewUserService } from "../../../hooks/User/mutation";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../JotaiStore";
 
 const { width } = Dimensions.get("window");
 
@@ -25,10 +27,10 @@ const inputFields = [
   { key: "remark", name: "Remark", required: false },
 ];
 
-const tradeLimitList = ["MCX", "NSE", "MINI"];
 const CreateNewUsersScreen = ({ navigation }: any) => {
   const [userType, setUserType]: any = useState("Client");
   const [fullScreenLoader, setFullScreenLoader]: any = useState(false);
+  const [userProfileData] = useAtom(currentUserData);
 
   const [personalDetails, setPersonalDetails]: any = useState({
     name: "",
@@ -187,21 +189,15 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
                 <Text style={styles.tableText}>{"Symbol\n(%)"}</Text>
               </View>
 
-              <ExchangeRowComponent
-                exchangeAllowance={exchangeAllowance}
-                setExchangeAllowance={setExchangeAllowance}
-                type={"mcx"}
-              />
-              <ExchangeRowComponent
-                exchangeAllowance={exchangeAllowance}
-                setExchangeAllowance={setExchangeAllowance}
-                type={"nse"}
-              />
-              <ExchangeRowComponent
-                exchangeAllowance={exchangeAllowance}
-                setExchangeAllowance={setExchangeAllowance}
-                type={"mini"}
-              />
+              {userProfileData?.exchange?.map((mapItem: any) => {
+                return (
+                  <ExchangeRowComponent
+                    exchangeAllowance={exchangeAllowance}
+                    setExchangeAllowance={setExchangeAllowance}
+                    type={mapItem.toLowerCase()}
+                  />
+                );
+              })}
             </View>
           </View>
 
@@ -211,7 +207,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
             </Text>
 
             <View style={styles.tradeLimitBox}>
-              {tradeLimitList.map((itemValue: any) => (
+              {userProfileData?.exchange.map((itemValue: any) => (
                 <View key={itemValue} style={styles.tradeLimitRow}>
                   <CheckBoxComponent
                     disabled={!exchangeAllowance[itemValue.toLowerCase()].first}

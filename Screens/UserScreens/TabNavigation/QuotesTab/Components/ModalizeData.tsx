@@ -83,6 +83,7 @@ const ModalizeData = ({
   messageModalize,
   setInsufficientFlag,
   positionListApi,
+  navigation,
 }: any) => {
   dayjs.extend(relativeTime);
 
@@ -344,7 +345,12 @@ const ModalizeData = ({
         </View>
 
         <View style={styles.purchaseBtnBox}>
-          <TouchableOpacity style={styles.smallBtnBox}>
+          <TouchableOpacity
+            style={styles.smallBtnBox}
+            onPress={() =>
+              navigation.navigate("ChartViewScreen", { selectedCoinData })
+            }
+          >
             <MaterialIcons
               name="bar-chart"
               size={22}
@@ -355,7 +361,9 @@ const ModalizeData = ({
 
           <TouchableOpacity
             style={styles.smallBtnBox}
-            // onPress={() => navigation.navigate("CoinDetailsScreen")}
+            onPress={() =>
+              navigation.navigate("CoinDetailsScreen", { selectedCoinData })
+            }
           >
             <Feather name="info" size={22} color={theme.colors.blue} />
             <Text style={styles.smallBtnText}>Info</Text>

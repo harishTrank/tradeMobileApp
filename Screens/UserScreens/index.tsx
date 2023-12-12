@@ -25,6 +25,7 @@ import { useAtom } from "jotai";
 import { userLoginGlobalFlag } from "../../JotaiStore";
 import CoinDetailsScreen from "./CoinDetailsScreen";
 import AddSymbolListScreen from "./AddSymbolListScreen";
+import ChartViewScreen from "./ChartViewScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -91,6 +92,7 @@ const UserScreens = () => {
       <Stack.Screen name="UserListScreen" component={UserListScreen} />
       <Stack.Screen name="SearchUserScreen" component={SearchUserScreen} />
       <Stack.Screen name="CoinDetailsScreen" component={CoinDetailsScreen} />
+      <Stack.Screen name="ChartViewScreen" component={ChartViewScreen} />
     </Stack.Navigator>
   );
 };

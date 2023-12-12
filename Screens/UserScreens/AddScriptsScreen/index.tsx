@@ -24,11 +24,7 @@ import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MessageModalizer from "../../ReUseComponents/MessageModalizer";
 import { dateManager } from "../UserUtils";
-import {
-  getAllData,
-  nodeURL,
-  subscribeToAllData,
-} from "../../../utils/socket/SocketService";
+import { nodeURL } from "../../../utils/socket/SocketService";
 import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
