@@ -409,7 +409,9 @@ const ModalizeData = ({
           >
             <Text style={styles.name}>Lot Size</Text>
             <Text style={styles.name}>
-              {Number(selectedCoinData?.QuotationLot)?.toFixed(1)}
+              {selectedCoinData?.QuotationLot != 0
+                ? Number(selectedCoinData?.QuotationLot)?.toFixed(1)
+                : 0}
             </Text>
           </View>
 
