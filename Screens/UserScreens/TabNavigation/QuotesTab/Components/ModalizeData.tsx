@@ -142,6 +142,7 @@ const ModalizeData = ({
       ip_address: currentMobileIP,
       order_method: Platform.OS,
       lot_size: selectedCoinData.QuotationLot,
+      stop_loss: currentPrice,
     };
 
     if (currentButtonState.toUpperCase() === "LIMIT") {
