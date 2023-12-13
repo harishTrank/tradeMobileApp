@@ -15,7 +15,7 @@ import {
   currentUserData,
   tradeSelectedCoinGlobal,
 } from "../../../../../JotaiStore";
-import { dateManager } from "../../../UserUtils";
+import { dateManager, miniList } from "../../../UserUtils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useBuySellTradeCoin } from "../../../../../hooks/TradeCoin/mutation";
@@ -128,10 +128,23 @@ const ModalizeData = ({
       coin_name:
         selectedCoinData?.Exchange === "NSE"
           ? `NSE ${selectedCoinData?.InstrumentIdentifier}`
-          : `${selectedCoinData?.Exchange || ""} ${
-              selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
-            }, ${dateManager(selectedCoinData?.InstrumentIdentifier) || ""}`,
-      ex_change: selectedCoinData.Exchange,
+          : `${
+              selectedCoinData.Exchange === "MCX" &&
+              miniList.find((itemObj) =>
+                selectedCoinData?.InstrumentIdentifier.includes(itemObj)
+              )
+                ? "MINI"
+                : selectedCoinData.Exchange
+            } ${selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]}, ${
+              dateManager(selectedCoinData?.InstrumentIdentifier) || ""
+            }`,
+      ex_change:
+        selectedCoinData.Exchange === "MCX" &&
+        miniList.find((itemObj) =>
+          selectedCoinData?.InstrumentIdentifier.includes(itemObj)
+        )
+          ? "MINI"
+          : selectedCoinData.Exchange,
       action: type,
       quantity: currentQuantity,
       price:
