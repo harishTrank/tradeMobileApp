@@ -10,10 +10,6 @@ const MessageModalizer = ({
   messageModalize,
   insufficientFlag,
 }: any) => {
-  const closeHandler = () => {
-    messageModalize.current?.close();
-  };
-
   useEffect(() => {
     if (!insufficientFlag) {
       setTimeout(() => messageModalize.current?.close(), 1500);
@@ -77,6 +73,7 @@ const styles = StyleSheet.create({
     ...theme.font.fontMedium,
     fontSize: 15,
     paddingBottom: 10,
+    textAlign: "center",
   },
   closeBtnStyle: {
     marginHorizontal: 20,

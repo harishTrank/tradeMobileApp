@@ -156,6 +156,7 @@ const ModalizeData = ({
       order_method: Platform.OS,
       lot_size: selectedCoinData.QuotationLot,
       stop_loss: currentPrice,
+      is_cancel: false,
     };
 
     if (currentButtonState.toUpperCase() === "LIMIT") {
@@ -176,6 +177,9 @@ const ModalizeData = ({
         return;
       }
     }
+    if (selectedCoinData.SellPrice === 0 || selectedCoinData.BuyPrice == 0) {
+      body.is_cancel = true;
+    }
     buySellApiCall
       ?.mutateAsync({
         body,
@@ -194,11 +198,13 @@ const ModalizeData = ({
         messageModalize.current?.open();
         return;
       })
-      .catch(() => {
+      .catch((err: any) => {
         setScreenLoader(false);
-        setInsufficientFlag(true);
+        if (!body.is_cancel) {
+          setInsufficientFlag(true);
+        }
         setErrorFlag(true);
-        setModalizeMessage("Insufficient balance.");
+        setModalizeMessage(err.data.message);
         messageModalize.current?.open();
       });
   };
