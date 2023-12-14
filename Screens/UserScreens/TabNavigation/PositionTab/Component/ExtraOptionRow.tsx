@@ -40,6 +40,9 @@ const ExtraOptionRow = ({
             style={styles.searchText}
             onChangeText={setSearchText}
             value={searchText}
+            autoCorrect={false}
+            autoFocus={true}
+            autoCapitalize="none"
           />
         </View>
       ) : (
