@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
+  SafeAreaView,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
@@ -22,6 +23,8 @@ import { currentUserData } from "../../../JotaiStore";
 import { useAtom } from "jotai";
 import { DatePickerModal } from "react-native-paper-dates";
 import dayjs from "dayjs";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const { width } = Dimensions.get("window");
 
 const RejectionLogScreen = ({ navigation }: any) => {
@@ -32,6 +35,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const [currentPage, setCurrentPage]: any = useState(1);
   const [currentUser]: any = useAtom(currentUserData);
   const userCoinListApi: any = useUserCoinList();
+  const [loading, setLoading]: any = useState(true);
   const [viewBtnSetData, setviewBtnSetData]: any = useState({
     startDate: "",
     endDate: "",
@@ -108,6 +112,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
           );
         });
       }
+      setLoading(false);
     }
   }, [
     successTradeList?.data?.results,
@@ -127,6 +132,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
   };
 
   const searchBtnHandler = () => {
+    setLoading(true);
     setviewBtnSetData({
       startDate: range.startDate || "",
       endDate: range.endDate || "",
@@ -134,6 +140,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
       ex_change: exchangeValue || "",
     });
     successTradeList.refetch();
+    setLoading(false);
   };
 
   const resetHandler = () => {
@@ -154,6 +161,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
 
   return (
     <View style={styles.screen}>
+      <FullScreenLoader loading={loading} />
       <BasicHeader navigation={navigation} title={"Rejection Log History"} />
       <View style={styles.mainBox}>
         <DropDownComponent
@@ -259,8 +267,11 @@ const RejectionLogScreen = ({ navigation }: any) => {
           />
         </View>
       </View>
-
       <FlatList
+        style={{
+          paddingBottom: useSafeAreaInsets().bottom + 10,
+        }}
+        showsVerticalScrollIndicator={false}
         data={successList}
         keyExtractor={(index: any) => index.id}
         renderItem={({ item }: any) => <RenderItem item={item} />}
