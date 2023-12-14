@@ -1,23 +1,124 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, ScrollView } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import DropDownComponent from "../../ReUseComponents/DropDownComponent";
-import { dropDownData, dropDownData2 } from "../UserUtils";
-
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import RenderItem from "./Components/RenderItem";
+import {
+  useTradeHistory,
+  useUserCoinList,
+} from "../../../hooks/TradeCoin/query";
+import { currentUserData } from "../../../JotaiStore";
+import { useAtom } from "jotai";
+import { DatePickerModal } from "react-native-paper-dates";
+import dayjs from "dayjs";
 const { width } = Dimensions.get("window");
 
 const RejectionLogScreen = ({ navigation }: any) => {
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [selectScript, setSelectScript]: any = useState("");
-  const [currentDropdownValue, setCurrentDropdownValue]: any = useState("");
+  const [searchText, setSearchText]: any = useState("");
+  const [successList, setSuccessList]: any = useState([]);
+  const [currentPage, setCurrentPage]: any = useState(1);
+  const [currentUser]: any = useAtom(currentUserData);
+  const userCoinListApi: any = useUserCoinList();
+
+  // date picker case working
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
+
+  const onDismiss = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirm = useCallback(
+    ({ startDate, endDate }: any) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  // ------------------------------
+
+  const successTradeList: any = useTradeHistory({
+    query: {
+      page: currentPage,
+      // from_date:
+      //   dateRange.startDate !== ""
+      //     ? dayjs(dateRange.startDate).format("YYYY-MM-DD")
+      //     : "",
+      // to_date:
+      //   dateRange.endDate !== ""
+      //     ? dayjs(dateRange.endDate).format("YYYY-MM-DD")
+      //     : "",
+      ex_change: exchangeValue,
+      coin_name: searchText,
+      is_cancel: true,
+    },
+  });
+
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      setCurrentPage(1);
+      successTradeList.refetch();
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    if (
+      !successTradeList?.isFetching &&
+      !successTradeList.isLoading &&
+      successTradeList?.data?.results
+    ) {
+      if (currentPage === 1) {
+        setSuccessList(successTradeList.data.results);
+      } else {
+        setSuccessList((oldValue: any) => {
+          return [...oldValue, ...successTradeList.data.results].filter(
+            (value, index, self) =>
+              index === self.findIndex((t: any) => t.id === value.id)
+          );
+        });
+      }
+    }
+  }, [
+    successTradeList?.data?.results,
+    currentPage,
+    successTradeList?.isFetching,
+    searchText,
+    exchangeValue,
+  ]);
+
+  const onEndReached = () => {
+    if (
+      successTradeList?.data?.total &&
+      currentPage < successTradeList?.data?.total
+    ) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
   return (
-    <ScrollView style={styles.screen}>
+    <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Rejection Log History"} />
       <View style={styles.mainBox}>
         <DropDownComponent
-          data={dropDownData2.exchange}
+          data={currentUser?.exchange?.map((item: any) => {
+            return { name: item };
+          })}
           value={exchangeValue}
           setValue={setExchangeValue}
           placeholder={"Exchange"}
@@ -26,24 +127,65 @@ const RejectionLogScreen = ({ navigation }: any) => {
           fieldKey={"name"}
         />
         <DropDownComponent
-          data={dropDownData2.selectScript}
+          data={
+            userCoinListApi?.data?.response.filter((filterObj: any) => {
+              return filterObj.coin_name.includes(exchangeValue);
+            }) || []
+          }
           value={selectScript}
           setValue={setSelectScript}
           placeholder={"Select Script"}
           search={true}
           style={styles.dropDownStyle}
-          fieldKey={"name"}
+          fieldKey={"coin_name"}
         />
       </View>
-      <DropDownComponent
-        data={dropDownData}
-        value={currentDropdownValue}
-        setValue={setCurrentDropdownValue}
-        placeholder={"Please select week of period"}
-        search={false}
-        style={styles.bigDropDown}
-        fieldKey={"name"}
-      />
+
+      <View style={styles.dateBox}>
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+          style={styles.datePersonalBox}
+        >
+          <MaterialIcons
+            name="date-range"
+            size={24}
+            color={theme.colors.secondary}
+          />
+          <Text style={styles.dateText}>
+            {range?.startDate
+              ? dayjs(`${range?.startDate}`).format("DD/MM/YYYY")
+              : "From Date"}
+          </Text>
+        </TouchableOpacity>
+
+        <DatePickerModal
+          locale="en"
+          mode="range"
+          visible={open}
+          onDismiss={onDismiss}
+          startDate={range.startDate}
+          endDate={range.endDate}
+          onConfirm={onConfirm}
+          validRange={{ endDate: new Date() }}
+        />
+
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+          style={styles.datePersonalBox}
+        >
+          <MaterialIcons
+            name="date-range"
+            size={24}
+            color={theme.colors.secondary}
+          />
+          <Text style={styles.dateText}>
+            {range?.endDate
+              ? dayjs(`${range?.endDate}`).format("DD/MM/YYYY")
+              : "To Date"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.btnStyleBox}>
         <SmallBtnComponent
           style={styles.buttonBtn}
@@ -58,7 +200,32 @@ const RejectionLogScreen = ({ navigation }: any) => {
           textColor={theme.colors.secondary}
         />
       </View>
-    </ScrollView>
+
+      <View style={styles.searchBox}>
+        <View style={styles.searchChildBox}>
+          <Ionicons name="search" size={24} color={theme.colors.greyText} />
+          <TextInput
+            placeholder="Search & Add"
+            style={{
+              ...styles.searchText,
+              paddingLeft: 10,
+              maxWidth: width * 0.8,
+            }}
+            autoCorrect={false}
+            autoCapitalize="none"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </View>
+      </View>
+
+      <FlatList
+        data={successList}
+        keyExtractor={(index: any) => index.id}
+        renderItem={({ item }: any) => <RenderItem item={item} />}
+        onEndReached={onEndReached}
+      />
+    </View>
   );
 };
 
@@ -75,7 +242,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
-    paddingVertical: 10,
   },
   dropDownStyle: {
     width: width * 0.46,
@@ -92,5 +258,48 @@ const styles = StyleSheet.create({
   bigDropDown: {
     marginHorizontal: 10,
     marginBottom: 10,
+  },
+  searchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    padding: 10,
+    borderRadius: 10,
+    margin: 10,
+    backgroundColor: "transparent",
+  },
+  searchChildBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+  searchText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+  },
+  dateBox: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginVertical: 5,
+    justifyContent: "space-between",
+  },
+  datePersonalBox: {
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.lightGrey,
+    width: width * 0.46,
+    marginBottom: 10,
+  },
+  dateText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+    marginLeft: 15,
+    fontSize: 15,
   },
 });

@@ -128,12 +128,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     justifyContent: "center",
-    width: width * 0.27,
+    width: width * 0.28,
   },
   priceBoxFirst: {
     ...theme.font.fontSemiBold,
     color: theme.colors.black,
     fontSize: 13,
+    width: width * 0.27,
+    textAlign: "center",
   },
   priceBoxSecond: {
     ...theme.font.fontRegular,

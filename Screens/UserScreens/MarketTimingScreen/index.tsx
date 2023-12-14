@@ -3,17 +3,22 @@ import { StyleSheet, View } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
 import DropDownComponent from "../../ReUseComponents/DropDownComponent";
-import { dropDownData2 } from "../UserUtils";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../JotaiStore";
 
 const MarketTimingScreen = ({ navigation }: any) => {
   const [exchangeValue, setExchangeValue]: any = useState("");
+  const [currentUser]: any = useAtom(currentUserData);
+
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Market Timings"} />
       <View style={styles.mainBox}>
         <DropDownComponent
-          data={dropDownData2.exchange}
+          data={currentUser?.exchange?.map((item: any) => {
+            return { name: item };
+          })}
           value={exchangeValue}
           setValue={setExchangeValue}
           placeholder={"Exchange"}

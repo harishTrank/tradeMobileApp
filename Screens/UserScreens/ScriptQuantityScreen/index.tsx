@@ -4,16 +4,21 @@ import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
 import DropDownComponent from "../../ReUseComponents/DropDownComponent";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
-import { dropDownData2 } from "../UserUtils";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../JotaiStore";
 
 const ScriptQuantityScreen = ({ navigation }: any) => {
   const [exchangeValue, setExchangeValue]: any = useState("");
+  const [currentUser]: any = useAtom(currentUserData);
+
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Script Quantity"} />
       <View style={styles.mainBox}>
         <DropDownComponent
-          data={dropDownData2.exchange}
+          data={currentUser?.exchange?.map((item: any) => {
+            return { name: item };
+          })}
           value={exchangeValue}
           setValue={setExchangeValue}
           placeholder={"Exchange"}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Modal,
@@ -16,6 +16,8 @@ import SmallBtnComponent from "../../../../ReUseComponents/SmallBtnComponent";
 import DropDownComponent from "../../../../ReUseComponents/DropDownComponent";
 import { dropDownData2 } from "../../../UserUtils";
 import { useUserCoinList } from "../../../../../hooks/TradeCoin/query";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../../../JotaiStore";
 
 const { width } = Dimensions.get("window");
 
@@ -36,6 +38,7 @@ const FilterModal = ({
   });
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage]: any = useState("");
+  const [currentUser]: any = useAtom(currentUserData);
 
   const userCoinListApi: any = useUserCoinList();
 
@@ -81,6 +84,7 @@ const FilterModal = ({
     setExchangeValue("");
     successTradeList.refetch();
   };
+
   return (
     <SafeAreaView>
       <Modal animationType="fade" transparent={true} visible={openFilterModal}>
@@ -144,7 +148,9 @@ const FilterModal = ({
 
             <View style={styles.dateBox}>
               <DropDownComponent
-                data={dropDownData2.exchange}
+                data={currentUser?.exchange?.map((item: any) => {
+                  return { name: item };
+                })}
                 value={exchangeValue}
                 setValue={setExchangeValue}
                 placeholder={"Exchange"}
@@ -154,7 +160,11 @@ const FilterModal = ({
                 fieldKey={"name"}
               />
               <DropDownComponent
-                data={userCoinListApi?.data?.response || []}
+                data={
+                  userCoinListApi?.data?.response.filter((filterObj: any) => {
+                    return filterObj.coin_name.includes(exchangeValue);
+                  }) || []
+                }
                 value={selectScript}
                 setValue={setSelectScript}
                 placeholder={"Select Script"}

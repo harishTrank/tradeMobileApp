@@ -43,7 +43,6 @@ const LoginScreen = ({ navigation }: any) => {
   const [serverType, setServerType]: any = useState("Demo");
   const [, setTradeCoinData] = useAtom(selectedCoinList);
   const [, setCurrentUser]: any = useAtom(currentUserData);
-
   // const [currentLocation]: any = useAtom(locationGlobal);
   const [loader, setLoader]: any = useState(false);
 
