@@ -32,6 +32,12 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const [currentPage, setCurrentPage]: any = useState(1);
   const [currentUser]: any = useAtom(currentUserData);
   const userCoinListApi: any = useUserCoinList();
+  const [viewBtnSetData, setviewBtnSetData]: any = useState({
+    startDate: "",
+    endDate: "",
+    coin_name: "",
+    ex_change: "",
+  });
 
   // date picker case working
   const [open, setOpen] = useState(false);
@@ -56,16 +62,16 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const successTradeList: any = useTradeHistory({
     query: {
       page: currentPage,
-      // from_date:
-      //   dateRange.startDate !== ""
-      //     ? dayjs(dateRange.startDate).format("YYYY-MM-DD")
-      //     : "",
-      // to_date:
-      //   dateRange.endDate !== ""
-      //     ? dayjs(dateRange.endDate).format("YYYY-MM-DD")
-      //     : "",
-      ex_change: exchangeValue,
-      coin_name: searchText,
+      from_date:
+        viewBtnSetData.startDate !== ""
+          ? dayjs(viewBtnSetData.startDate).format("YYYY-MM-DD")
+          : "",
+      to_date:
+        viewBtnSetData.endDate !== ""
+          ? dayjs(viewBtnSetData.endDate).format("YYYY-MM-DD")
+          : "",
+      ex_change: viewBtnSetData.ex_change,
+      coin_name: viewBtnSetData.coin_name,
       is_cancel: true,
     },
   });
@@ -76,6 +82,15 @@ const RejectionLogScreen = ({ navigation }: any) => {
       successTradeList.refetch();
     });
   }, [navigation]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setviewBtnSetData((oldValue: any) => {
+        return { ...oldValue, coin_name: searchText };
+      });
+      successTradeList.refetch();
+    }, 700);
+  }, [searchText]);
 
   useEffect(() => {
     if (
@@ -109,6 +124,32 @@ const RejectionLogScreen = ({ navigation }: any) => {
     ) {
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const searchBtnHandler = () => {
+    setviewBtnSetData({
+      startDate: range.startDate || "",
+      endDate: range.endDate || "",
+      coin_name: selectScript || "",
+      ex_change: exchangeValue || "",
+    });
+    successTradeList.refetch();
+  };
+
+  const resetHandler = () => {
+    setviewBtnSetData({
+      startDate: "",
+      endDate: "",
+      coin_name: "",
+      ex_change: "",
+    });
+    setRange({
+      startDate: undefined,
+      endDate: undefined,
+    });
+    setExchangeValue("");
+    setSelectScript("");
+    successTradeList.refetch();
   };
 
   return (
@@ -190,12 +231,12 @@ const RejectionLogScreen = ({ navigation }: any) => {
         <SmallBtnComponent
           style={styles.buttonBtn}
           title={"Search"}
-          onPress={() => {}}
+          onPress={searchBtnHandler}
         />
         <SmallBtnComponent
           style={{ ...styles.buttonBtn, ...{ marginLeft: 15 } }}
           title={"Reset"}
-          onPress={() => {}}
+          onPress={resetHandler}
           backgroundColor={theme.colors.lightGrey}
           textColor={theme.colors.secondary}
         />

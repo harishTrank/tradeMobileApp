@@ -33,17 +33,21 @@ const RenderItem = ({ item }: any) => {
         </Text>
       </View>
 
+      <Text style={[styles.itemText2, { paddingVertical: 2 }]}>
+        {item.message}
+      </Text>
+
       <View style={styles.itemSecondRow}>
         <View style={styles.itemSecondRowContainer}>
-          <Feather name="user" size={20} color="black" />
-          <Text style={[styles.itemText, { marginLeft: 5 }]}>
+          <Feather name="user" size={16} color={theme.colors.greyText} />
+          <Text style={[styles.itemText2, { marginLeft: 5 }]}>
             {item?.buy_sell_user__user_name}
           </Text>
         </View>
 
         <View style={styles.itemSecondRowContainer}>
-          <Feather name="clock" size={20} color="black" />
-          <Text style={[styles.itemText, { marginLeft: 5 }]}>
+          <Feather name="clock" size={16} color={theme.colors.greyText} />
+          <Text style={[styles.itemText2, { marginLeft: 5 }]}>
             {dayjs(item?.created_at).format("DD MMM YYYY hh:mm:ss A")}
           </Text>
         </View>
@@ -63,7 +67,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: 5,
   },
   itemSecondRow: {
     flexDirection: "row",
@@ -75,9 +78,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   itemText: {
-    ...theme.font.fontSemiBold,
+    ...theme.font.fontMedium,
     color: theme.colors.black,
-    // fontSize: 13,
+    fontSize: 13,
+  },
+  itemText2: {
+    ...theme.font.fontMedium,
+    color: theme.colors.greyText,
+    fontSize: 12,
   },
   emptyStyleContainer: {
     height: height * 0.6,
