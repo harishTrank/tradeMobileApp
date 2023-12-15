@@ -86,9 +86,11 @@ const PositionTab = ({ navigation }: any) => {
   }, [positionListApi.data?.response, socketResponse]);
 
   useEffect(() => {
-    subscribeToFilterData((data: any) => {
-      setSocketResponse(data);
-    });
+    setTimeout(() => {
+      subscribeToFilterData((data: any) => {
+        setSocketResponse(data);
+      });
+    }, 1000);
   }, []);
   const focusRefetchContant = async () => {
     const quantityData: any = await AsyncStorage.getItem("quantity");
