@@ -49,7 +49,6 @@ const QuotesTab = ({ navigation }: any) => {
   // socket manage case -------------------------
   useEffect(() => {
     subscribeToFilterData((data: any) => {
-      // console.log("1111", 1111);
       setLoading(false);
       setWatchListData(data);
     });

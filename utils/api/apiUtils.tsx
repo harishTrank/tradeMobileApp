@@ -4,9 +4,9 @@ import queryString from "querystring";
 import { Alert } from "react-native";
 
 export const hostname = () => {
-  // let hostUrl = "http://13.232.101.55:8000/api";
+  let hostUrl = "http://13.232.101.55:8000/api";
   // let hostUrl = "http://192.168.0.176:8000/api";
-  let hostUrl = "http://localhost:8000/api";
+  // let hostUrl = "http://localhost:8000/api";
 
   return hostUrl;
 };

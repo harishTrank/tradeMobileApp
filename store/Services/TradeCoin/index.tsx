@@ -1,7 +1,5 @@
-import axios from "axios";
 import { callApi } from "../../../utils/api/apiUtils";
 import { tradeCoinEndpoints } from "../../Endpoints/TradeCoin";
-import { nodeURL } from "../../../utils/socket/SocketService";
 
 export const addTradeCoin = ({ body }: any) =>
   callApi({
