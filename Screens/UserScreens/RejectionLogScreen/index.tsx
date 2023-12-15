@@ -268,7 +268,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
       </View>
       <FlatList
         style={{
-          paddingBottom: useSafeAreaInsets().bottom + 10,
+          marginBottom: useSafeAreaInsets().bottom,
         }}
         showsVerticalScrollIndicator={false}
         data={successList}

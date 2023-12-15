@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 5,
     borderBottomWidth: 1,
-    borderBlockColor: theme.colors.secondary,
+    borderBlockColor: theme.colors.border,
   },
   toggleText: {
     ...theme.font.fontMedium,

@@ -18,3 +18,9 @@ export const changePassword = ({ body }: any) =>
     uriEndPoint: authEndpoints.changePassword.v1,
     body,
   });
+
+export const loginHistory = ({ query }: any) =>
+  callApi({
+    uriEndPoint: authEndpoints.loginHistory.v1,
+    query,
+  });

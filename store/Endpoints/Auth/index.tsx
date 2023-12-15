@@ -22,4 +22,11 @@ export const authEndpoints = {
       uri: "/logout/",
     },
   },
+  loginHistory: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/login-history/",
+    },
+  },
 };

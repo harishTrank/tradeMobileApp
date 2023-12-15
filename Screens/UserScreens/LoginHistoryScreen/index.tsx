@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  FlatList,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
@@ -13,23 +14,79 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import dayjs from "dayjs";
 import { DatePickerModal } from "react-native-paper-dates";
+import { useLoginHistory } from "../../../hooks/Auth/query";
+import LoginItem from "./Components/LoginItem";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const { width } = Dimensions.get("window");
 
 const LoginHistoryScreen = ({ navigation }: any) => {
-  const [selectedWeek, setSelectedWeek]: any = useState("");
   const [searchExchangeText, setSearchExchangeText]: any = useState("");
   const [searchIconColorState, setSearchIconColorState]: any = useState(
     theme.colors.greyText
   );
-
-  // date picker case working
+  const [loading, setLoading]: any = useState(false);
+  const [currentPage, setCurrentPage]: any = useState(1);
+  const [successList, setSuccessList]: any = useState([]);
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState({
     startDate: undefined,
     endDate: undefined,
   });
+  const [apiKeys, setApiKeys]: any = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
 
+  const loginHistoryApi: any = useLoginHistory({
+    query: {
+      page: currentPage,
+      from_date:
+        apiKeys.startDate !== ""
+          ? dayjs(apiKeys.startDate).format("YYYY-MM-DD")
+          : "",
+      to_date:
+        apiKeys.endDate !== ""
+          ? dayjs(apiKeys.endDate).format("YYYY-MM-DD")
+          : "",
+    },
+  });
+
+  useEffect(() => {
+    if (
+      !loginHistoryApi?.isFetching &&
+      !loginHistoryApi.isLoading &&
+      loginHistoryApi?.data?.results
+    ) {
+      if (currentPage === 1) {
+        setSuccessList(loginHistoryApi.data.results);
+      } else {
+        setSuccessList((oldValue: any) => {
+          return [...oldValue, ...loginHistoryApi.data.results].filter(
+            (value, index, self) =>
+              index === self.findIndex((t: any) => t.id === value.id)
+          );
+        });
+      }
+      setLoading(false);
+    }
+  }, [
+    loginHistoryApi?.data?.results,
+    currentPage,
+    loginHistoryApi?.isFetching,
+  ]);
+
+  const onEndReached = () => {
+    if (
+      loginHistoryApi?.data?.total &&
+      currentPage < loginHistoryApi?.data?.total
+    ) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // date picker case working
   const onDismiss = useCallback(() => {
     setOpen(false);
   }, [setOpen]);
@@ -43,8 +100,25 @@ const LoginHistoryScreen = ({ navigation }: any) => {
   );
   // ------------------------------
 
+  const searchBtnHandler = () => {
+    setApiKeys({
+      startDate: range.startDate,
+      endDate: range.endDate,
+    });
+    loginHistoryApi.refetch();
+  };
+
+  const resetBtnHandler = () => {
+    setApiKeys({
+      startDate: undefined,
+      endDate: undefined,
+    });
+    loginHistoryApi.refetch();
+  };
+
   return (
     <View style={styles.screen}>
+      <FullScreenLoader loading={loading} />
       <BasicHeader navigation={navigation} title={"Login History"} />
       <View style={styles.mainBox}>
         <View style={styles.dateBox}>
@@ -97,7 +171,7 @@ const LoginHistoryScreen = ({ navigation }: any) => {
           <TextInput
             value={searchExchangeText}
             onChangeText={setSearchExchangeText}
-            placeholder="Seach exchange or script"
+            placeholder="Search"
             placeholderTextColor={theme.colors.greyText}
             style={styles.searchTextBox}
             onBlur={() => setSearchIconColorState(theme.colors.greyText)}
@@ -109,17 +183,30 @@ const LoginHistoryScreen = ({ navigation }: any) => {
           <SmallBtnComponent
             style={styles.buttonBtn}
             title={"Search"}
-            onPress={() => {}}
+            onPress={searchBtnHandler}
           />
           <SmallBtnComponent
             style={{ ...styles.buttonBtn, ...{ marginLeft: 15 } }}
             title={"Reset"}
-            onPress={() => {}}
+            onPress={resetBtnHandler}
             backgroundColor={theme.colors.lightGrey}
             textColor={theme.colors.secondary}
           />
         </View>
       </View>
+
+      <FlatList
+        style={{
+          marginBottom: useSafeAreaInsets().bottom,
+        }}
+        showsVerticalScrollIndicator={false}
+        data={successList}
+        keyExtractor={(item: any) => `${item.id}`}
+        renderItem={({ item }: any) => {
+          return <LoginItem item={item} />;
+        }}
+        onEndReached={onEndReached}
+      />
     </View>
   );
 };
