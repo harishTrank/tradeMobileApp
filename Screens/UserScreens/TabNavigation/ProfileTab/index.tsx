@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Platform,
 } from "react-native";
 import theme from "../../../../utils/theme";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
@@ -15,6 +16,9 @@ import { boxData } from "./ProfileUtils";
 import { useAtom } from "jotai";
 import { currentUserData, userLoginGlobalFlag } from "../../../../JotaiStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMobileLogout } from "../../../../hooks/Auth/mutation";
+import * as Network from "expo-network";
+import Toast from "react-native-toast-message";
 
 const { width }: any = Dimensions.get("window");
 
@@ -31,13 +35,31 @@ const ProfileTab = ({ navigation }: any) => {
   const [, setUserLogFlag]: any = useAtom(userLoginGlobalFlag);
   const [currentUserDetails]: any = useAtom(currentUserData);
 
+  const mobileLogoutApi: any = useMobileLogout();
+
   const logoutHander = async () => {
-    await AsyncStorage.removeItem("accessToken");
-    setUserLogFlag(false);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "LoginScreen" }],
-    });
+    const currentMobileIP = await Network.getIpAddressAsync();
+    mobileLogoutApi
+      .mutateAsync({
+        body: {
+          user_id: currentUserDetails.id,
+          current_ip: currentMobileIP,
+          method: Platform.OS.toUpperCase(),
+        },
+      })
+      .then(async (res: any) => {
+        await AsyncStorage.removeItem("accessToken");
+        setUserLogFlag(false);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "LoginScreen" }],
+        });
+        Toast.show({
+          type: "success",
+          text1: res?.message,
+        });
+      })
+      .catch((err: any) => console.log("err", err));
   };
 
   return (

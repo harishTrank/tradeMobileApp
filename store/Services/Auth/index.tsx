@@ -7,6 +7,12 @@ export const loginApiCall = ({ body }: any) =>
     body,
   });
 
+export const mobileLogout = ({ body }: any) =>
+  callApi({
+    uriEndPoint: authEndpoints.mobileLogout.v1,
+    body,
+  });
+
 export const changePassword = ({ body }: any) =>
   callApi({
     uriEndPoint: authEndpoints.changePassword.v1,

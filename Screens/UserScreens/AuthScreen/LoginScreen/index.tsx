@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Dimensions,
   StyleSheet,
+  Platform,
 } from "react-native";
 import ImageModule from "../../../../ImageModule";
 import theme from "../../../../utils/theme";
@@ -28,9 +29,6 @@ const accountType = [{ name: "Demo" }, { name: "AREX" }];
 
 const validationSchema = Yup.object().shape({
   userName: Yup.string().required("User Name is required"),
-  // .matches(/^[0-9]+$/, "Mobile Number must be a valid number")
-  // .min(10)
-  // .max(10)
   password: Yup.string()
     .required("Password is required")
     .min(4, "Password must be at least 4 characters"),
@@ -43,13 +41,12 @@ const LoginScreen = ({ navigation }: any) => {
   const [serverType, setServerType]: any = useState("Demo");
   const [, setTradeCoinData] = useAtom(selectedCoinList);
   const [, setCurrentUser]: any = useAtom(currentUserData);
-  // const [currentLocation]: any = useAtom(locationGlobal);
   const [loader, setLoader]: any = useState(false);
 
   const loginApiHandler: any = useloginApiCall();
 
   const handleSubmit = async (values: any) => {
-    // const currentMobileIP = await Network.getIpAddressAsync();
+    const currentMobileIP = await Network.getIpAddressAsync();
     setLoader(true);
     loginApiHandler
       ?.mutateAsync({
@@ -57,9 +54,8 @@ const LoginScreen = ({ navigation }: any) => {
           user_type: serverType,
           user_name: values?.userName,
           password: values?.password,
-          // latitude: currentLocation?.latitude,
-          // longitude: currentLocation?.longitude,
-          // currentMobileIP,
+          current_ip: currentMobileIP,
+          method: Platform.OS.toUpperCase(),
         },
       })
       .then(async (response: any) => {
