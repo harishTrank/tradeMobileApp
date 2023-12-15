@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
+  ActivityIndicator,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
@@ -274,7 +275,15 @@ const RejectionLogScreen = ({ navigation }: any) => {
         data={successList}
         keyExtractor={(index: any) => index.id}
         renderItem={({ item }: any) => <RenderItem item={item} />}
+        onEndReachedThreshold={0.5}
         onEndReached={onEndReached}
+        ListFooterComponent={
+          <>
+            {successTradeList?.isLoading && (
+              <ActivityIndicator color={theme.colors.primary} size={"large"} />
+            )}
+          </>
+        }
       />
     </View>
   );

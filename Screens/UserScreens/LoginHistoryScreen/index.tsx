@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
@@ -37,6 +38,7 @@ const LoginHistoryScreen = ({ navigation }: any) => {
   const [apiKeys, setApiKeys]: any = useState({
     startDate: undefined,
     endDate: undefined,
+    searchInput: "",
   });
 
   const loginHistoryApi: any = useLoginHistory({
@@ -50,6 +52,7 @@ const LoginHistoryScreen = ({ navigation }: any) => {
         apiKeys.endDate !== ""
           ? dayjs(apiKeys.endDate).format("YYYY-MM-DD")
           : "",
+      searchInput: apiKeys.searchInput,
     },
   });
 
@@ -76,6 +79,15 @@ const LoginHistoryScreen = ({ navigation }: any) => {
     currentPage,
     loginHistoryApi?.isFetching,
   ]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setApiKeys((oldValue: any) => {
+        return { ...oldValue, searchInput: searchExchangeText };
+      });
+      loginHistoryApi.refetch();
+    }, 700);
+  }, [searchExchangeText]);
 
   const onEndReached = () => {
     if (
@@ -205,7 +217,15 @@ const LoginHistoryScreen = ({ navigation }: any) => {
         renderItem={({ item }: any) => {
           return <LoginItem item={item} />;
         }}
+        onEndReachedThreshold={0.5}
         onEndReached={onEndReached}
+        ListFooterComponent={
+          <>
+            {loginHistoryApi?.isLoading && (
+              <ActivityIndicator color={theme.colors.primary} size={"large"} />
+            )}
+          </>
+        }
       />
     </View>
   );

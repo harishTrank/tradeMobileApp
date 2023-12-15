@@ -6,6 +6,7 @@ import {
   Dimensions,
   Text,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
 import theme from "../../../../utils/theme";
@@ -21,6 +22,7 @@ import FullScreenLoader from "../../../ReUseComponents/FullScreenLoader";
 import { useAtom } from "jotai";
 import { particularTradeTabCoin } from "../../../../JotaiStore";
 import { getParticularCoin } from "../../../../store/Services/TradeCoin";
+import { useQueryClient } from "@tanstack/react-query";
 
 const { height }: any = Dimensions.get("window");
 
@@ -123,6 +125,7 @@ const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
   const [loading, setLoading]: any = useState(false);
   const [selectTradeId, setSelectTradeId]: any = useState(0);
   const [, setParticularCoinHistory]: any = useAtom(particularTradeTabCoin);
+  const queryClient: any = useQueryClient();
 
   useEffect(() => {
     if (selectTradeId !== 0) {
@@ -166,6 +169,7 @@ const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
 
   useEffect(() => {
     return navigation.addListener("focus", () => {
+      queryClient.removeQueries(["tradeHistory"]);
       setCurrentPage(1);
       successTradeList.refetch();
     });
@@ -244,6 +248,13 @@ const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
           </>
         }
         onEndReached={onEndReached}
+        ListFooterComponent={
+          <>
+            {successTradeList?.isLoading && (
+              <ActivityIndicator color={theme.colors.primary} size={"large"} />
+            )}
+          </>
+        }
       />
     </View>
   );
