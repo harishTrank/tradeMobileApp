@@ -7,7 +7,6 @@ import {
   FlatList,
   TouchableOpacity,
   Text,
-  SafeAreaView,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";

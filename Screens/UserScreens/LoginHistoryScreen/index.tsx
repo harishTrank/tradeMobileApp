@@ -1,11 +1,18 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Dimensions, TextInput } from "react-native";
+import React, { useCallback, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TextInput,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
-import DropDownComponent from "../../ReUseComponents/DropDownComponent";
-import { dropDownData } from "../UserUtils";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
+import dayjs from "dayjs";
+import { DatePickerModal } from "react-native-paper-dates";
 
 const { width } = Dimensions.get("window");
 
@@ -16,19 +23,74 @@ const LoginHistoryScreen = ({ navigation }: any) => {
     theme.colors.greyText
   );
 
+  // date picker case working
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
+
+  const onDismiss = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirm = useCallback(
+    ({ startDate, endDate }: any) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  // ------------------------------
+
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Login History"} />
       <View style={styles.mainBox}>
-        <DropDownComponent
-          data={dropDownData}
-          value={selectedWeek}
-          setValue={setSelectedWeek}
-          placeholder={"Please select week of period"}
-          search={false}
-          style={styles.dropDownMargin}
-          fieldKey={"name"}
-        />
+        <View style={styles.dateBox}>
+          <TouchableOpacity
+            onPress={() => setOpen(true)}
+            style={styles.datePersonalBox}
+          >
+            <MaterialIcons
+              name="date-range"
+              size={24}
+              color={theme.colors.secondary}
+            />
+            <Text style={styles.dateText}>
+              {range?.startDate
+                ? dayjs(`${range?.startDate}`).format("DD/MM/YYYY")
+                : "From Date"}
+            </Text>
+          </TouchableOpacity>
+
+          <DatePickerModal
+            locale="en"
+            mode="range"
+            visible={open}
+            onDismiss={onDismiss}
+            startDate={range.startDate}
+            endDate={range.endDate}
+            onConfirm={onConfirm}
+            validRange={{ endDate: new Date() }}
+          />
+
+          <TouchableOpacity
+            onPress={() => setOpen(true)}
+            style={styles.datePersonalBox}
+          >
+            <MaterialIcons
+              name="date-range"
+              size={24}
+              color={theme.colors.secondary}
+            />
+            <Text style={styles.dateText}>
+              {range?.endDate
+                ? dayjs(`${range?.endDate}`).format("DD/MM/YYYY")
+                : "To Date"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.searchBox}>
           <FontAwesome name="search" size={20} color={searchIconColorState} />
@@ -94,5 +156,28 @@ const styles = StyleSheet.create({
   },
   buttonBtn: {
     width: width * 0.4,
+  },
+  dateBox: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginVertical: 5,
+    justifyContent: "space-between",
+  },
+  datePersonalBox: {
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.lightGrey,
+    width: width * 0.43,
+    marginBottom: 10,
+  },
+  dateText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+    marginLeft: 15,
+    fontSize: 15,
   },
 });
