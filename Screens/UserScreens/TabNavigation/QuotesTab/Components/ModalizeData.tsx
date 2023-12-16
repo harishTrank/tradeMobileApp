@@ -177,7 +177,7 @@ const ModalizeData = ({
         return;
       }
     }
-    if (selectedCoinData.SellPrice === 0 || selectedCoinData.BuyPrice == 0) {
+    if (selectedCoinData.SellPrice === 0 || selectedCoinData.BuyPrice == 0 || Number(dayjs().format("d")) === 0 || Number(dayjs().format("d")) === 6) {
       body.is_cancel = true;
     }
     buySellApiCall

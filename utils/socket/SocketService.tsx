@@ -20,15 +20,20 @@ const getAllData = () => {
 // ---------------------------------------------
 
 // ---------------------------------------------
+let filterDataRequestInProgress = false;
 const subscribeToFilterData = (callback: any) => {
   socket.on("filterDataSend", callback);
 };
 
 const getFilterData = (data: any) => {
-  socket.emit("filterDataGet", data);
+  if (!filterDataRequestInProgress) {
+    filterDataRequestInProgress = true;
+    socket.emit("filterDataGet", data);
+  }
 };
 
 const getFilterOff = () => {
+  filterDataRequestInProgress = false;
   socket.emit("filterDataOff");
 };
 // ---------------------------------------------
