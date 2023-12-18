@@ -45,11 +45,11 @@ const LoginHistoryScreen = ({ navigation }: any) => {
     query: {
       page: currentPage,
       from_date:
-        apiKeys.startDate !== ""
+        apiKeys.startDate && apiKeys.startDate !== ""
           ? dayjs(apiKeys.startDate).format("YYYY-MM-DD")
           : "",
       to_date:
-        apiKeys.endDate !== ""
+        apiKeys.startDate && apiKeys.endDate !== ""
           ? dayjs(apiKeys.endDate).format("YYYY-MM-DD")
           : "",
       searchInput: apiKeys.searchInput,

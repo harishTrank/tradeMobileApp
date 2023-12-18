@@ -26,7 +26,6 @@ import { userLoginGlobalFlag } from "../../JotaiStore";
 import CoinDetailsScreen from "./CoinDetailsScreen";
 import AddSymbolListScreen from "./AddSymbolListScreen";
 import ChartViewScreen from "./ChartViewScreen";
-import PositionSquareOffScreen from "./PositionSquareOffScreen";
 
 const Stack = createStackNavigator<any>();
 

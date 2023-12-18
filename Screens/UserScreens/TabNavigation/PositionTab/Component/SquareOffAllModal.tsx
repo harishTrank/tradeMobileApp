@@ -171,7 +171,7 @@ const SquareOffAllModal = ({
             onPress={squareOffPosition}
             title="Square-Off Position"
             style={{
-              marginBottom: useSafeAreaInsets().bottom,
+              marginBottom: useSafeAreaInsets().bottom + 10,
               marginHorizontal: 10,
             }}
           />
