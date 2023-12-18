@@ -2,14 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import CheckBoxComponent from "../../ReUseComponents/CheckBoxComponent";
 import theme from "../../../utils/theme";
-import DropDownComponent from "../../ReUseComponents/DropDownComponent";
 
 const { width } = Dimensions.get("window");
 
 const ExchangeRowComponent = ({
   exchangeAllowance,
-  // dropDownValue,
-  // setDropDownValue,
   type,
   setExchangeAllowance,
 }: any) => {

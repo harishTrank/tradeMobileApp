@@ -16,7 +16,7 @@ const ExtraOptionRow = ({
   searchText,
   setSearchText,
   refreshHandler,
-  buySellHandler,
+  setVisible,
 }: any) => {
   const [searchOpen, isSearchOpen]: any = useState(false);
   const searchOpenHandler = () => isSearchOpen(true);
@@ -60,7 +60,10 @@ const ExtraOptionRow = ({
               <Text style={styles.textStyle}>Refresh</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonBox} onPress={buySellHandler}>
+            <TouchableOpacity
+              style={styles.buttonBox}
+              onPress={() => setVisible(true)}
+            >
               <Entypo name="dots-three-vertical" size={18} color="black" />
               <Text style={styles.textStyle}>Square-Off</Text>
             </TouchableOpacity>

@@ -26,6 +26,7 @@ import { userLoginGlobalFlag } from "../../JotaiStore";
 import CoinDetailsScreen from "./CoinDetailsScreen";
 import AddSymbolListScreen from "./AddSymbolListScreen";
 import ChartViewScreen from "./ChartViewScreen";
+import PositionSquareOffScreen from "./PositionSquareOffScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -36,8 +37,8 @@ const UserScreens = () => {
       screenOptions={{
         headerShown: false,
       }}
-      // initialRouteName={userLogFlag ? "TabNavigation" : "LoginScreen"}
-      initialRouteName={"UserListScreen"}
+      initialRouteName={userLogFlag ? "TabNavigation" : "LoginScreen"}
+      // initialRouteName={"UserListScreen"}
     >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="TabNavigation" component={TabNavigation} />

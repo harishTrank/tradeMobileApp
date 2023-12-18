@@ -14,7 +14,6 @@ import { DatePickerModal } from "react-native-paper-dates";
 import dayjs from "dayjs";
 import SmallBtnComponent from "../../../../ReUseComponents/SmallBtnComponent";
 import DropDownComponent from "../../../../ReUseComponents/DropDownComponent";
-import { dropDownData2 } from "../../../UserUtils";
 import { useUserCoinList } from "../../../../../hooks/TradeCoin/query";
 import { useAtom } from "jotai";
 import { currentUserData } from "../../../../../JotaiStore";

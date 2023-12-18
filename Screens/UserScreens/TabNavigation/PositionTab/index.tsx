@@ -29,6 +29,8 @@ import ExtraOptionRow from "./Component/ExtraOptionRow";
 import { useBuySellTradeCoin } from "../../../../hooks/TradeCoin/mutation";
 import * as Network from "expo-network";
 import Toast from "react-native-toast-message";
+import ModalLizeComp from "./Component/ModalLizeComp";
+import SquareOffAllModal from "./Component/SquareOffAllModal";
 
 const { height } = Dimensions.get("window");
 
@@ -111,11 +113,13 @@ const PositionTab = ({ navigation }: any) => {
   // ----------------------
 
   // square off -------------------------
+  const [visible, setVisible]: any = useState(false);
+  const [squareOffScreen, setSquareOffScreen]: any = useState(false);
   const buySellApiCall: any = useBuySellTradeCoin();
-  const buySellHandler = async () => {
+  const buySellHandler = async (completeList: any) => {
     setLoading(true);
     const currentMobileIP = await Network.getIpAddressAsync();
-    positionListApi.data?.response?.map((item: any) => {
+    completeList?.map((item: any) => {
       const socketItem = socketResponse.find(
         (findObject: any) =>
           findObject?.InstrumentIdentifier === item?.identifer
@@ -143,7 +147,7 @@ const PositionTab = ({ navigation }: any) => {
           positionListApi?.refetch();
           Toast.show({
             type: "success",
-            text1: "Complete all the positions.",
+            text1: "Complete selected position.",
           });
         })
         .catch(() => {});
@@ -172,6 +176,22 @@ const PositionTab = ({ navigation }: any) => {
 
       <FullScreenLoader loading={loading} />
 
+      <ModalLizeComp
+        visible={visible}
+        setVisible={setVisible}
+        setSquareOffScreen={setSquareOffScreen}
+      />
+
+      {squareOffScreen && (
+        <SquareOffAllModal
+          squareOffScreen={squareOffScreen}
+          setSquareOffScreen={setSquareOffScreen}
+          data={positionListApi.data?.response}
+          socketResponse={socketResponse}
+          buySellHandler={buySellHandler}
+        />
+      )}
+
       <DropDownCompo
         dropDownOpen={dropDownOpen}
         setDropDownOpen={setDropDownOpen}
@@ -182,7 +202,7 @@ const PositionTab = ({ navigation }: any) => {
         setSearchText={setSearchText}
         searchText={searchText}
         refreshHandler={refreshHandler}
-        buySellHandler={buySellHandler}
+        setVisible={setVisible}
       />
 
       <FlatList
