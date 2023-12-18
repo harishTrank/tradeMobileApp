@@ -15,4 +15,11 @@ export const userEndpoints = {
       uri: "/user-profile/",
     },
   },
+  userListView: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/user-list/",
+    },
+  },
 };

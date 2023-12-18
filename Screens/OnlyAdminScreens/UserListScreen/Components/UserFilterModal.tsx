@@ -21,10 +21,14 @@ const filterKey = {
   third: [{ name: "All" }, { name: "Active" }, { name: "InActive" }],
 };
 
-const UserFilterModal = ({ userModalOpen, setUserModalOpen }: any) => {
-  const [ownUser, setOwnUser]: any = useState("");
-  const [selectUser, setSelectUser]: any = useState("");
-  const [selectStatus, setSelectStatus]: any = useState("");
+const UserFilterModal = ({
+  userModalOpen,
+  setUserModalOpen,
+  stateFilter,
+  setStateFilter,
+  restartHandler,
+  submitHandler,
+}: any) => {
   return (
     <SafeAreaView>
       <Modal animationType="fade" transparent={true} visible={userModalOpen}>
@@ -40,24 +44,36 @@ const UserFilterModal = ({ userModalOpen, setUserModalOpen }: any) => {
             <View style={styles.dropDownContainer}>
               <DropDownComponent
                 data={filterKey.first}
-                value={ownUser}
-                setValue={setOwnUser}
+                value={stateFilter.own_user}
+                setValue={(val: any) =>
+                  setStateFilter((oldValue: any) => {
+                    return { ...oldValue, own_user: val };
+                  })
+                }
                 style={styles.dropDown}
                 fieldKey={"name"}
                 placeholder={"Own User"}
               />
               <DropDownComponent
                 data={filterKey.second}
-                value={selectUser}
-                setValue={setSelectUser}
+                value={stateFilter.select_user}
+                setValue={(val: any) =>
+                  setStateFilter((oldValue: any) => {
+                    return { ...oldValue, select_user: val };
+                  })
+                }
                 style={styles.dropDown}
                 fieldKey={"name"}
                 placeholder={"Select User"}
               />
               <DropDownComponent
                 data={filterKey.third}
-                value={selectStatus}
-                setValue={setSelectStatus}
+                value={stateFilter.select_status}
+                setValue={(val: any) =>
+                  setStateFilter((oldValue: any) => {
+                    return { ...oldValue, select_status: val };
+                  })
+                }
                 style={styles.dropDown}
                 fieldKey={"name"}
                 placeholder={"Select Status"}
@@ -67,12 +83,12 @@ const UserFilterModal = ({ userModalOpen, setUserModalOpen }: any) => {
             <View style={styles.buttonsBoxStyle}>
               <SmallBtnComponent
                 title={"Reset"}
-                onPress={() => {}}
+                onPress={restartHandler}
                 style={{ marginLeft: 10 }}
               />
               <SmallBtnComponent
                 title={"Search"}
-                onPress={() => {}}
+                onPress={submitHandler}
                 backgroundColor={theme.colors.lightGrey}
                 textColor={theme.colors.secondary}
                 style={{ marginLeft: 10 }}

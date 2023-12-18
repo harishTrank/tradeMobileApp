@@ -11,3 +11,9 @@ export const userProfileView = () =>
   callApi({
     uriEndPoint: userEndpoints.userProfileView.v1,
   });
+
+export const userListView = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.userListView.v1,
+    query,
+  });

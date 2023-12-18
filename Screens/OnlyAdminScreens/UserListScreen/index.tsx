@@ -6,19 +6,24 @@ import theme from "../../../utils/theme";
 import UserFilterModal from "./Components/UserFilterModal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
+import { useUserListView } from "../../../hooks/User/query";
 
 const RenderItem = ({ item }: any) => {
   return (
     <View style={styles.itemContainer}>
       <View>
-        <Text style={styles.itemText}>DEMO999(demo)</Text>
-        <Text style={styles.itemBalance}>Balance: 0</Text>
-        <Text style={styles.itemText}>Credit: 8000000</Text>
+        <Text style={styles.itemText}>
+          {item?.full_name}({item?.user_name})
+        </Text>
+        <Text style={styles.itemBalance}>Balance: {item?.balance}</Text>
+        <Text style={styles.itemText}>Credit: {item?.credit}</Text>
       </View>
 
       <View style={styles.itemSmallBox}>
         <View style={styles.circularBack}>
-          <Text style={styles.userType}>M</Text>
+          <Text style={styles.userType}>
+            {item?.user_type?.[0]?.toUpperCase()}
+          </Text>
         </View>
         <Text style={styles.itemPercent}>0%</Text>
       </View>
@@ -29,6 +34,40 @@ const RenderItem = ({ item }: any) => {
 const UserListScreen = ({ navigation }: any) => {
   const [searchText, setSearchText]: any = useState("");
   const [userModalOpen, setUserModalOpen]: any = useState(false);
+  const [stateFilter, setStateFilter]: any = useState({
+    own_user: "",
+    select_user: "",
+    select_status: "",
+  });
+
+  const [btnHitSearchFilter, setBtnHitSearchFilter]: any = useState({
+    own_user: "",
+    select_user: "",
+    select_status: "",
+  });
+
+  const userListApiHandler: any = useUserListView({
+    query: btnHitSearchFilter,
+  });
+
+  const submitHandler = () => {
+    setBtnHitSearchFilter(stateFilter);
+    userListApiHandler.refetch();
+  };
+
+  const restartHandler = () => {
+    setStateFilter({
+      own_user: "",
+      select_user: "",
+      select_status: "",
+    });
+    setBtnHitSearchFilter({
+      own_user: "",
+      select_user: "",
+      select_status: "",
+    });
+    userListApiHandler.refetch();
+  };
   return (
     <View style={styles.screen}>
       <UserNameHeader navigation={navigation} title={"User List"} />
@@ -36,6 +75,10 @@ const UserListScreen = ({ navigation }: any) => {
         <UserFilterModal
           userModalOpen={userModalOpen}
           setUserModalOpen={setUserModalOpen}
+          stateFilter={stateFilter}
+          setStateFilter={setStateFilter}
+          restartHandler={restartHandler}
+          submitHandler={submitHandler}
         />
         <SearchComponent
           searchText={searchText}
@@ -51,9 +94,10 @@ const UserListScreen = ({ navigation }: any) => {
       </View>
 
       <FlatList
-        data={[1, 2, 3, 4]}
+        showsVerticalScrollIndicator={false}
+        data={userListApiHandler?.data?.results || []}
         style={styles.flatlistStyle}
-        keyExtractor={(item: any) => `${item}`}
+        keyExtractor={(item: any) => item.id}
         renderItem={RenderItem}
       />
     </View>
