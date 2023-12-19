@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textStyle: {
-    ...theme.font.fontMedium,
+    ...theme.font.fontSemiBold,
     fontSize: 16,
   },
   cloFieldHandler: {

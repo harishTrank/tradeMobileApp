@@ -96,7 +96,6 @@ const UserListScreen = ({ navigation }: any) => {
       <FlatList
         showsVerticalScrollIndicator={false}
         data={userListApiHandler?.data?.results || []}
-        style={styles.flatlistStyle}
         keyExtractor={(item: any) => item.id}
         renderItem={RenderItem}
       />
@@ -120,14 +119,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
   },
-  flatlistStyle: {
-    padding: 10,
-  },
   itemContainer: {
     backgroundColor: theme.colors.lightGrey,
     marginBottom: 10,
     padding: 10,
     borderRadius: 10,
+    marginHorizontal: 10,
     ...theme.elevationLight,
     flexDirection: "row",
     alignItems: "center",

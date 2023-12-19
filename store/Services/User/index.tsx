@@ -17,3 +17,8 @@ export const userListView = ({ query }: any) =>
     uriEndPoint: userEndpoints.userListView.v1,
     query,
   });
+
+export const searchUserList = () =>
+  callApi({
+    uriEndPoint: userEndpoints.searchUserList.v1,
+  });
