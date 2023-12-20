@@ -189,9 +189,10 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
                 <Text style={styles.tableText}>{"Symbol\n(%)"}</Text>
               </View>
 
-              {userProfileData?.exchange?.map((mapItem: any) => {
+              {userProfileData?.exchange?.map((mapItem: any, index: any) => {
                 return (
                   <ExchangeRowComponent
+                    key={index}
                     exchangeAllowance={exchangeAllowance}
                     setExchangeAllowance={setExchangeAllowance}
                     type={mapItem.toLowerCase()}
