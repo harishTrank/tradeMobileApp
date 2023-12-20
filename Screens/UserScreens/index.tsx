@@ -37,7 +37,7 @@ const UserScreens = () => {
         headerShown: false,
       }}
       initialRouteName={userLogFlag ? "TabNavigation" : "LoginScreen"}
-      // initialRouteName={"UserListScreen"}
+      // initialRouteName={"AccountSummaryScreen"}
     >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="TabNavigation" component={TabNavigation} />

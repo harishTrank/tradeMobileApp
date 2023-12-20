@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  accountSummary,
   searchUserList,
   userListView,
   userProfileView,
@@ -16,3 +17,6 @@ export const useUserListView = (payload: any) =>
 
 export const useSearchUserList = () =>
   useQuery(["searchUserList"], () => searchUserList());
+
+export const useAccountSummary = (payload: any) =>
+  useQuery(["accountSummary", payload], () => accountSummary(payload));

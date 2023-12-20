@@ -160,8 +160,8 @@ const FilterModal = ({
               />
               <DropDownComponent
                 data={
-                  userCoinListApi?.data?.response.filter((filterObj: any) => {
-                    return filterObj.coin_name.includes(exchangeValue);
+                  userCoinListApi?.data?.response?.filter((filterObj: any) => {
+                    return filterObj?.coin_name?.includes(exchangeValue);
                   }) || []
                 }
                 value={selectScript}

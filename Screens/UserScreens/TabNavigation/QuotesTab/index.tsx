@@ -61,7 +61,11 @@ const QuotesTab = ({ navigation }: any) => {
         .then((res: any) => {
           getFilterData({ identifier: res.result });
         })
-        ?.catch((err: any) => console.log("err", err));
+        ?.catch(async (err: any) => {
+          setLoading(false);
+          await AsyncStorage.removeItem("accessToken");
+          navigation.navigate("LoginScreen");
+        });
       focusRefetchContant();
     });
   }, [navigation]);

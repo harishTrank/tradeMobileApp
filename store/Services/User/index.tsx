@@ -22,3 +22,9 @@ export const searchUserList = () =>
   callApi({
     uriEndPoint: userEndpoints.searchUserList.v1,
   });
+
+export const accountSummary = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.accountSummary.v1,
+    query,
+  });

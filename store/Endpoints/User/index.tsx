@@ -29,4 +29,12 @@ export const userEndpoints = {
       uri: "/search-user-api/",
     },
   },
+
+  accountSummary: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/account-summary/",
+    },
+  },
 };

@@ -1,72 +1,242 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   Dimensions,
-  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
-import DropDownComponent from "../../ReUseComponents/DropDownComponent";
 import CheckBoxComponent from "../../ReUseComponents/CheckBoxComponent";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
-import { FontAwesome } from "@expo/vector-icons";
-import { dropDownData } from "../UserUtils";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import dayjs from "dayjs";
+import { DatePickerModal } from "react-native-paper-dates";
+import { useAccountSummary } from "../../../hooks/User/query";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
+import RenderItem from "./Components/RenderItem";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const AccountSummaryScreen = ({ navigation }: any) => {
-  const [currentDropdownValue, setCurrentDropdownValue]: any = useState("");
   const [toggleCheckBoxs, setToggleCheckBoxs] = useState({
     pAndL: true,
     brk: true,
     credit: false,
   });
+  const [viewBtnSetData, setviewBtnSetData]: any = useState({
+    from_date: "",
+    to_date: "",
+    coin_name: "",
+    pAndL: true,
+    brk: true,
+  });
+  const [currentPage, setCurrentPage]: any = useState(1);
   const [searchExchangeText, setSearchExchangeText]: any = useState("");
   const [searchIconColorState, setSearchIconColorState]: any = useState(
     theme.colors.greyText
   );
 
-  const setToggleHandler = (value: any) => {
+  const accountSummaryApi: any = useAccountSummary({
+    query: {
+      page: currentPage,
+      from_date:
+        viewBtnSetData.startDate && viewBtnSetData.startDate !== ""
+          ? dayjs(viewBtnSetData.startDate).format("YYYY-MM-DD")
+          : "",
+      to_date:
+        viewBtnSetData.endDate && viewBtnSetData.endDate !== ""
+          ? dayjs(viewBtnSetData.endDate).format("YYYY-MM-DD")
+          : "",
+      coin_name: searchExchangeText,
+      p_and_l: true,
+      brk: true,
+    },
+  });
+  const [accountSummaryList, setAccountSummaryList]: any = useState([]);
+  const [loading, setLoading]: any = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setviewBtnSetData((oldValue: any) => {
+        return { ...oldValue, coin_name: searchExchangeText };
+      });
+      accountSummaryApi.refetch();
+    }, 700);
+  }, [searchExchangeText]);
+
+  useEffect(() => {
+    if (
+      !accountSummaryApi?.isFetching &&
+      !accountSummaryApi.isLoading &&
+      accountSummaryApi?.data?.results
+    ) {
+      if (currentPage === 1) {
+        setAccountSummaryList(accountSummaryApi.data.results);
+      } else {
+        setAccountSummaryList((oldValue: any) => {
+          return [...oldValue, ...accountSummaryApi.data.results].filter(
+            (value, index, self) =>
+              index === self.findIndex((t: any) => t.id === value.id)
+          );
+        });
+      }
+      setLoading(false);
+    }
+  }, [
+    accountSummaryApi?.data?.results,
+    currentPage,
+    accountSummaryApi?.isFetching,
+  ]);
+
+  const onEndReached = () => {
+    if (
+      accountSummaryApi?.data?.total &&
+      currentPage < accountSummaryApi?.data?.total
+    ) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const searchBtnHandler = () => {
+    setLoading(true);
+    setviewBtnSetData({
+      startDate: range.startDate || "",
+      endDate: range.endDate || "",
+      coin_name: searchExchangeText || "",
+      p_and_l: toggleCheckBoxs.pAndL,
+      brk: toggleCheckBoxs.brk,
+    });
+    accountSummaryApi.refetch();
+    setLoading(false);
+  };
+
+  const resetHandler = () => {
+    setviewBtnSetData({
+      startDate: "",
+      endDate: "",
+      coin_name: "",
+      ex_change: "",
+    });
+    setRange({
+      startDate: undefined,
+      endDate: undefined,
+    });
+    setSearchExchangeText("");
+    accountSummaryApi.refetch();
+  };
+
+  const setToggleHandler = (value: any, key: any) => {
     setToggleCheckBoxs((oldValue: any) => {
-      return { ...oldValue, ...value };
+      return key === "credit"
+        ? {
+            ...oldValue,
+            ...{
+              [key]: value,
+              brk: value === true ? false : true,
+              pAndL: value === true ? false : true,
+            },
+          }
+        : {
+            ...oldValue,
+            [key]: value,
+            credit: value === true ? false : true,
+          };
     });
   };
+
+  // date picker case working
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
+
+  const onDismiss = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirm = useCallback(
+    ({ startDate, endDate }: any) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  // ------------------------------
+
   return (
-    <ScrollView style={styles.screen}>
+    <View style={styles.screen}>
+      <FullScreenLoader loading={loading} />
       <BasicHeader navigation={navigation} title={"Account Summary"} />
-      <View style={styles.mainBox}>
-        <DropDownComponent
-          data={dropDownData}
-          value={currentDropdownValue}
-          setValue={setCurrentDropdownValue}
-          placeholder={"Please select week of period"}
-          style={styles.dropDownMargin}
-          search={false}
-          fieldKey={"name"}
+      <View style={styles.dateBox}>
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+          style={styles.datePersonalBox}
+        >
+          <MaterialIcons
+            name="date-range"
+            size={24}
+            color={theme.colors.secondary}
+          />
+          <Text style={styles.dateText}>
+            {range?.startDate
+              ? dayjs(`${range?.startDate}`).format("DD/MM/YYYY")
+              : "From Date"}
+          </Text>
+        </TouchableOpacity>
+
+        <DatePickerModal
+          locale="en"
+          mode="range"
+          visible={open}
+          onDismiss={onDismiss}
+          startDate={range.startDate}
+          endDate={range.endDate}
+          onConfirm={onConfirm}
+          validRange={{ endDate: new Date() }}
         />
 
+        <TouchableOpacity
+          onPress={() => setOpen(true)}
+          style={styles.datePersonalBox}
+        >
+          <MaterialIcons
+            name="date-range"
+            size={24}
+            color={theme.colors.secondary}
+          />
+          <Text style={styles.dateText}>
+            {range?.endDate
+              ? dayjs(`${range?.endDate}`).format("DD/MM/YYYY")
+              : "To Date"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.mainBox}>
         <View style={styles.checkBoxParentBox}>
           <View style={styles.checkBoxChild}>
             <CheckBoxComponent
               value={toggleCheckBoxs.pAndL}
-              setValue={(value: any) => setToggleHandler({ pAndL: value })}
+              setValue={(value: any) => setToggleHandler(value, "pAndL")}
             />
             <Text style={styles.checkBoxText}>P&L</Text>
           </View>
           <View style={styles.checkBoxChild}>
             <CheckBoxComponent
               value={toggleCheckBoxs.brk}
-              setValue={(value: any) => setToggleHandler({ brk: value })}
+              setValue={(value: any) => setToggleHandler(value, "brk")}
             />
             <Text style={styles.checkBoxText}>Brk</Text>
           </View>
           <View style={styles.checkBoxChild}>
             <CheckBoxComponent
               value={toggleCheckBoxs.credit}
-              setValue={(value: any) => setToggleHandler({ credit: value })}
+              setValue={(value: any) => setToggleHandler(value, "credit")}
             />
             <Text style={styles.checkBoxText}>Credit</Text>
           </View>
@@ -75,12 +245,12 @@ const AccountSummaryScreen = ({ navigation }: any) => {
         <View style={styles.buttonsBoxStyle}>
           <SmallBtnComponent
             title={"View"}
-            onPress={() => {}}
+            onPress={searchBtnHandler}
             style={{ marginLeft: 10 }}
           />
           <SmallBtnComponent
             title={"Clear"}
-            onPress={() => {}}
+            onPress={resetHandler}
             backgroundColor={theme.colors.lightGrey}
             textColor={theme.colors.secondary}
             style={{ marginLeft: 10 }}
@@ -100,7 +270,38 @@ const AccountSummaryScreen = ({ navigation }: any) => {
           />
         </View>
       </View>
-    </ScrollView>
+      <FlatList
+        style={{
+          marginBottom: useSafeAreaInsets().bottom,
+        }}
+        showsVerticalScrollIndicator={false}
+        data={accountSummaryList}
+        keyExtractor={(index: any) => `${index.id}`}
+        renderItem={({ item }: any) => <RenderItem item={item} />}
+        onEndReachedThreshold={0.5}
+        onEndReached={onEndReached}
+        ListFooterComponent={
+          <>
+            {accountSummaryApi?.isLoading ||
+              (accountSummaryApi?.isFetching && (
+                <ActivityIndicator
+                  color={theme.colors.primary}
+                  size={"large"}
+                />
+              ))}
+          </>
+        }
+        ListEmptyComponent={
+          <>
+            {!accountSummaryApi?.isLoading && (
+              <View style={styles.emptyView}>
+                <Text style={styles.emptyText}>No record found!</Text>
+              </View>
+            )}
+          </>
+        }
+      />
+    </View>
   );
 };
 
@@ -152,5 +353,38 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: 10,
     width: width * 0.8,
+  },
+  dateBox: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginVertical: 5,
+    justifyContent: "space-between",
+  },
+  datePersonalBox: {
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.lightGrey,
+    width: width * 0.46,
+    marginBottom: 10,
+  },
+  dateText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+    marginLeft: 15,
+    fontSize: 15,
+  },
+  emptyView: {
+    height: height * 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyText: {
+    ...theme.font.fontMedium,
+    fontSize: 15,
+    color: theme.colors.primary,
   },
 });

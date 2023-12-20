@@ -124,6 +124,8 @@ const LoginScreen = ({ navigation }: any) => {
               label="User Name"
               value={values.userName}
               onChangeText={handleChange("userName")}
+              autoCapitalize="none"
+              autoCorrect={false}
               onBlur={handleBlur("userName")}
               placeholder="Please Enter Mobile Number"
               mode="outlined"
