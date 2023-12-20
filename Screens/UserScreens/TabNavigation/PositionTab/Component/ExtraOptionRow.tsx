@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 import theme from "../../../../../utils/theme";
+import Toast from "react-native-toast-message";
 
 const { width } = Dimensions.get("window");
 
@@ -17,6 +18,7 @@ const ExtraOptionRow = ({
   setSearchText,
   refreshHandler,
   setVisible,
+  length,
 }: any) => {
   const [searchOpen, isSearchOpen]: any = useState(false);
   const searchOpenHandler = () => isSearchOpen(true);
@@ -62,7 +64,14 @@ const ExtraOptionRow = ({
 
             <TouchableOpacity
               style={styles.buttonBox}
-              onPress={() => setVisible(true)}
+              onPress={() =>
+                length > 0
+                  ? setVisible(true)
+                  : Toast.show({
+                      type: "error",
+                      text1: "Position doesn't exist.",
+                    })
+              }
             >
               <Entypo name="dots-three-vertical" size={18} color="black" />
               <Text style={styles.textStyle}>Square-Off</Text>

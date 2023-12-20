@@ -77,14 +77,7 @@ const PositionTab = ({ navigation }: any) => {
   };
 
   useEffect(() => {
-    // if (
-    //   positionListApi.data?.response &&
-    //   positionListApi.data?.response.length > 0 &&
-    //   socketResponse &&
-    //   socketResponse.length > 0
-    // ) {
     updateTotalPrice();
-    // }
   }, [positionListApi.data?.response, socketResponse]);
 
   useEffect(() => {
@@ -203,6 +196,7 @@ const PositionTab = ({ navigation }: any) => {
         searchText={searchText}
         refreshHandler={refreshHandler}
         setVisible={setVisible}
+        length={positionListApi.data?.response?.length}
       />
 
       <FlatList
