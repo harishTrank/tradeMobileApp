@@ -36,6 +36,7 @@ const AccountSummaryScreen = ({ navigation }: any) => {
     pAndL: true,
     brk: true,
   });
+
   const [currentPage, setCurrentPage]: any = useState(1);
   const [searchExchangeText, setSearchExchangeText]: any = useState("");
   const [searchIconColorState, setSearchIconColorState]: any = useState(
@@ -54,10 +55,11 @@ const AccountSummaryScreen = ({ navigation }: any) => {
           ? dayjs(viewBtnSetData.endDate).format("YYYY-MM-DD")
           : "",
       coin_name: searchExchangeText,
-      p_and_l: true,
-      brk: true,
+      p_and_l: viewBtnSetData.pAndL,
+      brk: viewBtnSetData.brk,
     },
   });
+
   const [accountSummaryList, setAccountSummaryList]: any = useState([]);
   const [loading, setLoading]: any = useState(true);
   useEffect(() => {
@@ -105,13 +107,12 @@ const AccountSummaryScreen = ({ navigation }: any) => {
   const searchBtnHandler = () => {
     setLoading(true);
     setviewBtnSetData({
-      startDate: range.startDate || "",
-      endDate: range.endDate || "",
+      from_date: range.startDate || "",
+      to_date: range.endDate || "",
       coin_name: searchExchangeText || "",
-      p_and_l: toggleCheckBoxs.pAndL,
-      brk: toggleCheckBoxs.brk,
+      pAndL: toggleCheckBoxs?.pAndL,
+      brk: toggleCheckBoxs?.brk,
     });
-    accountSummaryApi.refetch();
     setLoading(false);
   };
 
@@ -127,25 +128,24 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       endDate: undefined,
     });
     setSearchExchangeText("");
-    accountSummaryApi.refetch();
   };
 
   const setToggleHandler = (value: any, key: any) => {
     setToggleCheckBoxs((oldValue: any) => {
-      return key === "credit"
-        ? {
-            ...oldValue,
-            ...{
-              [key]: value,
-              brk: value === true ? false : true,
-              pAndL: value === true ? false : true,
-            },
-          }
-        : {
-            ...oldValue,
-            [key]: value,
-            credit: value === true ? false : true,
-          };
+      if (key === "credit") {
+        return {
+          ...oldValue,
+          credit: value,
+          brk: !value,
+          pAndL: !value,
+        };
+      } else {
+        return {
+          ...oldValue,
+          [key]: value,
+          credit: false,
+        };
+      }
     });
   };
 
