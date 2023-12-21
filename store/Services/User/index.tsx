@@ -28,3 +28,9 @@ export const accountSummary = ({ query }: any) =>
     uriEndPoint: userEndpoints.accountSummary.v1,
     query,
   });
+
+export const scriptQuantity = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.scriptQuantity.v1,
+    query,
+  });

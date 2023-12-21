@@ -37,4 +37,12 @@ export const userEndpoints = {
       uri: "/account-summary/",
     },
   },
+
+  scriptQuantity: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/script-quantity-api/",
+    },
+  },
 };

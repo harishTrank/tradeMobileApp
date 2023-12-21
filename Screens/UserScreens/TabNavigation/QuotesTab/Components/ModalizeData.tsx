@@ -15,7 +15,7 @@ import {
   currentUserData,
   tradeSelectedCoinGlobal,
 } from "../../../../../JotaiStore";
-import { dateManager, miniList } from "../../../UserUtils";
+import { dateManager } from "../../../UserUtils";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useBuySellTradeCoin } from "../../../../../hooks/TradeCoin/mutation";
@@ -128,23 +128,10 @@ const ModalizeData = ({
       coin_name:
         selectedCoinData?.Exchange === "NSE"
           ? `NSE ${selectedCoinData?.InstrumentIdentifier}`
-          : `${
-              selectedCoinData.Exchange === "MCX" &&
-              miniList.find((itemObj) =>
-                selectedCoinData?.InstrumentIdentifier.includes(itemObj)
-              )
-                ? "MINI"
-                : selectedCoinData.Exchange
-            } ${selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]}, ${
-              dateManager(selectedCoinData?.InstrumentIdentifier) || ""
-            }`,
-      ex_change:
-        selectedCoinData.Exchange === "MCX" &&
-        miniList.find((itemObj) =>
-          selectedCoinData?.InstrumentIdentifier.includes(itemObj)
-        )
-          ? "MINI"
-          : selectedCoinData.Exchange,
+          : `${selectedCoinData.Exchange} ${
+              selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
+            }, ${dateManager(selectedCoinData?.InstrumentIdentifier) || ""}`,
+      ex_change: selectedCoinData.Exchange,
       action: type,
       quantity: currentQuantity,
       price:
@@ -177,7 +164,12 @@ const ModalizeData = ({
         return;
       }
     }
-    if (selectedCoinData.SellPrice === 0 || selectedCoinData.BuyPrice == 0 || Number(dayjs().format("d")) === 0 || Number(dayjs().format("d")) === 6) {
+    if (
+      selectedCoinData.SellPrice === 0 ||
+      selectedCoinData.BuyPrice == 0 ||
+      Number(dayjs().format("d")) === 0 ||
+      Number(dayjs().format("d")) === 6
+    ) {
       body.is_cancel = true;
     }
     buySellApiCall

@@ -67,14 +67,3 @@ export const dateManager = (val: any) => {
     ?.split("_")?.[2]
     ?.slice(2, 5)} ${val?.split("_")?.[2]?.slice(7)}`;
 };
-
-export const miniList = [
-  "ZINCMINI",
-  "SILVERM",
-  "NATGASMINI",
-  "LEADMINI",
-  "GOLDM",
-  "COPPERM",
-  "ALUMINIUM",
-  "CRUDEOILM",
-];
