@@ -120,13 +120,15 @@ const ScriptQuantityScreen = ({ navigation }: any) => {
             marginBottom: useSafeAreaInsets().bottom,
           }}
         >
-          <RowElements
-            first={"Symbol"}
-            second={"Breakup qty"}
-            third={"Max qty"}
-            fourth={"Breakup Lot"}
-            fifth={"Max Lot"}
-          />
+          {currentResponse && currentResponse.length > 0 && (
+            <RowElements
+              first={"Symbol"}
+              second={"Breakup qty"}
+              third={"Max qty"}
+              fourth={"Breakup Lot"}
+              fifth={"Max Lot"}
+            />
+          )}
           {currentResponse.map((item: any) => (
             <RowElements
               key={item.id}
