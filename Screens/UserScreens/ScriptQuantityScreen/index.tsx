@@ -19,7 +19,7 @@ const RowElements = ({
 }: any) => {
   return (
     <View style={styles.rowStyle}>
-      <View style={[styles.boxStyle, { width: 150 }]}>
+      <View style={[styles.boxStyle, { width: 120 }]}>
         <Text style={styles.boxText}>
           {first === "Symbol"
             ? first

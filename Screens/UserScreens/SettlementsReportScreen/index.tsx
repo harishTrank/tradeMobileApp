@@ -1,45 +1,131 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Dimensions, ScrollView } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  ScrollView,
+} from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
-import DropDownComponent from "../../ReUseComponents/DropDownComponent";
-import { dropDownData } from "../UserUtils";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
-
+import { MaterialIcons } from "@expo/vector-icons";
+import dayjs from "dayjs";
 const { width } = Dimensions.get("window");
+import { DatePickerModal } from "react-native-paper-dates";
+import ProfitTab from "./Components/ProfitTab";
+import LossTab from "./Components/LossTab";
+import { useSettlementApi } from "../../../hooks/User/query";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const SettlementsReportScreen = ({ navigation }: any) => {
-  const [currentDropdownValue, setCurrentDropdownValue]: any = useState("");
+  const settleMentApiHit: any = useSettlementApi({
+    query: {},
+  });
+  const [loading, setLoading]: any = useState(true);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [settleMentApiHit.data]);
+  // date picker case working
+  const [open, setOpen] = useState(false);
+  const [range, setRange] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
+
+  const onDismiss = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirm = useCallback(
+    ({ startDate, endDate }: any) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  // ------------------------------
+
+  const searchBtnHit = () => {};
+
+  const resetBtnHit = () => {
+    setRange({
+      startDate: undefined,
+      endDate: undefined,
+    });
+  };
   return (
-    <ScrollView style={styles.screen}>
+    <View style={styles.screen}>
+      <FullScreenLoader loading={loading} />
       <BasicHeader navigation={navigation} title={"Settlement Report"} />
       <View style={styles.mainBox}>
-        <DropDownComponent
-          data={dropDownData}
-          value={currentDropdownValue}
-          setValue={setCurrentDropdownValue}
-          placeholder={"Please select week of period"}
-          style={styles.dropDownMargin}
-          search={false}
-          fieldKey={"name"}
-        />
+        <View style={styles.dateBox}>
+          <TouchableOpacity
+            onPress={() => setOpen(true)}
+            style={styles.datePersonalBox}
+          >
+            <MaterialIcons
+              name="date-range"
+              size={24}
+              color={theme.colors.secondary}
+            />
+            <Text style={styles.dateText}>
+              {range?.startDate
+                ? dayjs(`${range?.startDate}`).format("DD/MM/YYYY")
+                : "From Date"}
+            </Text>
+          </TouchableOpacity>
+
+          <DatePickerModal
+            locale="en"
+            mode="range"
+            visible={open}
+            onDismiss={onDismiss}
+            startDate={range.startDate}
+            endDate={range.endDate}
+            onConfirm={onConfirm}
+            validRange={{ endDate: new Date() }}
+          />
+
+          <TouchableOpacity
+            onPress={() => setOpen(true)}
+            style={styles.datePersonalBox}
+          >
+            <MaterialIcons
+              name="date-range"
+              size={24}
+              color={theme.colors.secondary}
+            />
+            <Text style={styles.dateText}>
+              {range?.endDate
+                ? dayjs(`${range?.endDate}`).format("DD/MM/YYYY")
+                : "To Date"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.buttonsBoxStyle}>
           <SmallBtnComponent
             title={"Search"}
-            onPress={() => {}}
+            onPress={searchBtnHit}
             style={styles.btnStyle}
           />
           <SmallBtnComponent
             title={"Reset"}
-            onPress={() => {}}
+            onPress={resetBtnHit}
             backgroundColor={theme.colors.lightGrey}
             textColor={theme.colors.secondary}
             style={styles.btnStyle}
           />
         </View>
       </View>
-    </ScrollView>
+      <ScrollView>
+        <ProfitTab />
+        <LossTab />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -54,7 +140,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     paddingVertical: 10,
   },
-  dropDownMargin: { marginTop: 10 },
   buttonsBoxStyle: {
     flexDirection: "row",
     alignItems: "center",
@@ -64,5 +149,28 @@ const styles = StyleSheet.create({
   btnStyle: {
     marginLeft: 10,
     width: width * 0.23,
+  },
+  dateBox: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginVertical: 5,
+    justifyContent: "space-between",
+  },
+  datePersonalBox: {
+    padding: 10,
+    borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: theme.colors.lightGrey,
+    width: width * 0.44,
+    marginBottom: 10,
+  },
+  dateText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+    marginLeft: 15,
+    fontSize: 15,
   },
 });

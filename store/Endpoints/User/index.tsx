@@ -45,4 +45,12 @@ export const userEndpoints = {
       uri: "/script-quantity-api/",
     },
   },
+
+  settlementApi: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/settlement-api/",
+    },
+  },
 };

@@ -27,6 +27,51 @@ export const boxData = {
       screenName: "SearchUserScreen",
     },
   ],
+  clientReport: [
+    {
+      icon: (
+        <MaterialCommunityIcons
+          name="card-account-details-outline"
+          size={20}
+          color={theme.colors.black}
+        />
+      ),
+      title: "Account Summary",
+      screenName: "AccountSummaryScreen",
+    },
+    {
+      icon: (
+        <Foundation name="page-edit" size={20} color={theme.colors.black} />
+      ),
+      title: "Generate Bill",
+      screenName: "GenerateBillScreen",
+    },
+    {
+      icon: (
+        <MaterialIcons name="history" size={20} color={theme.colors.black} />
+      ),
+      title: "Intraday History",
+      screenName: "IntradayHistoryScreen",
+    },
+    {
+      icon: (
+        <MaterialCommunityIcons
+          name="crosshairs-off"
+          size={20}
+          color={theme.colors.black}
+        />
+      ),
+      title: "Settlements Report",
+      screenName: "SettlementsReportScreen",
+    },
+    {
+      icon: (
+        <Foundation name="page-delete" size={20} color={theme.colors.black} />
+      ),
+      title: "Rejection Log",
+      screenName: "RejectionLogScreen",
+    },
+  ],
   first: [
     {
       icon: (

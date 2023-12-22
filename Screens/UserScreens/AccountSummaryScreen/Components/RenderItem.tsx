@@ -36,20 +36,22 @@ const RenderItem = ({ item }: any) => {
       <View style={styles.middleBox}>
         <View style={styles.itemNewRow}>
           <Text style={styles.smallText}>{item?.price}</Text>
-          <Entypo
-            name="arrow-long-right"
-            size={20}
-            color="black"
-            style={styles.arrowIcon}
-          />
-          <Text
-            style={[
-              styles.smallText,
-              { color: item.buy_sell_type === "BUY" ? "green" : "red" },
-            ]}
-          >
-            {item?.average}
-          </Text>
+          <>
+            <Entypo
+              name="arrow-long-right"
+              size={20}
+              color="black"
+              style={styles.arrowIcon}
+            />
+            <Text
+              style={[
+                styles.smallText,
+                { color: item.buy_sell_type === "BUY" ? "green" : "red" },
+              ]}
+            >
+              {Number(item?.average).toFixed(2)}
+            </Text>
+          </>
         </View>
 
         <Text style={styles.smallText}>CL: {item.closing}</Text>

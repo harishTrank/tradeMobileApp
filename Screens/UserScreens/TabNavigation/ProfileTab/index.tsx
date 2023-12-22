@@ -82,14 +82,23 @@ const ProfileTab = ({ navigation }: any) => {
 
         <Text style={styles.heading}>Report</Text>
         <View style={styles.cardHolder}>
-          {boxData.first.map((cardItem: any) => (
-            <ProfileOptionCard
-              key={cardItem.title}
-              icon={cardItem.icon}
-              title={cardItem.title}
-              onPress={() => navigation.navigate(cardItem.screenName)}
-            />
-          ))}
+          {currentUserDetails.user_type === "Master"
+            ? boxData.first.map((cardItem: any) => (
+                <ProfileOptionCard
+                  key={cardItem.title}
+                  icon={cardItem.icon}
+                  title={cardItem.title}
+                  onPress={() => navigation.navigate(cardItem.screenName)}
+                />
+              ))
+            : boxData.clientReport.map((cardItem: any) => (
+                <ProfileOptionCard
+                  key={cardItem.title}
+                  icon={cardItem.icon}
+                  title={cardItem.title}
+                  onPress={() => navigation.navigate(cardItem.screenName)}
+                />
+              ))}
         </View>
 
         <Text style={styles.heading}>Setting</Text>

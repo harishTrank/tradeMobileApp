@@ -34,3 +34,9 @@ export const scriptQuantity = ({ query }: any) =>
     uriEndPoint: userEndpoints.scriptQuantity.v1,
     query,
   });
+
+export const settlementApi = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.settlementApi.v1,
+    query,
+  });
