@@ -22,7 +22,7 @@ const RowBox = ({ first, second, third, fourth }: any) => {
     </View>
   );
 };
-const ProfitTab = () => {
+const ProfitTab = ({ data }: any) => {
   const [profitTabOpen, setProfitTabOpen]: any = useState(true);
   return (
     <View style={styles.mainContainer}>
@@ -41,8 +41,13 @@ const ProfitTab = () => {
             third={"Brk"}
             fourth={"Total"}
           />
-          <RowBox first={"Admin"} second={350} third={0} fourth={350} />
-          <RowBox first={"Total"} second={350} third={0} fourth={350} />
+          {/* <RowBox first={"Admin"} second={350} third={0} fourth={350} /> */}
+          <RowBox
+            first={"Total"}
+            second={data?.[1]?.total_amount?.toFixed(2) || 0}
+            third={0}
+            fourth={(parseFloat(data?.[1]?.total_amount) || 0).toFixed(2)}
+          />
         </>
       )}
     </View>

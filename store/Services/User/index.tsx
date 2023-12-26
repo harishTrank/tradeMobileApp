@@ -40,3 +40,8 @@ export const settlementApi = ({ query }: any) =>
     uriEndPoint: userEndpoints.settlementApi.v1,
     query,
   });
+
+export const positionHeaderApi = () =>
+  callApi({
+    uriEndPoint: userEndpoints.positionHeaderApi.v1,
+  });

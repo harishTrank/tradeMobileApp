@@ -53,4 +53,12 @@ export const userEndpoints = {
       uri: "/settlement-api/",
     },
   },
+
+  positionHeaderApi: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/position-header-api/",
+    },
+  },
 };

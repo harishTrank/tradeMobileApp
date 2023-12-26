@@ -20,14 +20,12 @@ import { useSettlementApi } from "../../../hooks/User/query";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const SettlementsReportScreen = ({ navigation }: any) => {
-  const settleMentApiHit: any = useSettlementApi({
-    query: {},
-  });
   const [loading, setLoading]: any = useState(true);
+  const [query, setQuery] = useState({
+    startDate: undefined,
+    endDate: undefined,
+  });
 
-  useEffect(() => {
-    setLoading(false);
-  }, [settleMentApiHit.data]);
   // date picker case working
   const [open, setOpen] = useState(false);
   const [range, setRange] = useState({
@@ -48,14 +46,36 @@ const SettlementsReportScreen = ({ navigation }: any) => {
   );
   // ------------------------------
 
-  const searchBtnHit = () => {};
+  const searchBtnHit = () => {
+    setQuery(range);
+  };
 
   const resetBtnHit = () => {
     setRange({
       startDate: undefined,
       endDate: undefined,
     });
+    setQuery({
+      startDate: undefined,
+      endDate: undefined,
+    });
   };
+
+  const settleMentApiHit: any = useSettlementApi({
+    query: {
+      from_date:
+        query.startDate && query.startDate !== ""
+          ? dayjs(query.startDate).format("YYYY-MM-DD")
+          : "",
+      to_date:
+        query.endDate && query.endDate !== ""
+          ? dayjs(query.endDate).format("YYYY-MM-DD")
+          : "",
+    },
+  });
+  useEffect(() => {
+    setLoading(false);
+  }, [settleMentApiHit.data]);
   return (
     <View style={styles.screen}>
       <FullScreenLoader loading={loading} />
@@ -122,8 +142,8 @@ const SettlementsReportScreen = ({ navigation }: any) => {
         </View>
       </View>
       <ScrollView>
-        <ProfitTab />
-        <LossTab />
+        <ProfitTab data={settleMentApiHit.data?.total_profit} />
+        <LossTab data={settleMentApiHit.data?.total_loss} />
       </ScrollView>
     </View>
   );

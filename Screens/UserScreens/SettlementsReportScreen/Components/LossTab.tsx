@@ -20,7 +20,7 @@ const RowBox = ({ first, second, third, fourth }: any) => {
     </View>
   );
 };
-const LossTab = () => {
+const LossTab = ({ data }: any) => {
   const [lossTabOpen, setLossTabOpen]: any = useState(true);
   return (
     <View style={styles.mainContainer}>
@@ -39,9 +39,17 @@ const LossTab = () => {
             third={"Brk"}
             fourth={"Total"}
           />
-          <RowBox first={"My PL"} second={0} third={0} fourth={-350} />
-          <RowBox first={"My Brokerage"} second={0} third={0} fourth={0} />
-          <RowBox first={"Total"} second={0} third={0} fourth={-350} />
+          {/* <RowBox first={"My PL"} second={0} third={0} fourth={-350} />
+          <RowBox first={"My Brokerage"} second={0} third={0} fourth={0} /> */}
+          <RowBox
+            first={"Total"}
+            second={data?.[0]?.total_amount?.toFixed(2) || 0}
+            third={data?.[1]?.total_amount?.toFixed(2) || 0}
+            fourth={(
+              (parseFloat(data?.[0]?.total_amount) || 0) +
+              (parseFloat(data?.[1]?.total_amount) || 0)
+            ).toFixed(2)}
+          />
         </>
       )}
     </View>

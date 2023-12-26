@@ -7,6 +7,7 @@ const DropDownCompo = ({
   dropDownOpen,
   setDropDownOpen,
   totalBalance,
+  positionHeaderApiCall,
 }: any) => {
   return (
     <View style={styles.mainDropContainer}>
@@ -19,25 +20,44 @@ const DropDownCompo = ({
             <Entypo
               name="chevron-up"
               size={25}
-              color={totalBalance > 0 ? "green" : theme.colors.danger}
+              color={
+                totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0
+                  ? "green"
+                  : theme.colors.danger
+              }
             />
           ) : (
             <Entypo
               name="chevron-down"
               size={25}
-              color={totalBalance > 0 ? "green" : theme.colors.danger}
+              color={
+                totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0
+                  ? "green"
+                  : theme.colors.danger
+              }
             />
           )}
           <Text
-            style={[styles.headerText, totalBalance > 0 && { color: "green" }]}
+            style={[
+              styles.headerText,
+              totalBalance + positionHeaderApiCall?.data?.release_p_and_l >
+                0 && { color: "green" },
+            ]}
           >
             Total
           </Text>
         </View>
         <Text
-          style={[styles.headerText, totalBalance > 0 && { color: "green" }]}
+          style={[
+            styles.headerText,
+            totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0 && {
+              color: "green",
+            },
+          ]}
         >
-          {totalBalance.toFixed(2)}
+          {(
+            totalBalance + positionHeaderApiCall?.data?.release_p_and_l
+          ).toFixed(2)}
         </Text>
       </TouchableOpacity>
 
@@ -47,32 +67,48 @@ const DropDownCompo = ({
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
           >
             <Text style={styles.basicText}>M2M P&L:</Text>
-            <Text style={styles.basicText}>456</Text>
+            <Text style={styles.basicText}>{totalBalance}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.basicText}>Realised P&L:</Text>
-            <Text style={styles.basicText}>1234</Text>
+            <Text style={styles.basicText}>
+              {positionHeaderApiCall?.data?.release_p_and_l?.toFixed(2) || 0}
+            </Text>
           </View>
           <View
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
           >
             <Text style={styles.basicText}>Credit:</Text>
-            <Text style={styles.basicText}>234</Text>
+            <Text style={styles.basicText}>
+              {positionHeaderApiCall?.data?.credit?.toFixed(2) || 0}
+            </Text>
           </View>
 
           <View style={styles.row}>
             <Text style={styles.basicText}>Equity:</Text>
-            <Text style={styles.basicText}>355</Text>
+            <Text style={styles.basicText}>
+              {(positionHeaderApiCall?.data?.balance + totalBalance)?.toFixed(
+                2
+              ) || 0}
+            </Text>
           </View>
           <View
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
           >
             <Text style={styles.basicText}>Margin Used:</Text>
-            <Text style={styles.basicText}>143</Text>
+            <Text style={styles.basicText}>
+              {positionHeaderApiCall?.data?.margin_used_value?.toFixed(2) || 0}
+            </Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.basicText}>Free margin:</Text>
-            <Text style={styles.basicText}>322</Text>
+            <Text style={styles.basicText}>
+              {(
+                positionHeaderApiCall?.data?.balance +
+                totalBalance -
+                positionHeaderApiCall?.data?.margin_used_value
+              )?.toFixed(2) || 0}
+            </Text>
           </View>
         </View>
       )}

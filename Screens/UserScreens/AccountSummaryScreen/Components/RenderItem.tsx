@@ -12,7 +12,7 @@ const RenderItem = ({ item }: any) => {
     <View style={styles.itemContainer}>
       <View style={styles.itemFirstRow}>
         <Text style={styles.itemText}>
-          {`${item?.particular},`}
+          {`${item?.particular.replace(",", "")},`}
           <Text
             style={[
               styles.itemText,

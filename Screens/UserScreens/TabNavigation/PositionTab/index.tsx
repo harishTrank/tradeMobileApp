@@ -31,6 +31,7 @@ import * as Network from "expo-network";
 import Toast from "react-native-toast-message";
 import ModalLizeComp from "./Component/ModalLizeComp";
 import SquareOffAllModal from "./Component/SquareOffAllModal";
+import { usePositionHeaderApi } from "../../../../hooks/User/query";
 
 const { height } = Dimensions.get("window");
 
@@ -48,6 +49,7 @@ const PositionTab = ({ navigation }: any) => {
   const messageModalize = useRef<Modalize>(null);
   const modalizeRef = useRef<Modalize>(null);
   const [, setTradeCoinSelected]: any = useAtom(tradeSelectedCoinGlobal);
+  const positionHeaderApiCall: any = usePositionHeaderApi();
   // ----------------------------------------------
 
   // position api and socket logic
@@ -96,6 +98,7 @@ const PositionTab = ({ navigation }: any) => {
     setLoading(true);
     focusRefetchContant();
     positionListApi?.refetch();
+    positionHeaderApiCall?.refetch();
     getAllCoinsPosition()
       .then((res: any) => {
         setLoading(false);
@@ -189,6 +192,7 @@ const PositionTab = ({ navigation }: any) => {
         dropDownOpen={dropDownOpen}
         setDropDownOpen={setDropDownOpen}
         totalBalance={totalBalance}
+        positionHeaderApiCall={positionHeaderApiCall}
       />
 
       <ExtraOptionRow
