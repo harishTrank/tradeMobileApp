@@ -31,12 +31,12 @@ const RenderListItem = ({ item, modalizeRef, setTradeCoinSelected }: any) => {
 
   useEffect(() => {
     setBuyColor(item?.buyColor);
-    setTimeout(() => setBuyColor(theme.colors.lightGrey), 1000);
+    setTimeout(() => setBuyColor(theme.colors.lightGrey), 500);
   }, [item?.BuyPrice]);
 
   useEffect(() => {
     setSellColor(item?.sellColor);
-    setTimeout(() => setSellColor(theme.colors.lightGrey), 1000);
+    setTimeout(() => setSellColor(theme.colors.lightGrey), 500);
   }, [item?.SellPrice]);
 
   return (
