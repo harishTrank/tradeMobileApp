@@ -25,8 +25,6 @@ const customTheme = {
 };
 
 export default function App() {
-  // -------------------------------
-
   const isLoadingComplete = useCachedResources();
   if (!isLoadingComplete) {
     return null;
