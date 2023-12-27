@@ -87,7 +87,7 @@ const LoginScreen = ({ navigation }: any) => {
         setLoader(false);
         return Toast.show({
           type: "error",
-          text1: "Invalid user credentials.",
+          text1: error.data.message,
         });
       });
   };

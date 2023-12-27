@@ -114,17 +114,7 @@ const AddScriptsScreen = ({ navigation, route }: any) => {
 
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={tradeCoin.filter((filterItem: any) => {
-          return filterItem?.Exchange === "NSE"
-            ? `NSE ${filterItem?.InstrumentIdentifier}`
-                .toLowerCase()
-                .includes(searchText.toLowerCase())
-            : `${filterItem?.Exchange} ${
-                filterItem?.InstrumentIdentifier?.split("_")?.[1]
-              }, ${dateManager(filterItem?.InstrumentIdentifier)}`
-                .toLowerCase()
-                .includes(searchText.toLowerCase());
-        })}
+        data={tradeCoin}
         keyExtractor={(item) => item?.InstrumentIdentifier}
         renderItem={({ item, index }) => (
           <ScriptCard

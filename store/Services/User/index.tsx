@@ -29,6 +29,12 @@ export const accountSummary = ({ query }: any) =>
     query,
   });
 
+export const accountSummaryCredit = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.accountSummaryCredit.v1,
+    query,
+  });
+
 export const scriptQuantity = ({ query }: any) =>
   callApi({
     uriEndPoint: userEndpoints.scriptQuantity.v1,

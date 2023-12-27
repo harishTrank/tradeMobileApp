@@ -84,6 +84,7 @@ const ModalizeData = ({
   setInsufficientFlag,
   positionListApi,
   navigation,
+  positionHeaderApiCall,
 }: any) => {
   dayjs.extend(relativeTime);
 
@@ -186,6 +187,7 @@ const ModalizeData = ({
         setModalizeMessage(res.message);
         if (positionListApi) {
           positionListApi?.refetch();
+          positionHeaderApiCall?.refetch();
         }
         messageModalize.current?.open();
         return;

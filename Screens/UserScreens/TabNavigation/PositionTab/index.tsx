@@ -245,6 +245,7 @@ const PositionTab = ({ navigation }: any) => {
           messageModalize={messageModalize}
           setInsufficientFlag={setInsufficientFlag}
           positionListApi={positionListApi}
+          positionHeaderApiCall={positionHeaderApiCall}
         />
       </Modalize>
 

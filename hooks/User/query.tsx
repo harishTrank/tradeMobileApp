@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import {
   accountSummary,
+  accountSummaryCredit,
   positionHeaderApi,
   searchUserList,
   settlementApi,
@@ -22,6 +23,9 @@ export const useSearchUserList = () =>
 
 export const useAccountSummary = (payload: any) =>
   useQuery(["accountSummary", payload], () => accountSummary(payload));
+
+export const useAccountSummaryCredit = (payload: any) =>
+  useQuery(["accountSummary", payload], () => accountSummaryCredit(payload));
 
 export const useSettlementApi = (payload: any) =>
   useQuery(["settlementApi", payload], () => settlementApi(payload));

@@ -16,7 +16,10 @@ import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import dayjs from "dayjs";
 import { DatePickerModal } from "react-native-paper-dates";
-import { useAccountSummary } from "../../../hooks/User/query";
+import {
+  useAccountSummary,
+  useAccountSummaryCredit,
+} from "../../../hooks/User/query";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import RenderItem from "./Components/RenderItem";
@@ -25,6 +28,11 @@ const { width, height } = Dimensions.get("window");
 
 const AccountSummaryScreen = ({ navigation }: any) => {
   const [toggleCheckBoxs, setToggleCheckBoxs] = useState({
+    pAndL: true,
+    brk: true,
+    credit: false,
+  });
+  const [toggleCheckBoxsFinal, setToggleCheckBoxsFinal] = useState({
     pAndL: true,
     brk: true,
     credit: false,
@@ -60,6 +68,21 @@ const AccountSummaryScreen = ({ navigation }: any) => {
     },
   });
 
+  const accountSummaryCredit: any = useAccountSummaryCredit({
+    query: {
+      page: currentPage,
+      from_date:
+        viewBtnSetData.startDate && viewBtnSetData.startDate !== ""
+          ? dayjs(viewBtnSetData.startDate).format("YYYY-MM-DD")
+          : "",
+      to_date:
+        viewBtnSetData.endDate && viewBtnSetData.endDate !== ""
+          ? dayjs(viewBtnSetData.endDate).format("YYYY-MM-DD")
+          : "",
+      coin_name: searchExchangeText,
+    },
+  });
+
   const [accountSummaryList, setAccountSummaryList]: any = useState([]);
   const [loading, setLoading]: any = useState(true);
   useEffect(() => {
@@ -67,7 +90,11 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       setviewBtnSetData((oldValue: any) => {
         return { ...oldValue, coin_name: searchExchangeText };
       });
-      accountSummaryApi.refetch();
+      if (toggleCheckBoxsFinal.credit) {
+        accountSummaryCredit.refetch();
+      } else {
+        accountSummaryApi.refetch();
+      }
     }, 700);
   }, [searchExchangeText]);
 
@@ -75,7 +102,8 @@ const AccountSummaryScreen = ({ navigation }: any) => {
     if (
       !accountSummaryApi?.isFetching &&
       !accountSummaryApi.isLoading &&
-      accountSummaryApi?.data?.results
+      accountSummaryApi?.data?.results &&
+      !toggleCheckBoxsFinal.credit
     ) {
       if (currentPage === 1) {
         setAccountSummaryList(accountSummaryApi.data.results);
@@ -88,17 +116,42 @@ const AccountSummaryScreen = ({ navigation }: any) => {
         });
       }
       setLoading(false);
+    } else if (
+      !accountSummaryCredit?.isFetching &&
+      !accountSummaryCredit.isLoading &&
+      accountSummaryCredit?.data?.results &&
+      toggleCheckBoxsFinal.credit
+    ) {
+      if (currentPage === 1) {
+        setAccountSummaryList(accountSummaryCredit.data.results);
+      } else {
+        setAccountSummaryList((oldValue: any) => {
+          return [...oldValue, ...accountSummaryCredit.data.results].filter(
+            (value, index, self) =>
+              index === self.findIndex((t: any) => t.id === value.id)
+          );
+        });
+      }
     }
   }, [
     accountSummaryApi?.data?.results,
+    accountSummaryCredit?.data?.results,
     currentPage,
     accountSummaryApi?.isFetching,
+    accountSummaryCredit?.isFetching,
   ]);
 
   const onEndReached = () => {
     if (
       accountSummaryApi?.data?.total &&
-      currentPage < accountSummaryApi?.data?.total
+      currentPage < accountSummaryApi?.data?.total &&
+      !toggleCheckBoxsFinal.credit
+    ) {
+      setCurrentPage(currentPage + 1);
+    } else if (
+      accountSummaryCredit?.data?.total &&
+      currentPage < accountSummaryCredit?.data?.total &&
+      toggleCheckBoxsFinal.credit
     ) {
       setCurrentPage(currentPage + 1);
     }
@@ -106,6 +159,8 @@ const AccountSummaryScreen = ({ navigation }: any) => {
 
   const searchBtnHandler = () => {
     setLoading(true);
+    setCurrentPage(1);
+    setToggleCheckBoxsFinal(toggleCheckBoxs);
     setviewBtnSetData({
       from_date: range.startDate || "",
       to_date: range.endDate || "",
@@ -277,7 +332,9 @@ const AccountSummaryScreen = ({ navigation }: any) => {
         showsVerticalScrollIndicator={false}
         data={accountSummaryList}
         keyExtractor={(index: any) => `${index.id}`}
-        renderItem={({ item }: any) => <RenderItem item={item} />}
+        renderItem={({ item }: any) => (
+          <RenderItem item={item} credit={toggleCheckBoxsFinal.credit} />
+        )}
         onEndReachedThreshold={0.5}
         onEndReached={onEndReached}
         ListFooterComponent={

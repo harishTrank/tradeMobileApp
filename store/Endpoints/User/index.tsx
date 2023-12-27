@@ -38,6 +38,14 @@ export const userEndpoints = {
     },
   },
 
+  accountSummaryCredit: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/account-summary-credit-api/",
+    },
+  },
+
   scriptQuantity: {
     v1: {
       ...defaults.methods.GET,

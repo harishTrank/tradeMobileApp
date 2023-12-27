@@ -67,7 +67,7 @@ const DropDownCompo = ({
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
           >
             <Text style={styles.basicText}>M2M P&L:</Text>
-            <Text style={styles.basicText}>{totalBalance}</Text>
+            <Text style={styles.basicText}>{totalBalance?.toFixed(2)}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.basicText}>Realised P&L:</Text>

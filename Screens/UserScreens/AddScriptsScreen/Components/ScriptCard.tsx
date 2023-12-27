@@ -87,9 +87,9 @@ const ScriptCard = ({
           )}
         </TouchableOpacity>
         <Text style={styles.titleStyle}>
-          {scriptType === "NSE"
+          {item.Exchange === "NSE"
             ? `NSE ${item?.InstrumentIdentifier}`
-            : `${scriptType} ${
+            : `${item.Exchange} ${
                 item?.InstrumentIdentifier?.split("_")?.[1]
               }, ${dateManager(item?.InstrumentIdentifier)}`}
         </Text>
