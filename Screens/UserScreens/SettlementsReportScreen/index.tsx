@@ -18,9 +18,12 @@ import ProfitTab from "./Components/ProfitTab";
 import LossTab from "./Components/LossTab";
 import { useSettlementApi } from "../../../hooks/User/query";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../JotaiStore";
 
 const SettlementsReportScreen = ({ navigation }: any) => {
   const [loading, setLoading]: any = useState(true);
+  const [currentUserDetails]: any = useAtom(currentUserData);
   const [query, setQuery] = useState({
     startDate: undefined,
     endDate: undefined,
@@ -142,8 +145,14 @@ const SettlementsReportScreen = ({ navigation }: any) => {
         </View>
       </View>
       <ScrollView>
-        <ProfitTab data={settleMentApiHit.data?.total_profit} />
-        <LossTab data={settleMentApiHit.data?.total_loss} />
+        <ProfitTab
+          currentUserDetails={currentUserDetails}
+          data={settleMentApiHit.data?.total_profit}
+        />
+        <LossTab
+          currentUserDetails={currentUserDetails}
+          data={settleMentApiHit.data?.total_loss}
+        />
       </ScrollView>
     </View>
   );

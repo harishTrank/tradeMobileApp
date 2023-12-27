@@ -19,7 +19,6 @@ import {
   userLoginGlobalFlag,
 } from "../JotaiStore";
 import Toast from "react-native-toast-message";
-import { Animated } from "react-native";
 
 const Stack = createStackNavigator<any>();
 
@@ -40,13 +39,12 @@ export default function Navigation() {
 }
 
 function RootNavigator() {
-  const av = new Animated.Value(0);
-  av.addListener(() => {
-    return;
-  });
+  // const av = new Animated.Value(0);
+  // av.addListener(() => {
+  //   return;
+  // });
   const [, setUserLogFlag]: any = useAtom(userLoginGlobalFlag);
   const [, setTradeCoinData] = useAtom(selectedCoinList);
-  const { navigate }: any = useNavigation();
 
   const [currentUser, setCurrentUser]: any = useAtom(currentUserData);
   const loginFlagManager = async () => {
@@ -79,12 +77,15 @@ function RootNavigator() {
         setTradeCoinData(res?.tradeCoinData);
         setCurrentUser(res?.data);
       })
-      ?.catch((err: any) => {
-        Toast.show({
-          type: "error",
-          text1: err.data.message,
-        });
-        navigate("LoginScreen");
+      ?.catch(async (err: any) => {
+        if (err?.data?.message) {
+          Toast.show({
+            type: "error",
+            text1: err.data.message,
+          });
+        }
+        setUserLogFlag(false);
+        await AsyncStorage.removeItem("accessToken");
       });
   }, []);
 
