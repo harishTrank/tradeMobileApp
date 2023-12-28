@@ -425,7 +425,7 @@ const ModalizeData = ({
             <Text style={styles.name}>
               {selectedCoinData?.QuotationLot != 0
                 ? Number(selectedCoinData?.QuotationLot)?.toFixed(1)
-                : 0}
+                : 1}
             </Text>
           </View>
 
