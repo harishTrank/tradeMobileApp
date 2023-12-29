@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Image
 } from "react-native";
 import theme from "../../../../utils/theme";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
@@ -19,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMobileLogout } from "../../../../hooks/Auth/mutation";
 import * as Network from "expo-network";
 import Toast from "react-native-toast-message";
+import ImageModule from "../../../../ImageModule";
 
 const { width }: any = Dimensions.get("window");
 
@@ -65,7 +67,10 @@ const ProfileTab = ({ navigation }: any) => {
   return (
     <View style={styles.screen}>
       <CustomTabFund navigation={navigation} title={"Profile"} />
-
+      <View style={styles.fixView}>
+        <Image style={styles.appImage} source={ImageModule.appIcon}/>
+        <Text style={styles.userNameStl}>{currentUserDetails.user_name}</Text>
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {currentUserDetails.user_type === "Master" && (
           <View style={[styles.cardHolder, { marginTop: 15 }]}>
@@ -161,5 +166,23 @@ const styles = StyleSheet.create({
     ...theme.font.fontSemiBold,
     color: theme.colors.secondary,
     paddingVertical: 5,
+  },
+  fixView:{
+    padding: 10,
+    alignItems:"center",
+    backgroundColor: theme.colors.white,
+    borderWidth: 2,
+    borderColor: theme.colors.lightGrey
+  },
+  appImage: {
+    height: 60,
+    width: 60,
+    borderRadius: 30,
+    borderWidth: 2,
+    borderColor: theme.colors.primary
+  },
+  userNameStl:{
+    ...theme.font.fontMedium,
+    color: theme.colors.black
   },
 });
