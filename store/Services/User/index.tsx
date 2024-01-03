@@ -51,3 +51,8 @@ export const positionHeaderApi = () =>
   callApi({
     uriEndPoint: userEndpoints.positionHeaderApi.v1,
   });
+
+export const getMasterChildApi = () =>
+  callApi({
+    uriEndPoint: userEndpoints.getMasterChildApi.v1,
+  });

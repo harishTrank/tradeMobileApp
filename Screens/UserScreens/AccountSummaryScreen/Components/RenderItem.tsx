@@ -36,70 +36,85 @@ const RenderItem = ({ item, credit }: any) => {
           </View>
         </View>
       ) : (
-        <View style={styles.itemContainer}>
-          <View style={styles.itemFirstRow}>
-            <Text style={styles.itemText}>
-              {`${item?.particular?.replace(",", "")},`}
-              <Text
-                style={[
-                  styles.itemText,
-                  { color: item.buy_sell_type === "BUY" ? "green" : "red" },
-                ]}
-              >
-                {" "}
-                {`${item?.quantity} ${item?.buy_sell_type}`}
-              </Text>
-            </Text>
-            <Text
-              style={[
-                styles.itemText,
-                { color: Number(item?.amount) > 0 ? "green" : "red" },
-              ]}
-            >
-              {Number(item?.amount).toFixed(2)}
-            </Text>
-          </View>
-
-          <View style={styles.middleBox}>
-            <View style={styles.itemNewRow}>
-              <Text style={styles.smallText}>{item?.price}</Text>
-              <>
-                <Entypo
-                  name="arrow-long-right"
-                  size={20}
-                  color="black"
-                  style={styles.arrowIcon}
-                />
+        <>
+          {item?.particular && (
+            <View style={styles.itemContainer}>
+              <View style={styles.itemFirstRow}>
+                <Text style={styles.itemText}>
+                  {`${item?.particular?.replace(",", "")},`}
+                  <Text
+                    style={[
+                      styles.itemText,
+                      { color: item.buy_sell_type === "BUY" ? "green" : "red" },
+                    ]}
+                  >
+                    {" "}
+                    {`${item?.quantity} ${item?.buy_sell_type}`}
+                  </Text>
+                </Text>
                 <Text
                   style={[
-                    styles.smallText,
-                    { color: item?.buy_sell_type === "BUY" ? "green" : "red" },
+                    styles.itemText,
+                    { color: Number(item?.amount) > 0 ? "green" : "red" },
                   ]}
                 >
-                  {Number(item?.average)?.toFixed(2)}
+                  {Number(item?.amount).toFixed(2)}
                 </Text>
-              </>
-            </View>
+              </View>
 
-            <Text style={styles.smallText}>CL: {item?.closing}</Text>
-          </View>
+              <View style={styles.middleBox}>
+                <View style={styles.itemNewRow}>
+                  <Text style={styles.smallText}>{item?.price}</Text>
+                  <>
+                    <Entypo
+                      name="arrow-long-right"
+                      size={20}
+                      color="black"
+                      style={styles.arrowIcon}
+                    />
+                    <Text
+                      style={[
+                        styles.smallText,
+                        {
+                          color:
+                            item?.buy_sell_type === "BUY" ? "green" : "red",
+                        },
+                      ]}
+                    >
+                      {Number(item?.average)?.toFixed(2)}
+                    </Text>
+                  </>
+                </View>
 
-          <View style={styles.itemSecondRow}>
-            <View style={styles.itemSecondRowContainer}>
-              <Feather name="user" size={16} color={theme.colors.greyText} />
-              <Text style={[styles.itemText2, { marginLeft: 5 }]}>
-                {`${item?.user_summary__user_name} - ${item?.summary_flg}`}
-              </Text>
-            </View>
+                <Text style={styles.smallText}>CL: {item?.closing}</Text>
+              </View>
 
-            <View style={styles.itemSecondRowContainer}>
-              <Feather name="clock" size={16} color={theme.colors.greyText} />
-              <Text style={[styles.itemText2, { marginLeft: 5 }]}>
-                {dayjs(item?.created_at).format("DD MMM YYYY hh:mm:ss A")}
-              </Text>
+              <View style={styles.itemSecondRow}>
+                <View style={styles.itemSecondRowContainer}>
+                  <Feather
+                    name="user"
+                    size={16}
+                    color={theme.colors.greyText}
+                  />
+                  <Text style={[styles.itemText2, { marginLeft: 5 }]}>
+                    {`${item?.user_summary__user_name} - ${item?.summary_flg}`}
+                  </Text>
+                </View>
+
+                <View style={styles.itemSecondRowContainer}>
+                  <Feather
+                    name="clock"
+                    size={16}
+                    color={theme.colors.greyText}
+                  />
+                  <Text style={[styles.itemText2, { marginLeft: 5 }]}>
+                    {dayjs(item?.created_at).format("DD MMM YYYY hh:mm:ss A")}
+                  </Text>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
+          )}
+        </>
       )}
     </>
   );

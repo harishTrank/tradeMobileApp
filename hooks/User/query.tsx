@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   accountSummary,
   accountSummaryCredit,
+  getMasterChildApi,
   positionHeaderApi,
   searchUserList,
   settlementApi,
@@ -32,3 +33,6 @@ export const useSettlementApi = (payload: any) =>
 
 export const usePositionHeaderApi = () =>
   useQuery(["positionHeaderApi"], () => positionHeaderApi());
+
+export const useGetMasterChildApi = () =>
+  useQuery(["getMasterChildApi"], () => getMasterChildApi());

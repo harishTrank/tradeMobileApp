@@ -69,4 +69,12 @@ export const userEndpoints = {
       uri: "/position-header-api/",
     },
   },
+
+  getMasterChildApi: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/master-child-api/",
+    },
+  },
 };

@@ -23,6 +23,9 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import RenderItem from "./Components/RenderItem";
+import UserListDropDown from "./Components/UserListDropDown";
+import { useAtom } from "jotai";
+import { currentUserData } from "../../../JotaiStore";
 
 const { width, height } = Dimensions.get("window");
 
@@ -43,6 +46,7 @@ const AccountSummaryScreen = ({ navigation }: any) => {
     coin_name: "",
     pAndL: true,
     brk: true,
+    user_name: "",
   });
 
   const [currentPage, setCurrentPage]: any = useState(1);
@@ -50,6 +54,8 @@ const AccountSummaryScreen = ({ navigation }: any) => {
   const [searchIconColorState, setSearchIconColorState]: any = useState(
     theme.colors.greyText
   );
+  const [userDropDownVal, setUserDropDownVal]: any = useState("");
+  const [currentUserDetails]: any = useAtom(currentUserData);
 
   const accountSummaryApi: any = useAccountSummary({
     query: {
@@ -65,6 +71,7 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       coin_name: searchExchangeText,
       p_and_l: viewBtnSetData.pAndL,
       brk: viewBtnSetData.brk,
+      user_name: viewBtnSetData.user_name,
     },
   });
 
@@ -80,6 +87,7 @@ const AccountSummaryScreen = ({ navigation }: any) => {
           ? dayjs(viewBtnSetData.endDate).format("YYYY-MM-DD")
           : "",
       coin_name: searchExchangeText,
+      user_name: viewBtnSetData.user_name,
     },
   });
 
@@ -167,6 +175,7 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       coin_name: searchExchangeText || "",
       pAndL: toggleCheckBoxs?.pAndL,
       brk: toggleCheckBoxs?.brk,
+      user_name: userDropDownVal,
     });
     setLoading(false);
   };
@@ -177,12 +186,14 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       endDate: "",
       coin_name: "",
       ex_change: "",
+      user_name: "",
     });
     setRange({
       startDate: undefined,
       endDate: undefined,
     });
     setSearchExchangeText("");
+    setUserDropDownVal("");
   };
 
   const setToggleHandler = (value: any, key: any) => {
@@ -272,6 +283,13 @@ const AccountSummaryScreen = ({ navigation }: any) => {
           </Text>
         </TouchableOpacity>
       </View>
+
+      {currentUserDetails?.user_type === "Master" && (
+        <UserListDropDown
+          userDropDownVal={userDropDownVal}
+          setUserDropDownVal={setUserDropDownVal}
+        />
+      )}
       <View style={styles.mainBox}>
         <View style={styles.checkBoxParentBox}>
           <View style={styles.checkBoxChild}>
@@ -312,18 +330,20 @@ const AccountSummaryScreen = ({ navigation }: any) => {
           />
         </View>
 
-        <View style={styles.searchBox}>
-          <FontAwesome name="search" size={20} color={searchIconColorState} />
-          <TextInput
-            value={searchExchangeText}
-            onChangeText={setSearchExchangeText}
-            placeholder="Seach exchange or script"
-            placeholderTextColor={theme.colors.greyText}
-            style={styles.searchTextBox}
-            onBlur={() => setSearchIconColorState(theme.colors.greyText)}
-            onFocus={() => setSearchIconColorState(theme.colors.blue)}
-          />
-        </View>
+        {!toggleCheckBoxsFinal.credit && (
+          <View style={styles.searchBox}>
+            <FontAwesome name="search" size={20} color={searchIconColorState} />
+            <TextInput
+              value={searchExchangeText}
+              onChangeText={setSearchExchangeText}
+              placeholder="Seach exchange or script"
+              placeholderTextColor={theme.colors.greyText}
+              style={styles.searchTextBox}
+              onBlur={() => setSearchIconColorState(theme.colors.greyText)}
+              onFocus={() => setSearchIconColorState(theme.colors.blue)}
+            />
+          </View>
+        )}
       </View>
       <FlatList
         style={{
@@ -378,6 +398,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
+    marginTop: 5,
   },
   checkBoxChild: {
     flexDirection: "row",
@@ -415,7 +436,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     marginHorizontal: 10,
-    marginVertical: 5,
+    marginTop: 5,
     justifyContent: "space-between",
   },
   datePersonalBox: {
@@ -426,7 +447,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.lightGrey,
     width: width * 0.46,
-    marginBottom: 10,
   },
   dateText: {
     ...theme.font.fontRegular,

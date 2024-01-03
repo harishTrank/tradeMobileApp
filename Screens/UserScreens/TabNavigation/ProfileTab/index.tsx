@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-  Image
+  Image,
 } from "react-native";
 import theme from "../../../../utils/theme";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
@@ -21,6 +21,7 @@ import { useMobileLogout } from "../../../../hooks/Auth/mutation";
 import * as Network from "expo-network";
 import Toast from "react-native-toast-message";
 import ImageModule from "../../../../ImageModule";
+import { queryClient } from "../../../../App";
 
 const { width }: any = Dimensions.get("window");
 
@@ -56,6 +57,7 @@ const ProfileTab = ({ navigation }: any) => {
           index: 0,
           routes: [{ name: "LoginScreen" }],
         });
+        queryClient.clear();
         Toast.show({
           type: "success",
           text1: res?.message,
@@ -68,7 +70,7 @@ const ProfileTab = ({ navigation }: any) => {
     <View style={styles.screen}>
       <CustomTabFund navigation={navigation} title={"Profile"} />
       <View style={styles.fixView}>
-        <Image style={styles.appImage} source={ImageModule.appIcon}/>
+        <Image style={styles.appImage} source={ImageModule.appIcon} />
         <Text style={styles.userNameStl}>{currentUserDetails.user_name}</Text>
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -167,22 +169,22 @@ const styles = StyleSheet.create({
     color: theme.colors.secondary,
     paddingVertical: 5,
   },
-  fixView:{
+  fixView: {
     padding: 10,
-    alignItems:"center",
+    alignItems: "center",
     backgroundColor: theme.colors.white,
     borderWidth: 2,
-    borderColor: theme.colors.lightGrey
+    borderColor: theme.colors.lightGrey,
   },
   appImage: {
     height: 60,
     width: 60,
     borderRadius: 30,
     borderWidth: 2,
-    borderColor: theme.colors.primary
+    borderColor: theme.colors.primary,
   },
-  userNameStl:{
+  userNameStl: {
     ...theme.font.fontMedium,
-    color: theme.colors.black
+    color: theme.colors.black,
   },
 });
