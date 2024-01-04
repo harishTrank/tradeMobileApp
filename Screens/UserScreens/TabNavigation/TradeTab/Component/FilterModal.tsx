@@ -28,6 +28,7 @@ const FilterModal = ({
   successTradeList,
   setExchangeKey,
   setSearchText,
+  user_id,
 }: any) => {
   const [selectScript, setSelectScript]: any = useState("");
   const [exchangeValue, setExchangeValue]: any = useState("");
@@ -39,7 +40,11 @@ const FilterModal = ({
   const [errorMessage, setErrorMessage]: any = useState("");
   const [currentUser]: any = useAtom(currentUserData);
 
-  const userCoinListApi: any = useUserCoinList();
+  const userCoinListApi: any = useUserCoinList({
+    query: {
+      user_id,
+    },
+  });
 
   const onDismiss = useCallback(() => {
     setOpen(false);

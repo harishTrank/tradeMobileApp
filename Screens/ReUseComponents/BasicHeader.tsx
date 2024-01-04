@@ -11,12 +11,9 @@ import theme from "../../utils/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { useAtom } from "jotai";
-import { currentUserData } from "../../JotaiStore";
 
 const { width }: any = Dimensions.get("window");
 const BasicHeader = ({ navigation, title }: any) => {
-  const [currentUserDetails]: any = useAtom(currentUserData);
   return (
     <>
       <View

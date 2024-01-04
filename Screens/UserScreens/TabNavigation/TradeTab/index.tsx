@@ -35,6 +35,7 @@ const SearchInput = ({
   setExchangeKey,
   searchText,
   setSearchText,
+  user_id,
 }: any) => {
   const [openFilterModal, setOpenFilterModal] = useState(false);
   return (
@@ -47,6 +48,7 @@ const SearchInput = ({
         successTradeList={successTradeList}
         setExchangeKey={setExchangeKey}
         setSearchText={setSearchText}
+        user_id={user_id}
       />
       <SearchComponent searchText={searchText} setSearchText={setSearchText} />
       <TouchableOpacity onPress={() => setOpenFilterModal(true)}>
@@ -117,7 +119,12 @@ export const ListItemCard = ({
   );
 };
 
-const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
+export const TradeCustomTab = ({
+  navigation,
+  pendingTab,
+  viewModalizeRef,
+  user_id,
+}: any) => {
   const [currentPage, setCurrentPage]: any = useState(1);
   const [successList, setSuccessList]: any = useState([]);
   const [exchangeKey, setExchangeKey]: any = useState("");
@@ -164,6 +171,7 @@ const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
       ex_change: exchangeKey,
       coin_name: searchText,
       is_pending: pendingTab,
+      user_id: user_id ? user_id : "",
     },
   });
 
@@ -226,6 +234,7 @@ const TradeCustomTab = ({ navigation, pendingTab, viewModalizeRef }: any) => {
         setExchangeKey={setExchangeKey}
         searchText={searchText}
         setSearchText={setSearchText}
+        user_id={user_id}
       />
       <FlatList
         showsVerticalScrollIndicator={false}

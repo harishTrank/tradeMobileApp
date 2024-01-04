@@ -77,4 +77,12 @@ export const userEndpoints = {
       uri: "/master-child-api/",
     },
   },
+
+  permissionToggleApi: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/permission-toggle/",
+    },
+  },
 };

@@ -71,7 +71,7 @@ function RootNavigator() {
     }
   };
   useEffect(() => {
-    userProfileView()
+    userProfileView({})
       .then((res: any) => {
         connectSocket();
         setTradeCoinData(res?.tradeCoinData);

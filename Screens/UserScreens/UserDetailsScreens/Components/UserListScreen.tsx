@@ -6,22 +6,19 @@ import {
   Text,
   Dimensions,
 } from "react-native";
-import UserNameHeader from "../../ReUseComponents/UserNameHeader";
-import SearchComponent from "../../ReUseComponents/SearchComponent";
-import theme from "../../../utils/theme";
-import UserFilterModal from "./Components/UserFilterModal";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
-import { useUserListView } from "../../../hooks/User/query";
-
-const { height } = Dimensions.get("window");
+import { useUserListView } from "../../../../hooks/User/query";
+import UserFilterModal from "../../../OnlyAdminScreens/UserListScreen/Components/UserFilterModal";
+import SearchComponent from "../../../ReUseComponents/SearchComponent";
+import theme from "../../../../utils/theme";
 
 const RenderItem = ({ item, navigation }: any) => {
   return (
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() =>
-        navigation.navigate("UserDetailsScreens", { user_id: item.id })
+        navigation.push("UserDetailsScreens", { user_id: item.id })
       }
     >
       <View>
@@ -44,7 +41,9 @@ const RenderItem = ({ item, navigation }: any) => {
   );
 };
 
-const UserListScreen = ({ navigation }: any) => {
+const { height } = Dimensions.get("window");
+
+const UserListScreen = ({ navigation, route }: any) => {
   const [searchText, setSearchText]: any = useState("");
   const [userModalOpen, setUserModalOpen]: any = useState(false);
   const [stateFilter, setStateFilter]: any = useState({
@@ -60,7 +59,7 @@ const UserListScreen = ({ navigation }: any) => {
   });
 
   const userListApiHandler: any = useUserListView({
-    query: btnHitSearchFilter,
+    query: { ...btnHitSearchFilter, ...{ user_id: route?.params?.user_id } },
   });
 
   const submitHandler = () => {
@@ -83,7 +82,6 @@ const UserListScreen = ({ navigation }: any) => {
   };
   return (
     <View style={styles.screen}>
-      <UserNameHeader navigation={navigation} title={"User List"} />
       <View style={styles.searchBox}>
         <UserFilterModal
           userModalOpen={userModalOpen}

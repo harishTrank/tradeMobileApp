@@ -16,8 +16,8 @@ export const useGetUserTradeCoin = () =>
 export const useTradeHistory = (payload: any) =>
   useQuery(["tradeHistory", payload], () => tradeHistory(payload));
 
-export const useUserCoinList = () =>
-  useQuery(["userCoinList"], () => userCoinList());
+export const useUserCoinList = (payload: any) =>
+  useQuery(["userCoinList", payload], () => userCoinList(payload));
 
 export const UseGetAllPosition = () =>
   useQuery(["getAllPosition"], () => getAllPosition());

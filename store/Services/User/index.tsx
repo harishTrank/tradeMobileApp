@@ -7,9 +7,10 @@ export const addNewUserService = ({ body }: any) =>
     body,
   });
 
-export const userProfileView = () =>
+export const userProfileView = ({ query }: any) =>
   callApi({
     uriEndPoint: userEndpoints.userProfileView.v1,
+    query,
   });
 
 export const userListView = ({ query }: any) =>
@@ -55,4 +56,10 @@ export const positionHeaderApi = () =>
 export const getMasterChildApi = () =>
   callApi({
     uriEndPoint: userEndpoints.getMasterChildApi.v1,
+  });
+
+export const permissionToggleApi = ({ body }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.permissionToggleApi.v1,
+    body,
   });

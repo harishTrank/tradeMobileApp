@@ -32,6 +32,8 @@ import ClientPandLScreen from "./ClientPandLScreen";
 import UserWiseNetPositionScreen from "./UserWiseNetPositionScreen";
 import OpenPositionScreen from "./OpenPositionScreen";
 import PercentOpenPositionScreen from "./PercentOpenPositionScreen";
+import UserDetailsScreens from "./UserDetailsScreens";
+import EditUserScreen from "./EditUserScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -90,7 +92,6 @@ const UserScreens = () => {
       <Stack.Screen name="LoginHistoryScreen" component={LoginHistoryScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
 
-      {/* admin routes */}
       <Stack.Screen
         name="CreateNewUsersScreen"
         component={CreateNewUsersScreen}
@@ -103,6 +104,8 @@ const UserScreens = () => {
       <Stack.Screen name="PandLScreen" component={PandLScreen} />
       <Stack.Screen name="ClientPandLScreen" component={ClientPandLScreen} />
       <Stack.Screen name="OpenPositionScreen" component={OpenPositionScreen} />
+      <Stack.Screen name="UserDetailsScreens" component={UserDetailsScreens} />
+      <Stack.Screen name="EditUserScreen" component={EditUserScreen} />
       <Stack.Screen
         name="PercentOpenPositionScreen"
         component={PercentOpenPositionScreen}

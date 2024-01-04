@@ -13,8 +13,8 @@ import {
 // export const useViewCollectionPost = (payload: any) =>
 //   useQuery(["viewCollectionPost", payload], () => viewCollectionPost(payload));
 
-export const useUserProfileView = () =>
-  useQuery(["userProfileView"], () => userProfileView());
+export const useUserProfileView = (payload: any) =>
+  useQuery(["userProfileView", payload], () => userProfileView(payload));
 
 export const useUserListView = (payload: any) =>
   useQuery(["userListView", payload], () => userListView(payload));

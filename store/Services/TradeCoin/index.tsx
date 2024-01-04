@@ -30,9 +30,10 @@ export const tradeHistory = ({ query }: any) =>
     query,
   });
 
-export const userCoinList = () =>
+export const userCoinList = ({ query }: any) =>
   callApi({
     uriEndPoint: tradeCoinEndpoints.userCoinList.v1,
+    query,
   });
 
 export const getAllPosition = () =>

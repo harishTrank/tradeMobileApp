@@ -14,9 +14,11 @@ const DropDownComponent = ({
   search,
   placeholderStyle,
   fieldKey,
+  disable,
 }: any) => {
   return (
     <Dropdown
+      disable
       style={{ ...styles.mainDroper, ...style }}
       placeholderStyle={[styles.textStyle, placeholderStyle]}
       placeholder={placeholder}
