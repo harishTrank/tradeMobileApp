@@ -8,6 +8,7 @@ import { useAtom } from "jotai";
 import { currentUserData } from "../../../JotaiStore";
 import { scriptQuantity } from "../../../store/Services/User";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
 
 const RowElements = ({
   first,
@@ -80,12 +81,14 @@ const ScriptQuantityScreen = ({ navigation }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [currentResponse, setCurrentResponse]: any = useState([]);
+  const [userDropDownVal, setUserDropDownVal]: any = useState("");
 
   const SubmitBtnHandler = () => {
     if (exchangeValue !== "") {
       scriptQuantity({
         query: {
           searchInput: exchangeValue,
+          user_id: userDropDownVal,
         },
       }).then((res: any) => {
         setCurrentResponse(res.response);
@@ -107,6 +110,15 @@ const ScriptQuantityScreen = ({ navigation }: any) => {
           search={false}
           fieldKey={"name"}
         />
+        {currentUser?.user_type === "Master" && (
+          <View style={{ marginBottom: 10 }}>
+            <UserListDropDown
+              userDropDownVal={userDropDownVal}
+              setUserDropDownVal={setUserDropDownVal}
+            />
+          </View>
+        )}
+
         <SmallBtnComponent title={"View"} onPress={SubmitBtnHandler} />
       </View>
       <ScrollView
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   dropDownMargin: {
-    marginVertical: 10,
+    marginTop: 10,
   },
   rowStyle: {
     flexDirection: "row",

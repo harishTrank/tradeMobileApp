@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DropDownComponent from "../../../ReUseComponents/DropDownComponent";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { getMasterChildApi } from "../../../../store/Services/User";
 
 const UserListDropDown = ({ userDropDownVal, setUserDropDownVal }: any) => {
@@ -27,10 +27,7 @@ const UserListDropDown = ({ userDropDownVal, setUserDropDownVal }: any) => {
 };
 
 const styles = StyleSheet.create({
-  dropDown: {
-    marginHorizontal: 10,
-    marginVertical: 10,
-  },
+  dropDown: {},
 });
 
 export default UserListDropDown;

@@ -25,6 +25,7 @@ import { DatePickerModal } from "react-native-paper-dates";
 import dayjs from "dayjs";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
 const { width } = Dimensions.get("window");
 
 const RejectionLogScreen = ({ navigation }: any) => {
@@ -36,11 +37,15 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const userCoinListApi: any = useUserCoinList();
   const [loading, setLoading]: any = useState(true);
+  const [currentUserDetails]: any = useAtom(currentUserData);
+  const [userDropDownVal, setUserDropDownVal]: any = useState("");
+
   const [viewBtnSetData, setviewBtnSetData]: any = useState({
     startDate: "",
     endDate: "",
     coin_name: "",
     ex_change: "",
+    user_name: "",
   });
 
   // date picker case working
@@ -77,6 +82,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
       ex_change: viewBtnSetData.ex_change,
       coin_name: viewBtnSetData.coin_name,
       is_cancel: true,
+      user_name: viewBtnSetData.user_name,
     },
   });
 
@@ -138,6 +144,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
       endDate: range.endDate || "",
       coin_name: selectScript || "",
       ex_change: exchangeValue || "",
+      user_name: userDropDownVal || "",
     });
     successTradeList.refetch();
     setLoading(false);
@@ -149,6 +156,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
       endDate: "",
       coin_name: "",
       ex_change: "",
+      user_name: "",
     });
     setRange({
       startDate: undefined,
@@ -156,6 +164,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
     });
     setExchangeValue("");
     setSelectScript("");
+    setUserDropDownVal("");
     successTradeList.refetch();
   };
 
@@ -236,18 +245,33 @@ const RejectionLogScreen = ({ navigation }: any) => {
       </View>
 
       <View style={styles.btnStyleBox}>
-        <SmallBtnComponent
-          style={styles.buttonBtn}
-          title={"Search"}
-          onPress={searchBtnHandler}
-        />
-        <SmallBtnComponent
-          style={{ ...styles.buttonBtn, ...{ marginLeft: 15 } }}
-          title={"Reset"}
-          onPress={resetHandler}
-          backgroundColor={theme.colors.lightGrey}
-          textColor={theme.colors.secondary}
-        />
+        <>
+          {currentUserDetails?.user_type === "Master" && (
+            <View style={{ width: "45%", marginLeft: 10 }}>
+              <UserListDropDown
+                userDropDownVal={userDropDownVal}
+                setUserDropDownVal={setUserDropDownVal}
+              />
+            </View>
+          )}
+        </>
+        <>
+          <SmallBtnComponent
+            style={styles.buttonBtn}
+            title={"Search"}
+            onPress={searchBtnHandler}
+          />
+          <SmallBtnComponent
+            style={{
+              ...styles.buttonBtn,
+              ...{ marginLeft: 5, marginRight: 15 },
+            }}
+            title={"Reset"}
+            onPress={resetHandler}
+            backgroundColor={theme.colors.lightGrey}
+            textColor={theme.colors.secondary}
+          />
+        </>
       </View>
 
       <View style={styles.searchBox}>
@@ -309,8 +333,7 @@ const styles = StyleSheet.create({
   btnStyleBox: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "flex-end",
-    marginHorizontal: 10,
+    justifyContent: "space-between",
   },
   buttonBtn: {
     width: width * 0.215,
@@ -354,7 +377,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.lightGrey,
     width: width * 0.46,
-    marginBottom: 10,
   },
   dateText: {
     ...theme.font.fontRegular,

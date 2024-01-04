@@ -197,6 +197,9 @@ const ModalizeData = ({
         if (!body.is_cancel) {
           setInsufficientFlag(true);
         }
+        if (err.data.message === "Not Allowed For Trade") {
+          setInsufficientFlag(false);
+        }
         setErrorFlag(true);
         setModalizeMessage(err.data.message);
         messageModalize.current?.open();

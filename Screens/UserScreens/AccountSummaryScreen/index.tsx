@@ -285,10 +285,12 @@ const AccountSummaryScreen = ({ navigation }: any) => {
       </View>
 
       {currentUserDetails?.user_type === "Master" && (
-        <UserListDropDown
-          userDropDownVal={userDropDownVal}
-          setUserDropDownVal={setUserDropDownVal}
-        />
+        <View style={{ margin: 10 }}>
+          <UserListDropDown
+            userDropDownVal={userDropDownVal}
+            setUserDropDownVal={setUserDropDownVal}
+          />
+        </View>
       )}
       <View style={styles.mainBox}>
         <View style={styles.checkBoxParentBox}>

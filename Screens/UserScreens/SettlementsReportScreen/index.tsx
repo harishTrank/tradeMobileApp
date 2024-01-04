@@ -20,13 +20,16 @@ import { useSettlementApi } from "../../../hooks/User/query";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import { useAtom } from "jotai";
 import { currentUserData } from "../../../JotaiStore";
+import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
 
 const SettlementsReportScreen = ({ navigation }: any) => {
   const [loading, setLoading]: any = useState(true);
   const [currentUserDetails]: any = useAtom(currentUserData);
+  const [userDropDownVal, setUserDropDownVal]: any = useState("");
   const [query, setQuery] = useState({
     startDate: undefined,
     endDate: undefined,
+    user_name: "",
   });
 
   // date picker case working
@@ -50,7 +53,7 @@ const SettlementsReportScreen = ({ navigation }: any) => {
   // ------------------------------
 
   const searchBtnHit = () => {
-    setQuery(range);
+    setQuery({ ...range, ...{ user_name: userDropDownVal } });
   };
 
   const resetBtnHit = () => {
@@ -61,6 +64,7 @@ const SettlementsReportScreen = ({ navigation }: any) => {
     setQuery({
       startDate: undefined,
       endDate: undefined,
+      user_name: "",
     });
   };
 
@@ -74,6 +78,7 @@ const SettlementsReportScreen = ({ navigation }: any) => {
         query.endDate && query.endDate !== ""
           ? dayjs(query.endDate).format("YYYY-MM-DD")
           : "",
+      user_name: query.user_name,
     },
   });
   useEffect(() => {
@@ -128,6 +133,15 @@ const SettlementsReportScreen = ({ navigation }: any) => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        {currentUserDetails?.user_type === "Master" && (
+          <View style={{ marginHorizontal: 10 }}>
+            <UserListDropDown
+              userDropDownVal={userDropDownVal}
+              setUserDropDownVal={setUserDropDownVal}
+            />
+          </View>
+        )}
 
         <View style={styles.buttonsBoxStyle}>
           <SmallBtnComponent
@@ -194,7 +208,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: theme.colors.lightGrey,
     width: width * 0.44,
-    marginBottom: 10,
   },
   dateText: {
     ...theme.font.fontRegular,
