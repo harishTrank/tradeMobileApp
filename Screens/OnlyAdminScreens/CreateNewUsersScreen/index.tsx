@@ -84,6 +84,15 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
         type: "error",
         text1: "Password or confirm password must match.",
       });
+    } else if (
+      !exchangeAllowance.mcx.first &&
+      !exchangeAllowance.nse.first &&
+      !exchangeAllowance.mini.first
+    ) {
+      return Toast.show({
+        type: "error",
+        text1: "Please Allow atleast one exchange.",
+      });
     } else {
       setFullScreenLoader(true);
       createNewUserApihandler
@@ -156,7 +165,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
         <View style={styles.secondHeader}>
           <Text style={styles.headingText}>User Type</Text>
           <DropDownComponent
-            data={[{ name: "Client" }]}
+            data={[{ name: "Client" }, { name: "Master" }]}
             value={userType}
             setValue={setUserType}
             style={styles.dropDown}

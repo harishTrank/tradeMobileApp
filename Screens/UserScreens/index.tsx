@@ -26,6 +26,12 @@ import { userLoginGlobalFlag } from "../../JotaiStore";
 import CoinDetailsScreen from "./CoinDetailsScreen";
 import AddSymbolListScreen from "./AddSymbolListScreen";
 import ChartViewScreen from "./ChartViewScreen";
+import WeeklyAdminScreen from "./WeeklyAdminScreen";
+import PandLScreen from "./PandLScreen";
+import ClientPandLScreen from "./ClientPandLScreen";
+import UserWiseNetPositionScreen from "./UserWiseNetPositionScreen";
+import OpenPositionScreen from "./OpenPositionScreen";
+import PercentOpenPositionScreen from "./PercentOpenPositionScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -37,7 +43,7 @@ const UserScreens = () => {
         headerShown: false,
       }}
       initialRouteName={userLogFlag ? "TabNavigation" : "LoginScreen"}
-      // initialRouteName={"AccountSummaryScreen"}
+      // initialRouteName={"OpenPositionScreen"}
     >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="TabNavigation" component={TabNavigation} />
@@ -93,6 +99,18 @@ const UserScreens = () => {
       <Stack.Screen name="SearchUserScreen" component={SearchUserScreen} />
       <Stack.Screen name="CoinDetailsScreen" component={CoinDetailsScreen} />
       <Stack.Screen name="ChartViewScreen" component={ChartViewScreen} />
+      <Stack.Screen name="WeeklyAdminScreen" component={WeeklyAdminScreen} />
+      <Stack.Screen name="PandLScreen" component={PandLScreen} />
+      <Stack.Screen name="ClientPandLScreen" component={ClientPandLScreen} />
+      <Stack.Screen name="OpenPositionScreen" component={OpenPositionScreen} />
+      <Stack.Screen
+        name="PercentOpenPositionScreen"
+        component={PercentOpenPositionScreen}
+      />
+      <Stack.Screen
+        name="UserWiseNetPositionScreen"
+        component={UserWiseNetPositionScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -37,7 +37,6 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const userCoinListApi: any = useUserCoinList();
   const [loading, setLoading]: any = useState(true);
-  const [currentUserDetails]: any = useAtom(currentUserData);
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
 
   const [viewBtnSetData, setviewBtnSetData]: any = useState({
@@ -246,7 +245,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
 
       <View style={styles.btnStyleBox}>
         <>
-          {currentUserDetails?.user_type === "Master" && (
+          {currentUser?.user_type === "Master" && (
             <View style={{ width: "45%", marginLeft: 10 }}>
               <UserListDropDown
                 userDropDownVal={userDropDownVal}

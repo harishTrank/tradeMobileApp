@@ -6,7 +6,9 @@ import {
   MaterialIcons,
   Entypo,
   AntDesign,
+  FontAwesome5,
   FontAwesome,
+  Fontisto,
 } from "@expo/vector-icons";
 
 export const boxData = {
@@ -55,8 +57,8 @@ export const boxData = {
     },
     {
       icon: (
-        <MaterialCommunityIcons
-          name="crosshairs-off"
+        <FontAwesome
+          name="balance-scale"
           size={20}
           color={theme.colors.black}
         />
@@ -93,21 +95,63 @@ export const boxData = {
     },
     {
       icon: (
+        <Foundation name="page-search" size={20} color={theme.colors.black} />
+      ),
+      title: "Weekly Admin",
+      screenName: "WeeklyAdminScreen",
+    },
+    {
+      icon: (
         <MaterialIcons name="history" size={20} color={theme.colors.black} />
       ),
       title: "Intraday History",
       screenName: "IntradayHistoryScreen",
     },
     {
+      icon: <AntDesign name="barschart" size={20} color={theme.colors.black} />,
+      title: "P & L",
+      screenName: "PandLScreen",
+    },
+    {
       icon: (
-        <MaterialCommunityIcons
-          name="crosshairs-off"
+        <FontAwesome name="bar-chart-o" size={20} color={theme.colors.black} />
+      ),
+      title: "Client P & L",
+      screenName: "ClientPandLScreen",
+    },
+    {
+      icon: (
+        <FontAwesome
+          name="balance-scale"
           size={20}
           color={theme.colors.black}
         />
       ),
       title: "Settlements Report",
       screenName: "SettlementsReportScreen",
+    },
+    {
+      icon: (
+        <FontAwesome5
+          name="user-astronaut"
+          size={20}
+          color={theme.colors.black}
+        />
+      ),
+      title: "User Wise Position",
+      screenName: "UserWiseNetPositionScreen",
+    },
+    {
+      icon: (
+        <FontAwesome5 name="searchengin" size={20} color={theme.colors.black} />
+      ),
+      title: "Open Position",
+      screenName: "OpenPositionScreen",
+    },
+    {
+      icon: <Fontisto name="graphql" size={20} color={theme.colors.black} />,
+      title: "% Open Position",
+      screenName: "PercentOpenPositionScreen",
     },
     {
       icon: (
@@ -209,8 +253,8 @@ export const boxData = {
     },
     {
       icon: (
-        <MaterialCommunityIcons
-          name="crosshairs-off"
+        <FontAwesome
+          name="balance-scale"
           size={20}
           color={theme.colors.black}
         />

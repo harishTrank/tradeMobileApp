@@ -22,6 +22,7 @@ const UserListDropDown = ({ userDropDownVal, setUserDropDownVal }: any) => {
       style={styles.dropDown}
       fieldKey={"name"}
       placeholder="Select User"
+      search
     />
   );
 };
