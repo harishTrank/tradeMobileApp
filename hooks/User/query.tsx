@@ -6,6 +6,7 @@ import {
   positionHeaderApi,
   searchUserList,
   settlementApi,
+  userDetailsView,
   userListView,
   userProfileView,
 } from "../../store/Services/User";
@@ -15,6 +16,9 @@ import {
 
 export const useUserProfileView = (payload: any) =>
   useQuery(["userProfileView", payload], () => userProfileView(payload));
+
+export const useUserDetailsView = (payload: any) =>
+  useQuery(["userDetailsView", payload], () => userDetailsView(payload));
 
 export const useUserListView = (payload: any) =>
   useQuery(["userListView", payload], () => userListView(payload));

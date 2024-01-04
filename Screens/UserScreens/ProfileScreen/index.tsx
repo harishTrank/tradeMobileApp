@@ -6,7 +6,7 @@ import CustomButton from "../../ReUseComponents/CustomButton";
 import { useUserProfileView } from "../../../hooks/User/query";
 
 const ProfileScreen = ({ navigation }: any) => {
-  const userApiCall: any = useUserProfileView();
+  const userApiCall: any = useUserProfileView({});
   // useEffect(() => {
   //   return navigation.addListener("focus", () => {
   //     userApiCall.refetch();

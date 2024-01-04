@@ -10,20 +10,48 @@ import theme from "../../../../utils/theme";
 import { Entypo, AntDesign } from "@expo/vector-icons";
 import ToggleBtnComponent from "../../../ReUseComponents/ToggleBtnComponent";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useUserProfileView } from "../../../../hooks/User/query";
 import dayjs from "dayjs";
+import { usePermissionToggleApi } from "../../../../hooks/User/mutation";
+import { useUserDetailsView } from "../../../../hooks/User/query";
 
 const OverViewScreen = ({ route, navigation }: any) => {
-  const userDetailsApi: any = useUserProfileView({
+  const userDetailsApi: any = useUserDetailsView({
     query: route?.params,
   });
-  const [statusToggle, setStatusToggle]: any = useState(false);
-  const [closeOnlyToggle, setCloseOnlyToggle]: any = useState();
+  const [statusToggle, setStatusToggle]: any = useState(undefined);
+  const [closeOnlyToggle, setCloseOnlyToggle]: any = useState(undefined);
+  const userPermissionApi: any = usePermissionToggleApi();
+
+  const userPermissionHandler = (type: any, value: any) => {
+    userPermissionApi
+      ?.mutateAsync({
+        body: {
+          id: route?.params?.user_id,
+          key: type,
+          value: value,
+        },
+      })
+      ?.then((res: any) => {
+        userDetailsApi?.refetch();
+      });
+  };
 
   useEffect(() => {
     setStatusToggle(userDetailsApi?.data?.data?.status);
     setCloseOnlyToggle(userDetailsApi?.data?.data?.close_only);
   }, [userDetailsApi?.data?.data]);
+
+  useEffect(() => {
+    if (statusToggle !== undefined) {
+      userPermissionHandler("status", statusToggle);
+    }
+  }, [statusToggle]);
+
+  useEffect(() => {
+    if (statusToggle !== undefined) {
+      userPermissionHandler("close_only", closeOnlyToggle);
+    }
+  }, [closeOnlyToggle]);
 
   return (
     <ScrollView
