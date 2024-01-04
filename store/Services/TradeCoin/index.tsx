@@ -36,14 +36,16 @@ export const userCoinList = ({ query }: any) =>
     query,
   });
 
-export const getAllPosition = () =>
+export const getAllPosition = ({ query }: any) =>
   callApi({
     uriEndPoint: tradeCoinEndpoints.getAllPosition.v1,
+    query,
   });
 
-export const getAllCoinsPosition = () =>
+export const getAllCoinsPosition = ({ query }: any) =>
   callApi({
     uriEndPoint: tradeCoinEndpoints.getAllCoinsPosition.v1,
+    query,
   });
 
 export const getParticularCoin = ({ pathParams }: any) =>

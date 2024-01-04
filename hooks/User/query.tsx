@@ -35,8 +35,8 @@ export const useAccountSummaryCredit = (payload: any) =>
 export const useSettlementApi = (payload: any) =>
   useQuery(["settlementApi", payload], () => settlementApi(payload));
 
-export const usePositionHeaderApi = () =>
-  useQuery(["positionHeaderApi"], () => positionHeaderApi());
+export const usePositionHeaderApi = (payload: any) =>
+  useQuery(["positionHeaderApi", payload], () => positionHeaderApi(payload));
 
 export const useGetMasterChildApi = () =>
   useQuery(["getMasterChildApi"], () => getMasterChildApi());

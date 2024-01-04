@@ -6,6 +6,8 @@ import {
   FlatList,
   Text,
   Platform,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import CustomTabFund from "../../../ReUseComponents/CustomTabFund";
 import theme from "../../../../utils/theme";
@@ -32,10 +34,11 @@ import Toast from "react-native-toast-message";
 import ModalLizeComp from "./Component/ModalLizeComp";
 import SquareOffAllModal from "./Component/SquareOffAllModal";
 import { usePositionHeaderApi } from "../../../../hooks/User/query";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const { height } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
-const PositionTab = ({ navigation }: any) => {
+const PositionTab = ({ navigation, user_id }: any) => {
   const [dropDownOpen, setDropDownOpen]: any = useState(false);
   const [totalBalance, setTotalBalance]: any = useState(0);
   const [searchText, setSearchText]: any = useState("");
@@ -49,11 +52,17 @@ const PositionTab = ({ navigation }: any) => {
   const messageModalize = useRef<Modalize>(null);
   const modalizeRef = useRef<Modalize>(null);
   const [, setTradeCoinSelected]: any = useAtom(tradeSelectedCoinGlobal);
-  const positionHeaderApiCall: any = usePositionHeaderApi();
+  const positionHeaderApiCall: any = usePositionHeaderApi({
+    query: { user_id: user_id ? user_id : "" },
+  });
   // ----------------------------------------------
 
   // position api and socket logic
-  const positionListApi: any = UseGetAllPosition();
+  const positionListApi: any = UseGetAllPosition({
+    query: {
+      user_id: user_id ? user_id : "",
+    },
+  });
   const [socketResponse, setSocketResponse]: any = useState([]);
   // socket manage case -------------------------
 
@@ -99,7 +108,9 @@ const PositionTab = ({ navigation }: any) => {
     focusRefetchContant();
     positionListApi?.refetch();
     positionHeaderApiCall?.refetch();
-    getAllCoinsPosition()
+    getAllCoinsPosition({
+      query: { user_id: user_id ? user_id : "" },
+    })
       .then((res: any) => {
         setLoading(false);
         getFilterData({ identifier: res.response });
@@ -168,7 +179,7 @@ const PositionTab = ({ navigation }: any) => {
   //----------------------------------------------
   return (
     <View style={styles.screen}>
-      <CustomTabFund navigation={navigation} title={"Position"} />
+      {!user_id && <CustomTabFund navigation={navigation} title={"Position"} />}
 
       <FullScreenLoader loading={loading} />
 
@@ -195,13 +206,29 @@ const PositionTab = ({ navigation }: any) => {
         positionHeaderApiCall={positionHeaderApiCall}
       />
 
-      <ExtraOptionRow
-        setSearchText={setSearchText}
-        searchText={searchText}
-        refreshHandler={refreshHandler}
-        setVisible={setVisible}
-        length={positionListApi.data?.response?.length}
-      />
+      {!user_id ? (
+        <ExtraOptionRow
+          setSearchText={setSearchText}
+          searchText={searchText}
+          refreshHandler={refreshHandler}
+          setVisible={setVisible}
+          length={positionListApi.data?.response?.length}
+        />
+      ) : (
+        <View style={styles.mainBoxSearch}>
+          <TextInput
+            placeholder="Search"
+            style={styles.searchText}
+            onChangeText={setSearchText}
+            value={searchText}
+            autoCorrect={false}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity onPress={refreshHandler}>
+            <MaterialIcons name="refresh" size={20} color="black" />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -277,5 +304,21 @@ const styles = StyleSheet.create({
   emptyText: {
     color: theme.colors.black,
     ...theme.font.fontRegular,
+  },
+  mainBoxSearch: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: 10,
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: theme.colors.white,
+    borderBlockColor: theme.colors.border,
+  },
+  searchText: {
+    ...theme.font.fontRegular,
+    color: theme.colors.greyText,
+    width: width * 0.83,
   },
 });

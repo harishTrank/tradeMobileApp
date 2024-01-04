@@ -18,7 +18,7 @@ const DropDownComponent = ({
 }: any) => {
   return (
     <Dropdown
-      disable
+      disable={disable}
       style={{ ...styles.mainDroper, ...style }}
       placeholderStyle={[styles.textStyle, placeholderStyle]}
       placeholder={placeholder}

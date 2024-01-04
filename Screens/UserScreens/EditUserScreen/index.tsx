@@ -170,7 +170,7 @@ const EditUserScreen = ({ navigation }: any) => {
             setValue={setUserType}
             style={styles.dropDown}
             fieldKey={"name"}
-            disable
+            disable={true}
           />
         </View>
 

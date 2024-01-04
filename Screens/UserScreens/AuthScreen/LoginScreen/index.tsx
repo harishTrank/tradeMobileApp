@@ -61,8 +61,7 @@ const LoginScreen = ({ navigation }: any) => {
       .then(async (response: any) => {
         if (response?.responsecode === 200) {
           await AsyncStorage.setItem("accessToken", response?.token?.access);
-
-          userProfileView()
+          userProfileView({})
             .then((res: any) => {
               connectSocket();
               setTradeCoinData(res?.tradeCoinData);
@@ -87,7 +86,7 @@ const LoginScreen = ({ navigation }: any) => {
         setLoader(false);
         return Toast.show({
           type: "error",
-          text1: error.data.message,
+          text1: error?.data?.message,
         });
       });
   };
