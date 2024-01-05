@@ -35,7 +35,7 @@ const RejectionLogScreen = ({ navigation }: any) => {
   const [successList, setSuccessList]: any = useState([]);
   const [currentPage, setCurrentPage]: any = useState(1);
   const [currentUser]: any = useAtom(currentUserData);
-  const userCoinListApi: any = useUserCoinList();
+  const userCoinListApi: any = useUserCoinList({});
   const [loading, setLoading]: any = useState(true);
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
 

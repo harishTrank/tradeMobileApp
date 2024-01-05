@@ -70,3 +70,16 @@ export const permissionToggleApi = ({ body }: any) =>
     uriEndPoint: userEndpoints.permissionToggleApi.v1,
     body,
   });
+
+export const userAccountLimit = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.userAccountLimit.v1,
+    query,
+  });
+
+export const userAccountLimitCreated = ({ body, query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.userAccountLimitCreated.v1,
+    body,
+    query,
+  });

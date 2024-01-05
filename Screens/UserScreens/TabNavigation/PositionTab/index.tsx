@@ -249,6 +249,7 @@ const PositionTab = ({ navigation, user_id }: any) => {
             modalizeRef={modalizeRef}
             setTradeCoinSelected={setTradeCoinSelected}
             item={item}
+            user_id={user_id}
           />
         )}
         ListEmptyComponent={

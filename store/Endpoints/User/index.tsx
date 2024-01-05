@@ -92,4 +92,20 @@ export const userEndpoints = {
       uri: "/permission-toggle/",
     },
   },
+
+  userAccountLimit: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/account-limit/",
+    },
+  },
+
+  userAccountLimitCreated: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/limit-user-creation/",
+    },
+  },
 };

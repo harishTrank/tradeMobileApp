@@ -8,13 +8,22 @@ const SmallBtnComponent = ({
   backgroundColor,
   textColor,
   style,
+  disabled,
+  fontStyle,
 }: any) => {
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={[styles.buttonBox, backgroundColor && { backgroundColor }, style]}
     >
-      <Text style={[styles.btnText, textColor && { color: textColor }]}>
+      <Text
+        style={[
+          styles.btnText,
+          textColor && { color: textColor },
+          fontStyle && fontStyle,
+        ]}
+      >
         {title}
       </Text>
     </TouchableOpacity>

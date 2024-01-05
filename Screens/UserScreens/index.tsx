@@ -34,6 +34,10 @@ import OpenPositionScreen from "./OpenPositionScreen";
 import PercentOpenPositionScreen from "./PercentOpenPositionScreen";
 import UserDetailsScreens from "./UserDetailsScreens";
 import EditUserScreen from "./EditUserScreen";
+import SharingDetailsScreen from "./SharingDetailsScreen";
+import GroupQuantityScreen from "./GroupQuantityScreen";
+import ViewGroupQuantityScreen from "./ViewGroupQuantityScreen";
+import TradeMarginScreen from "./TradeMarginScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -107,6 +111,10 @@ const UserScreens = () => {
       <Stack.Screen name="UserDetailsScreens" component={UserDetailsScreens} />
       <Stack.Screen name="EditUserScreen" component={EditUserScreen} />
       <Stack.Screen
+        name="SharingDetailsScreen"
+        component={SharingDetailsScreen}
+      />
+      <Stack.Screen
         name="PercentOpenPositionScreen"
         component={PercentOpenPositionScreen}
       />
@@ -114,6 +122,16 @@ const UserScreens = () => {
         name="UserWiseNetPositionScreen"
         component={UserWiseNetPositionScreen}
       />
+
+      <Stack.Screen
+        name="GroupQuantityScreen"
+        component={GroupQuantityScreen}
+      />
+      <Stack.Screen
+        name="ViewGroupQuantityScreen"
+        component={ViewGroupQuantityScreen}
+      />
+      <Stack.Screen name="TradeMarginScreen" component={TradeMarginScreen} />
     </Stack.Navigator>
   );
 };

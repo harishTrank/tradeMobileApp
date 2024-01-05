@@ -13,6 +13,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import dayjs from "dayjs";
 import { usePermissionToggleApi } from "../../../../hooks/User/mutation";
 import { useUserDetailsView } from "../../../../hooks/User/query";
+import AccountLimitModal from "../ModalsScreens/AccountLimitModal";
+import AdminRightModal from "../ModalsScreens/AdminRightModal";
+import MarketTradeModal from "../ModalsScreens/MarketTradeModal";
 
 const OverViewScreen = ({ route, navigation }: any) => {
   const userDetailsApi: any = useUserDetailsView({
@@ -20,6 +23,9 @@ const OverViewScreen = ({ route, navigation }: any) => {
   });
   const [statusToggle, setStatusToggle]: any = useState(undefined);
   const [closeOnlyToggle, setCloseOnlyToggle]: any = useState(undefined);
+  const [accountLimitModal, setAccountLimitModal]: any = useState(false);
+  const [adminRightModal, setAdminRightModal]: any = useState(false);
+  const [marketTradeRight, setMarketTradeRight]: any = useState(false);
   const userPermissionApi: any = usePermissionToggleApi();
 
   const userPermissionHandler = (type: any, value: any) => {
@@ -55,9 +61,25 @@ const OverViewScreen = ({ route, navigation }: any) => {
 
   return (
     <ScrollView
-      style={[styles.screen, { marginBottom: useSafeAreaInsets().bottom }]}
+      style={[styles.screen, { paddingBottom: useSafeAreaInsets().bottom }]}
       showsVerticalScrollIndicator={false}
     >
+      <AccountLimitModal
+        visible={accountLimitModal}
+        setVisible={setAccountLimitModal}
+        user_id={route?.params?.user_id}
+      />
+
+      <AdminRightModal
+        visible={adminRightModal}
+        setVisible={setAdminRightModal}
+      />
+
+      <MarketTradeModal
+        visible={marketTradeRight}
+        setVisible={setMarketTradeRight}
+      />
+
       <View style={styles.defaultBcg}>
         <View style={styles.userCard2}>
           <View style={styles.circularCard}>
@@ -180,7 +202,15 @@ const OverViewScreen = ({ route, navigation }: any) => {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() =>
+          navigation.navigate("GroupQuantityScreen", {
+            ...route?.params,
+            exchange: userDetailsApi?.data?.data?.exchange,
+          })
+        }
+      >
         <Text style={styles.defaultText}>Group Quantity Settings</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
@@ -190,32 +220,64 @@ const OverViewScreen = ({ route, navigation }: any) => {
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() =>
+          navigation.navigate("TradeMarginScreen", {
+            ...route?.params,
+            exchange: userDetailsApi?.data?.data?.exchange,
+          })
+        }
+      >
         <Text style={styles.defaultText}>Trade margin</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() =>
+          navigation.navigate("SharingDetailsScreen", route?.params)
+        }
+      >
         <Text style={styles.defaultText}>Sharing Details</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() =>
+          navigation.navigate("ChangePasswordScreen", route?.params)
+        }
+      >
         <Text style={styles.defaultText}>Change Password</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
-        <Text style={styles.defaultText}>Account Limit</Text>
-        <AntDesign name="right" size={20} color="black" />
-      </TouchableOpacity>
+      {userDetailsApi?.data?.data?.user_type === "Master" && (
+        <TouchableOpacity
+          style={styles.defaultBcg}
+          onPress={() => setAccountLimitModal(true)}
+        >
+          <Text style={styles.defaultText}>Account Limit</Text>
+          <AntDesign name="right" size={20} color="black" />
+        </TouchableOpacity>
+      )}
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() => setAdminRightModal(true)}
+      >
         <Text style={styles.defaultText}>Admin Rights</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={[
+          styles.defaultBcg,
+          { marginBottom: useSafeAreaInsets().bottom + 5 },
+        ]}
+        onPress={() => setMarketTradeRight(true)}
+      >
         <Text style={styles.defaultText}>Market trade right</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>

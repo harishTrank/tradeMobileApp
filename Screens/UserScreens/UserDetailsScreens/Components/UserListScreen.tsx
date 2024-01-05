@@ -23,7 +23,7 @@ const RenderItem = ({ item, navigation }: any) => {
     >
       <View>
         <Text style={styles.itemText}>
-          {item?.full_name}({item?.user_name})
+          {item?.user_name}({item?.user_type})
         </Text>
         <Text style={styles.itemBalance}>Balance: {item?.balance}</Text>
         <Text style={styles.itemText}>Credit: {item?.credit}</Text>

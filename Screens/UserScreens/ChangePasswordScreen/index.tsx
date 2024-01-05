@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     .min(6, "Current Password must be at least 6 characters"),
 });
 
-const ChangePasswordScreen = ({ navigation }: any) => {
+const ChangePasswordScreen = ({ navigation, route }: any) => {
   const changePasswordAPICALL: any = useChangePassword();
   const [loader, setLoader]: any = useState(false);
   const handleSubmit = (values: any) => {
@@ -37,6 +37,7 @@ const ChangePasswordScreen = ({ navigation }: any) => {
           current_password: values.currentPassword,
           new_password: values.newPassword,
           confirm_password: values.confirmPassword,
+          user_id: route?.params?.user_id ? route?.params?.user_id : "",
         },
       })
       ?.then((res: any) => {

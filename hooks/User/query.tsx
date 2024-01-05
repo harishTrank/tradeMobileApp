@@ -6,6 +6,7 @@ import {
   positionHeaderApi,
   searchUserList,
   settlementApi,
+  userAccountLimit,
   userDetailsView,
   userListView,
   userProfileView,
@@ -40,3 +41,6 @@ export const usePositionHeaderApi = (payload: any) =>
 
 export const useGetMasterChildApi = () =>
   useQuery(["getMasterChildApi"], () => getMasterChildApi());
+
+export const useUserAccountLimit = (payload: any) =>
+  useQuery(["userAccountLimit", payload], () => userAccountLimit(payload));

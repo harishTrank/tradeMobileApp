@@ -17,6 +17,7 @@ const RanderComponent = ({
   modalizeRef,
   socketResponse,
   setTradeCoinSelected,
+  user_id,
 }: any) => {
   const modalizerOpen = () => {
     setTradeCoinSelected(socketResponse);
@@ -37,7 +38,11 @@ const RanderComponent = ({
 
   const finalProfitLoss: any = profitLossHandler();
   return (
-    <TouchableOpacity style={styles.itemContainer} onPress={modalizerOpen}>
+    <TouchableOpacity
+      disabled={user_id ? true : false}
+      style={styles.itemContainer}
+      onPress={modalizerOpen}
+    >
       <View style={styles.itemFirstRow}>
         <Text style={styles.itemText}>
           {item?.coin_name} ,{" "}

@@ -19,6 +19,7 @@ const ModalLizeComp = ({ visible, setVisible, setSquareOffScreen }: any) => {
       <Modal animationType="slide" transparent={true} visible={visible}>
         <TouchableOpacity
           style={styles.cloFieldHandler}
+          activeOpacity={1}
           onPress={() => setVisible(false)}
         />
         <View

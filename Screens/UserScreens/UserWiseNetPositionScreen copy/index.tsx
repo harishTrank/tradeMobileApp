@@ -11,7 +11,7 @@ import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDow
 
 const { width } = Dimensions.get("window");
 
-const OpenPositionScreen = ({ navigation }: any) => {
+const UserWiseNetPositionScreen = ({ navigation }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [selectScript, setSelectScript]: any = useState("");
@@ -21,7 +21,7 @@ const OpenPositionScreen = ({ navigation }: any) => {
   const resetHandler = () => {};
   return (
     <View style={styles.screen}>
-      <BasicHeader navigation={navigation} title={"Open Position"} />
+      <BasicHeader navigation={navigation} title={"User Wise Netposition"} />
 
       <View style={styles.mainBox}>
         <DropDownComponent
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OpenPositionScreen;
+export default UserWiseNetPositionScreen;
