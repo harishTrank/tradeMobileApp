@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   accountSummary,
   accountSummaryCredit,
+  getAdminTraderight,
   getMasterChildApi,
   positionHeaderApi,
   searchUserList,
@@ -44,3 +45,6 @@ export const useGetMasterChildApi = () =>
 
 export const useUserAccountLimit = (payload: any) =>
   useQuery(["userAccountLimit", payload], () => userAccountLimit(payload));
+
+export const useGetAdminTraderight = (payload: any) =>
+  useQuery(["getAdminTraderight", payload], () => getAdminTraderight(payload));

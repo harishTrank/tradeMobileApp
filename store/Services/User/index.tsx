@@ -83,3 +83,9 @@ export const userAccountLimitCreated = ({ body, query }: any) =>
     body,
     query,
   });
+
+export const getAdminTraderight = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.getAdminTraderight.v1,
+    query,
+  });

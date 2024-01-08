@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   TouchableOpacity,
@@ -12,16 +12,35 @@ import { Entypo } from "@expo/vector-icons";
 import CheckBoxComponent from "../../../ReUseComponents/CheckBoxComponent";
 import ToggleBtnComponent from "../../../ReUseComponents/ToggleBtnComponent";
 import CustomButton from "../../../ReUseComponents/CustomButton";
+import { useGetAdminTraderight } from "../../../../hooks/User/query";
 
 const { height, width } = Dimensions.get("window");
 
-const AdminRightModal = ({ visible, setVisible }: any) => {
+const AdminRightModal = ({ visible, setVisible, navigation, user_id }: any) => {
   const [checkBoxData, setCheckBoxData]: any = useState({
     add_order: false,
     delete_trade: false,
     execute_pending_trade: false,
   });
   const [downUserToggle, setDownUserToggle]: any = useState(false);
+  const getApiCall: any = useGetAdminTraderight({
+    query: {
+      user_id,
+    },
+  });
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      getApiCall?.refetch();
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    setCheckBoxData({
+      add_order: getApiCall?.data?.data?.add_order,
+      delete_trade: getApiCall?.data?.data?.delete_trade,
+      execute_pending_trade: getApiCall?.data?.data?.execute_pending_order,
+    });
+  }, [getApiCall?.data]);
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <TouchableOpacity

@@ -73,6 +73,8 @@ const OverViewScreen = ({ route, navigation }: any) => {
       <AdminRightModal
         visible={adminRightModal}
         setVisible={setAdminRightModal}
+        navigation={navigation}
+        user_id={route?.params?.user_id}
       />
 
       <MarketTradeModal

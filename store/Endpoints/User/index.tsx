@@ -108,4 +108,11 @@ export const userEndpoints = {
       uri: "/limit-user-creation/",
     },
   },
+  getAdminTraderight: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/admin-right-get/",
+    },
+  },
 };
