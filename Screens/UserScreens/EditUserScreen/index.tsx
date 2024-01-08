@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, ScrollView, Text, Dimensions } from "react-native";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import theme from "../../../utils/theme";
@@ -7,30 +7,42 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CheckBoxComponent from "../../ReUseComponents/CheckBoxComponent";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import Toast from "react-native-toast-message";
-import { useAddNewUserService } from "../../../hooks/User/mutation";
+import { useEditUserCase } from "../../../hooks/User/mutation";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 import { useAtom } from "jotai";
 import { currentUserData } from "../../../JotaiStore";
 import InputComponent from "../../OnlyAdminScreens/CreateNewUsersScreen/InputComponent";
 import ExchangeRowComponent from "../../OnlyAdminScreens/CreateNewUsersScreen/ExchangeRowComponent";
+import { useUserDetailsView } from "../../../hooks/User/query";
 
 const { width } = Dimensions.get("window");
 
 const inputFields = [
   { key: "name", name: "Name", required: true },
   { key: "userName", name: "Username", required: true },
-  { key: "password", name: "Password", required: true, eye: true },
-  { key: "cPassword", name: "Retype Password", required: true, eye: true },
+  { key: "password", name: "Password", required: false, eye: true },
+  { key: "cPassword", name: "Retype Password", required: false, eye: true },
   { key: "mobileNumber", name: "Mobile Number", required: false },
   { key: "city", name: "City", required: false },
   { key: "credit", name: "Credit", required: true },
   { key: "remark", name: "Remark", required: false },
 ];
 
-const EditUserScreen = ({ navigation }: any) => {
+const EditUserScreen = ({ navigation, route }: any) => {
+  const userDetailsApi: any = useUserDetailsView({
+    query: {
+      user_id: route?.params?.user_id,
+    },
+  });
   const [userType, setUserType]: any = useState("Client");
   const [fullScreenLoader, setFullScreenLoader]: any = useState(false);
   const [userProfileData] = useAtom(currentUserData);
+
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      userDetailsApi?.refetch();
+    });
+  }, [navigation]);
 
   const [personalDetails, setPersonalDetails]: any = useState({
     name: "",
@@ -56,7 +68,55 @@ const EditUserScreen = ({ navigation }: any) => {
     mini: false,
   });
 
-  const createNewUserApihandler: any = useAddNewUserService();
+  const editUserApi: any = useEditUserCase();
+
+  useEffect(() => {
+    if (userDetailsApi?.data) {
+      setPersonalDetails({
+        name: `${userDetailsApi?.data?.data?.full_name || ""}`,
+        userName: `${userDetailsApi?.data?.data?.user_name || ""}`,
+        password: "",
+        cPassword: "",
+        mobileNumber: `${userDetailsApi?.data?.data?.phone_number || ""}`,
+        city: `${userDetailsApi?.data?.data?.city || ""}`,
+        credit: `${userDetailsApi?.data?.data?.credit || ""}`,
+        remark: `${userDetailsApi?.data?.data?.remark || ""}`,
+      });
+
+      setTradeLimit({
+        mcx: userDetailsApi?.data?.data?.mcx,
+        nse: userDetailsApi?.data?.data?.nse,
+        mini: userDetailsApi?.data?.data?.mini,
+      });
+
+      const mcxDetails: any = userDetailsApi?.data?.data?.la_lodu?.find(
+        (findItem: any) => findItem?.symbol_name?.toUpperCase() === "MCX"
+      );
+      const nseDetails: any = userDetailsApi?.data?.data?.la_lodu?.find(
+        (findItem: any) => findItem?.symbol_name?.toUpperCase() === "NSE"
+      );
+      const miniDetails: any = userDetailsApi?.data?.data?.la_lodu?.find(
+        (findItem: any) => findItem?.symbol_name?.toUpperCase() === "MINI"
+      );
+      setExchangeAllowance({
+        mcx: {
+          first: mcxDetails.exchange,
+          second: mcxDetails.turnover,
+          third: mcxDetails.symbols,
+        },
+        nse: {
+          first: nseDetails.exchange,
+          second: nseDetails.turnover,
+          third: nseDetails.symbols,
+        },
+        mini: {
+          first: miniDetails.exchange,
+          second: miniDetails.turnover,
+          third: miniDetails.symbols,
+        },
+      });
+    }
+  }, [userDetailsApi?.data]);
 
   const createUserHandler = () => {
     if (personalDetails.name === "") {
@@ -68,16 +128,6 @@ const EditUserScreen = ({ navigation }: any) => {
       return Toast.show({
         type: "error",
         text1: "User name Field is required.",
-      });
-    } else if (personalDetails.password === "") {
-      return Toast.show({
-        type: "error",
-        text1: "Password Field is required.",
-      });
-    } else if (personalDetails.cPassword === "") {
-      return Toast.show({
-        type: "error",
-        text1: "Retype Password Field is required.",
       });
     } else if (personalDetails.password !== personalDetails.cPassword) {
       return Toast.show({
@@ -95,43 +145,30 @@ const EditUserScreen = ({ navigation }: any) => {
       });
     } else {
       setFullScreenLoader(true);
-      createNewUserApihandler
+      editUserApi
         ?.mutateAsync({
+          query: route?.params,
           body: {
-            role: "AREX",
             full_name: personalDetails.name,
             user_name: personalDetails.userName,
-            password: personalDetails.password,
             phone_number: personalDetails.mobileNumber,
             city: personalDetails.city,
             credit: personalDetails.credit,
-            balance: personalDetails.credit,
             remark: personalDetails.remark,
             mcx: tradeLimit.mcx,
             nse: tradeLimit.nse,
             mini: tradeLimit.mini,
-            add_master: addMaster,
-            change_password: changePassword,
-            exchange_data: [
-              {
-                symbol_name: "mcx",
-                exchange: exchangeAllowance.mcx.first,
-                symbols: exchangeAllowance.mcx.second,
-                turnover: exchangeAllowance.mcx.third,
-              },
-              {
-                symbol_name: "nse",
-                exchange: exchangeAllowance.nse.first,
-                symbols: exchangeAllowance.nse.second,
-                turnover: exchangeAllowance.nse.third,
-              },
-              {
-                symbol_name: "mini",
-                exchange: exchangeAllowance.mini.first,
-                symbols: exchangeAllowance.mini.second,
-                turnover: exchangeAllowance.mini.third,
-              },
-            ],
+            password: personalDetails.password,
+            change_password: false,
+            mcx_exchange: exchangeAllowance.mcx.first,
+            mcx_symbol: exchangeAllowance.mcx.third,
+            mcx_turnover: exchangeAllowance.mcx.second,
+            nse_exchange: exchangeAllowance.nse.first,
+            nse_symbol: exchangeAllowance.nse.third,
+            nse_turnover: exchangeAllowance.nse.second,
+            mini_exchange: exchangeAllowance.mini.first,
+            mini_symbol: exchangeAllowance.mini.third,
+            mini_turnover: exchangeAllowance.mini.second,
           },
         })
         .then((res: any) => {
@@ -241,7 +278,11 @@ const EditUserScreen = ({ navigation }: any) => {
           <View style={styles.lightBox}>
             <View style={styles.bottomRowBox}>
               <Text style={styles.rowBoxText}>Add Master</Text>
-              <CheckBoxComponent value={addMaster} setValue={setAddMaster} />
+              <CheckBoxComponent
+                disabled={true}
+                value={addMaster}
+                setValue={setAddMaster}
+              />
             </View>
             <View style={styles.bottomRowBox}>
               <Text style={styles.rowBoxText}>

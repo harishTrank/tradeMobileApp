@@ -115,4 +115,33 @@ export const userEndpoints = {
       uri: "/admin-right-get/",
     },
   },
+  updateAdminTraderight: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/admin-right/",
+    },
+  },
+  getMarketTrade: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/admin-trade-get/",
+    },
+  },
+  updateMarketTrade: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/admin-trade-right/",
+    },
+  },
+
+  editUserCase: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/edit-user/",
+    },
+  },
 };

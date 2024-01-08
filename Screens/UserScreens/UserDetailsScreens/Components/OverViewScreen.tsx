@@ -59,6 +59,12 @@ const OverViewScreen = ({ route, navigation }: any) => {
     }
   }, [closeOnlyToggle]);
 
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      userDetailsApi.refetch();
+    });
+  }, [navigation]);
+
   return (
     <ScrollView
       style={[styles.screen, { paddingBottom: useSafeAreaInsets().bottom }]}
@@ -80,6 +86,7 @@ const OverViewScreen = ({ route, navigation }: any) => {
       <MarketTradeModal
         visible={marketTradeRight}
         setVisible={setMarketTradeRight}
+        user_id={route?.params?.user_id}
       />
 
       <View style={styles.defaultBcg}>
@@ -204,7 +211,7 @@ const OverViewScreen = ({ route, navigation }: any) => {
         </Text>
       </View>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.defaultBcg}
         onPress={() =>
           navigation.navigate("GroupQuantityScreen", {
@@ -215,7 +222,7 @@ const OverViewScreen = ({ route, navigation }: any) => {
       >
         <Text style={styles.defaultText}>Group Quantity Settings</Text>
         <AntDesign name="right" size={20} color="black" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         style={styles.defaultBcg}
@@ -243,7 +250,7 @@ const OverViewScreen = ({ route, navigation }: any) => {
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.defaultBcg}
         onPress={() =>
           navigation.navigate("SharingDetailsScreen", route?.params)
@@ -251,7 +258,7 @@ const OverViewScreen = ({ route, navigation }: any) => {
       >
         <Text style={styles.defaultText}>Sharing Details</Text>
         <AntDesign name="right" size={20} color="black" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <TouchableOpacity
         style={styles.defaultBcg}

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addNewUserService, permissionToggleApi, userAccountLimitCreated } from "../../store/Services/User";
+import { addNewUserService, editUserCase, permissionToggleApi, updateAdminTraderight, updateMarketTrade, userAccountLimitCreated } from "../../store/Services/User";
 
 
 export const useAddNewUserService = () => {
@@ -13,3 +13,15 @@ export const usePermissionToggleApi = () => {
 export const useUserAccountLimitCreated = () => {
     return useMutation((payload) => userAccountLimitCreated(payload));
 };
+export const useUpdateAdminTraderight = () => {
+    return useMutation((payload) => updateAdminTraderight(payload));
+};
+
+export const useUpdateMarketTrade = () => {
+    return useMutation((payload) => updateMarketTrade(payload));
+};
+
+export const useEditUserCase = () => {
+    return useMutation((payload) => editUserCase(payload));
+};
+

@@ -13,6 +13,8 @@ import CheckBoxComponent from "../../../ReUseComponents/CheckBoxComponent";
 import ToggleBtnComponent from "../../../ReUseComponents/ToggleBtnComponent";
 import CustomButton from "../../../ReUseComponents/CustomButton";
 import { useGetAdminTraderight } from "../../../../hooks/User/query";
+import { useUpdateAdminTraderight } from "../../../../hooks/User/mutation";
+import Toast from "react-native-toast-message";
 
 const { height, width } = Dimensions.get("window");
 
@@ -41,6 +43,32 @@ const AdminRightModal = ({ visible, setVisible, navigation, user_id }: any) => {
       execute_pending_trade: getApiCall?.data?.data?.execute_pending_order,
     });
   }, [getApiCall?.data]);
+
+  const saveApiHandler: any = useUpdateAdminTraderight();
+  const saveBtnHandler = () => {
+    saveApiHandler
+      ?.mutateAsync({
+        body: {
+          add_order: checkBoxData.add_order,
+          delete_trade: checkBoxData.delete_trade,
+          execute_pending_order: checkBoxData.execute_pending_trade,
+          user_rights: downUserToggle,
+        },
+        query: {
+          user_id,
+        },
+      })
+      .then((res: any) => {
+        setVisible(false);
+        return Toast.show({
+          type: "success",
+          text1: res.message,
+        });
+      })
+      .catch((err: any) => {
+        console.log("err", err);
+      });
+  };
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <TouchableOpacity
@@ -109,7 +137,7 @@ const AdminRightModal = ({ visible, setVisible, navigation, user_id }: any) => {
           <View style={styles.btnContainer}>
             <CustomButton
               title="Save"
-              onPress={() => {}}
+              onPress={saveBtnHandler}
               extraStyle={{ marginVertical: 30 }}
               style={styles.saveBtn}
             />

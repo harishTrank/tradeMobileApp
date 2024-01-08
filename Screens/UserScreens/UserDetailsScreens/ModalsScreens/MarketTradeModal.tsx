@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   TouchableOpacity,
@@ -11,11 +11,44 @@ import theme from "../../../../utils/theme";
 import { Entypo } from "@expo/vector-icons";
 import ToggleBtnComponent from "../../../ReUseComponents/ToggleBtnComponent";
 import CustomButton from "../../../ReUseComponents/CustomButton";
+import { useGetMarketTrade } from "../../../../hooks/User/query";
+import { useUpdateMarketTrade } from "../../../../hooks/User/mutation";
+import Toast from "react-native-toast-message";
 
 const { height, width } = Dimensions.get("window");
 
-const MarketTradeModal = ({ visible, setVisible }: any) => {
+const MarketTradeModal = ({ visible, setVisible, user_id }: any) => {
   const [downUserToggle, setDownUserToggle]: any = useState(false);
+  const getAPiReponse: any = useGetMarketTrade({
+    query: {
+      user_id,
+    },
+  });
+
+  useEffect(() => {
+    setDownUserToggle(getAPiReponse?.data?.data?.trade_right);
+  }, [getAPiReponse?.data]);
+
+  const saveApiCall: any = useUpdateMarketTrade();
+  const saveBtnHandler = () => {
+    saveApiCall
+      ?.mutateAsync({
+        body: {
+          trade_right: downUserToggle,
+        },
+        query: {
+          id: user_id,
+        },
+      })
+      .then((res: any) => {
+        console.log("res", res);
+        setVisible(false);
+        return Toast.show({
+          type: "success",
+          text1: res.message,
+        });
+      });
+  };
   return (
     <Modal animationType="slide" transparent={true} visible={visible}>
       <TouchableOpacity
@@ -46,7 +79,7 @@ const MarketTradeModal = ({ visible, setVisible }: any) => {
           <View style={styles.btnContainer}>
             <CustomButton
               title="Save"
-              onPress={() => {}}
+              onPress={saveBtnHandler}
               extraStyle={{ marginVertical: 30 }}
               style={styles.saveBtn}
             />

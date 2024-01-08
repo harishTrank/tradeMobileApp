@@ -89,3 +89,30 @@ export const getAdminTraderight = ({ query }: any) =>
     uriEndPoint: userEndpoints.getAdminTraderight.v1,
     query,
   });
+
+export const updateAdminTraderight = ({ query, body }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.updateAdminTraderight.v1,
+    query,
+    body,
+  });
+
+export const getMarketTrade = ({ query }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.getMarketTrade.v1,
+    query,
+  });
+
+export const updateMarketTrade = ({ query, body }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.updateMarketTrade.v1,
+    query,
+    body,
+  });
+
+export const editUserCase = ({ query, body }: any) =>
+  callApi({
+    uriEndPoint: userEndpoints.editUserCase.v1,
+    query,
+    body,
+  });

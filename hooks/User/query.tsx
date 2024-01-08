@@ -3,6 +3,7 @@ import {
   accountSummary,
   accountSummaryCredit,
   getAdminTraderight,
+  getMarketTrade,
   getMasterChildApi,
   positionHeaderApi,
   searchUserList,
@@ -48,3 +49,6 @@ export const useUserAccountLimit = (payload: any) =>
 
 export const useGetAdminTraderight = (payload: any) =>
   useQuery(["getAdminTraderight", payload], () => getAdminTraderight(payload));
+
+export const useGetMarketTrade = (payload: any) =>
+  useQuery(["getMarketTrade", payload], () => getMarketTrade(payload));
