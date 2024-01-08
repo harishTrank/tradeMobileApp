@@ -215,7 +215,15 @@ const OverViewScreen = ({ route, navigation }: any) => {
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.defaultBcg}>
+      <TouchableOpacity
+        style={styles.defaultBcg}
+        onPress={() =>
+          navigation.navigate("BrkSettingScreen", {
+            ...route?.params,
+            exchange: userDetailsApi?.data?.data?.exchange,
+          })
+        }
+      >
         <Text style={styles.defaultText}>Brokerage Settings</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>

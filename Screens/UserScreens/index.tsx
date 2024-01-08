@@ -38,6 +38,7 @@ import SharingDetailsScreen from "./SharingDetailsScreen";
 import GroupQuantityScreen from "./GroupQuantityScreen";
 import ViewGroupQuantityScreen from "./ViewGroupQuantityScreen";
 import TradeMarginScreen from "./TradeMarginScreen";
+import BrkSettingScreen from "./BrkSettingScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -132,6 +133,8 @@ const UserScreens = () => {
         component={ViewGroupQuantityScreen}
       />
       <Stack.Screen name="TradeMarginScreen" component={TradeMarginScreen} />
+      <Stack.Screen name="BrkSettingScreen" component={BrkSettingScreen} />
+      
     </Stack.Navigator>
   );
 };
