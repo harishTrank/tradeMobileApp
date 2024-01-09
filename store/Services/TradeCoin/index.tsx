@@ -53,3 +53,27 @@ export const getParticularCoin = ({ pathParams }: any) =>
     uriEndPoint: tradeCoinEndpoints.getParticularCoin.v1,
     pathParams,
   });
+
+export const getBrkSettings = ({ query }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.getBrkSettings.v1,
+    query,
+  });
+
+export const postBrkSettings = ({ body }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.postBrkSettings.v1,
+    body,
+  });
+
+export const getTradeMarginSettings = ({ query }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.getTradeMarginSettings.v1,
+    query,
+  });
+
+export const postTradeMarginSettings = ({ body }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.postTradeMarginSettings.v1,
+    body,
+  });

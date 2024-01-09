@@ -9,6 +9,7 @@ import { currentUserData } from "../../../JotaiStore";
 import { scriptQuantity } from "../../../store/Services/User";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const RowElements = ({
   first,
@@ -82,22 +83,28 @@ const ScriptQuantityScreen = ({ navigation }: any) => {
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [currentResponse, setCurrentResponse]: any = useState([]);
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
+  const [loading, setLoading]: any = useState(false);
 
   const SubmitBtnHandler = () => {
     if (exchangeValue !== "") {
+      setLoading(true);
       scriptQuantity({
         query: {
           searchInput: exchangeValue,
           user_id: userDropDownVal,
         },
-      }).then((res: any) => {
-        setCurrentResponse(res.response);
-      });
+      })
+        .then((res: any) => {
+          setCurrentResponse(res.response);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
     }
   };
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Script Quantity"} />
+      <FullScreenLoader loading={loading} />
       <View style={styles.mainBox}>
         <DropDownComponent
           data={currentUser?.exchange?.map((item: any) => {
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
   },
   boxStyle: {
     width: 100,
-    height: 50,
+    height: 40,
     padding: 10,
     borderWidth: 0.5,
     borderColor: theme.colors.lightBackground,

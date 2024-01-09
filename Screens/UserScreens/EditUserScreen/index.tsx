@@ -297,7 +297,7 @@ const EditUserScreen = ({ navigation, route }: any) => {
 
           <SmallBtnComponent
             style={{ margin: 10 }}
-            title={"CREATE"}
+            title={"UPDATE"}
             onPress={createUserHandler}
           />
         </View>

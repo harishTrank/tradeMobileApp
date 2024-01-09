@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import {
   View,
@@ -13,6 +13,11 @@ import DropDownComponent from "../../ReUseComponents/DropDownComponent";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import { TextInput } from "react-native-paper";
 import CheckBoxComponent from "../../ReUseComponents/CheckBoxComponent";
+import { getBrkSettings } from "../../../store/Services/TradeCoin";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import { usePostBrkSettings } from "../../../hooks/TradeCoin/mutation";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const { width } = Dimensions.get("window");
 
@@ -45,11 +50,34 @@ const SelectOptionComponent = ({
   );
 };
 
-const RowElement = ({ second, third }: any) => {
+const RowElement = ({
+  second,
+  third,
+  setListData,
+  listData,
+  checkBox,
+}: any) => {
+  const clickCheckBox = (val: any) => {
+    if (second === "Script Name" && listData && listData.length > 0) {
+      setListData((oldValue: any) =>
+        oldValue.map((mapItem: any) => {
+          return { ...mapItem, checkBox: val };
+        })
+      );
+    } else {
+      setListData((oldValue: any) =>
+        oldValue.map((mapItem: any) => {
+          return mapItem.identifier !== second.replaceAll(" ", "_")
+            ? mapItem
+            : { ...mapItem, checkBox: val };
+        })
+      );
+    }
+  };
   return (
     <View style={styles.rowElementStyle}>
       <View style={[styles.box, { flex: 1 }]}>
-        <CheckBoxComponent />
+        <CheckBoxComponent value={checkBox} setValue={clickCheckBox} />
       </View>
       <View
         style={[
@@ -60,7 +88,9 @@ const RowElement = ({ second, third }: any) => {
         <Text style={styles.defaultText}>{second}</Text>
       </View>
       <View style={[styles.box, { flex: 2 }]}>
-        <Text style={styles.defaultText}>{third}</Text>
+        <Text style={styles.defaultText}>
+          {third === "Brk" ? third : Number(third).toFixed(1)}
+        </Text>
       </View>
     </View>
   );
@@ -71,11 +101,90 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
     useState("TURNOVER WISE");
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [amountVal, setAmountVal]: any = useState("");
+  const [listData, setListData]: any = useState([]);
+  const [loading, setLoading]: any = useState(false);
+  const updateBrkSettings: any = usePostBrkSettings();
+
+  const clearBtnHandler = () => {
+    setListData([]);
+    setExchangeValue("");
+    setAmountVal("");
+  };
+
+  useEffect(() => {
+    if (exchangeValue && exchangeValue != "") {
+      setLoading(true);
+      getBrkSettings({
+        query: {
+          user_id: route.params?.user_id,
+          ex_change: exchangeValue,
+        },
+      })
+        .then((res: any) => {
+          setListData(res.response);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [exchangeValue]);
+
+  const applyBtnHandler = () => {
+    if (amountVal === "") {
+      return Toast.show({
+        type: "error",
+        text1: "Amount is required.",
+      });
+    } else {
+      const currentKey =
+        currentSelection === "TURNOVER WISE" ? "turnover_brk" : "lot_brk";
+      setListData((oldValue: any) => {
+        return oldValue.map((mapItem: any) =>
+          mapItem?.checkBox ? { ...mapItem, [currentKey]: amountVal } : mapItem
+        );
+      });
+    }
+  };
+
+  const updateBtnHandler = () => {
+    if (
+      listData.length === 0 &&
+      listData?.filter((filterItem: any) => filterItem.checkBox)?.length === 0
+    ) {
+      return Toast.show({
+        type: "error",
+        text1: "Nothing to update.",
+      });
+    } else {
+      setLoading(true);
+      updateBrkSettings
+        ?.mutateAsync({
+          body: {
+            brk_type: currentSelection,
+            amount: amountVal,
+            object_list: listData
+              ?.filter((filterItem: any) => filterItem.checkBox)
+              ?.map((mapItem: any) => {
+                return mapItem.id;
+              }),
+          },
+        })
+        .then((res: any) => {
+          setLoading(false);
+          return Toast.show({
+            type: "success",
+            text1: res?.message,
+          });
+        })
+        .catch(() => setLoading(false));
+    }
+  };
   return (
     <View style={styles.screen}>
       <BasicHeader title="Brk Setting" navigation={navigation} />
+      <FullScreenLoader loading={loading} />
       <FlatList
-        data={[1, 2]}
+        data={listData}
+        style={{ marginBottom: useSafeAreaInsets().bottom + 10 }}
         ListHeaderComponent={
           <>
             <View style={styles.headerMainBox}>
@@ -105,7 +214,7 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
                 />
                 <SmallBtnComponent
                   title="Clear"
-                  onPress={() => console.log("clear")}
+                  onPress={clearBtnHandler}
                   style={styles.clearBtn}
                   textColor={theme.colors.black}
                   fontStyle={theme.font.fontMedium}
@@ -118,13 +227,15 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
                   theme={{ roundness: 5 }}
                   value={amountVal}
                   mode="outlined"
-                  onChangeText={setAmountVal}
+                  onChangeText={(val: any) =>
+                    setAmountVal(val.replaceAll("-", ""))
+                  }
                   style={styles.amountInput}
                   keyboardType="numeric"
                 />
                 <SmallBtnComponent
                   title="Apply"
-                  onPress={() => console.log("Apply")}
+                  onPress={applyBtnHandler}
                   fontStyle={theme.font.fontMedium}
                   style={[
                     styles.clearBtn,
@@ -133,20 +244,34 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
                 />
                 <SmallBtnComponent
                   title="Update"
-                  onPress={() => console.log("Update")}
+                  onPress={updateBtnHandler}
                   style={styles.clearBtn}
                   fontStyle={theme.font.fontMedium}
                   textColor={theme.colors.black}
                 />
               </View>
             </View>
-            <RowElement second="Script Name" third="Brk" />
+            <RowElement
+              second="Script Name"
+              third="Brk"
+              listData={listData}
+              setListData={setListData}
+            />
           </>
         }
         showsVerticalScrollIndicator={false}
-        keyExtractor={(item: any) => item}
+        keyExtractor={(item: any) => `${item.id}`}
         renderItem={({ item }: any) => (
-          <RowElement second="AARTIIND" third="10.0" />
+          <RowElement
+            second={item?.identifier}
+            setListData={setListData}
+            checkBox={item?.checkBox}
+            third={
+              currentSelection === "TURNOVER WISE"
+                ? item?.turnover_brk
+                : item?.lot_brk
+            }
+          />
         )}
       />
     </View>

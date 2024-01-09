@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -66,6 +66,12 @@ const UserListScreen = ({ navigation, route }: any) => {
     setBtnHitSearchFilter(stateFilter);
     userListApiHandler.refetch();
   };
+
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      userListApiHandler?.refetch();
+    });
+  }, [navigation]);
 
   const restartHandler = () => {
     setStateFilter({
