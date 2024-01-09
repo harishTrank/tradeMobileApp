@@ -77,3 +77,9 @@ export const postTradeMarginSettings = ({ body }: any) =>
     uriEndPoint: tradeCoinEndpoints.postTradeMarginSettings.v1,
     body,
   });
+
+export const postAllTradeMarginSettings = ({ body }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.postAllTradeMarginSettings.v1,
+    body,
+  });

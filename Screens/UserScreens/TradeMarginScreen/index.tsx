@@ -7,7 +7,10 @@ import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
 import { TextInput } from "react-native-paper";
 import CheckBoxComponent from "../../ReUseComponents/CheckBoxComponent";
 import { getTradeMarginSettings } from "../../../store/Services/TradeCoin";
-import { usePostTradeMarginSettings } from "../../../hooks/TradeCoin/mutation";
+import {
+  usePostAllTradeMarginSettings,
+  usePostTradeMarginSettings,
+} from "../../../hooks/TradeCoin/mutation";
 import Toast from "react-native-toast-message";
 import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
@@ -71,6 +74,7 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
   const [listData, setListData]: any = useState([]);
   const [loading, setLoading]: any = useState(false);
   const updateSingleApiCall: any = usePostTradeMarginSettings();
+  const updateAllApiCall: any = usePostAllTradeMarginSettings();
 
   useEffect(() => {
     if (exchangeValue && exchangeValue != "") {
@@ -153,6 +157,49 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
         .catch(() => setLoading(false));
     }
   };
+
+  const updateAllBtnHandler = () => {
+    if (
+      listData.length === 0 &&
+      listData?.filter((filterItem: any) => filterItem.checkBox)?.length === 0
+    ) {
+      return Toast.show({
+        type: "error",
+        text1: "Nothing to update.",
+      });
+    } else if (exchangeValue?.toUpperCase() === "NSE" && amountVal > 100) {
+      return Toast.show({
+        type: "error",
+        text1: "Percentage out of range.",
+      });
+    } else {
+      setLoading(true);
+      updateAllApiCall
+        ?.mutateAsync({
+          body: {
+            exchange: exchangeValue?.toUpperCase(),
+            amount: amountVal,
+            identifier_list: listData
+              ?.filter((filterItem: any) => filterItem.checkBox)
+              ?.map((mapItem: any) => {
+                return mapItem.identifier;
+              }),
+          },
+        })
+        .then((res: any) => {
+          setLoading(false);
+          setTimeout(() => {
+            navigation.goBack();
+          }, 2000);
+          return Toast.show({
+            type: "success",
+            text1: res?.message,
+          });
+        })
+        .catch(() => setLoading(false));
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title="Trade Margin Setting" />
@@ -215,7 +262,7 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
             </View>
             <SmallBtnComponent
               title="Update To All Users"
-              onPress={() => console.log("Update")}
+              onPress={updateAllBtnHandler}
               style={styles.updateAll}
               fontStyle={theme.font.fontRegular}
               textColor={theme.colors.black}

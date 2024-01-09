@@ -88,6 +88,7 @@ export const ListItemCard = ({
             {" "}
             {isNaN(item.quantity) ? "" : Math.abs(item.quantity)}{" "}
             {item.action || ""}
+            {`  ${item.trade_type?.toUpperCase()}`}
           </Text>
         </Text>
         <Text
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
   itemText: {
     ...theme.font.fontSemiBold,
     color: theme.colors.black,
-    // fontSize: 13,
+    fontSize: 13,
   },
   emptyStyleContainer: {
     height: height * 0.6,

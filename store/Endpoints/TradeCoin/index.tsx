@@ -101,4 +101,11 @@ export const tradeCoinEndpoints = {
       uri: "/trademargin-setting-api/",
     },
   },
+  postAllTradeMarginSettings: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/trademargin-all-setting-api/",
+    },
+  },
 };
