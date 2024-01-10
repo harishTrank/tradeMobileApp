@@ -19,32 +19,30 @@ const { width } = Dimensions.get("window");
 const RowElement = ({
   second,
   third,
-  listData,
   setListData,
   checkBox,
   exchangeValue,
+  selectAll,
+  setSelectAll,
 }: any) => {
   const clickCheckBox = (val: any) => {
-    if (second === "Script Name" && listData && listData.length > 0) {
-      setListData((oldValue: any) =>
-        oldValue.map((mapItem: any) => {
-          return { ...mapItem, checkBox: val };
-        })
-      );
-    } else {
-      setListData((oldValue: any) =>
-        oldValue.map((mapItem: any) => {
-          return mapItem.identifier !== second.replaceAll(" ", "_")
-            ? mapItem
-            : { ...mapItem, checkBox: val };
-        })
-      );
-    }
+    setListData((oldValue: any) =>
+      oldValue.map((mapItem: any) => {
+        return mapItem.identifier !== second.replaceAll(" ", "_")
+          ? mapItem
+          : { ...mapItem, checkBox: val };
+      })
+    );
   };
   return (
     <View style={styles.rowElementStyle}>
       <View style={[styles.box, { flex: 1 }]}>
-        <CheckBoxComponent value={checkBox} setValue={clickCheckBox} />
+        <CheckBoxComponent
+          value={second === "Script Name" ? selectAll : checkBox}
+          setValue={(val: boolean) =>
+            second === "Script Name" ? setSelectAll(val) : clickCheckBox(val)
+          }
+        />
       </View>
       <View
         style={[
@@ -75,6 +73,15 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
   const [loading, setLoading]: any = useState(false);
   const updateSingleApiCall: any = usePostTradeMarginSettings();
   const updateAllApiCall: any = usePostAllTradeMarginSettings();
+  const [selectAll, setSelectAll]: any = useState(false);
+
+  useEffect(() => {
+    setListData((oldValue: any) =>
+      oldValue.map((mapItem: any) => {
+        return { ...mapItem, checkBox: selectAll };
+      })
+    );
+  }, [selectAll]);
 
   useEffect(() => {
     if (exchangeValue && exchangeValue != "") {
@@ -134,8 +141,7 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
       updateSingleApiCall
         ?.mutateAsync({
           body: {
-            update_type:
-              exchangeValue?.toUpperCase() === "NSE" ? "PERCENTAGE" : "AMOUNT",
+            exchange: exchangeValue?.toUpperCase(),
             amount: amountVal,
             object_list: listData
               ?.filter((filterItem: any) => filterItem.checkBox)
@@ -273,6 +279,8 @@ const TradeMarginScreen = ({ navigation, route }: any) => {
               listData={listData}
               setListData={setListData}
               exchangeValue={exchangeValue}
+              selectAll={selectAll}
+              setSelectAll={setSelectAll}
             />
           </>
         }

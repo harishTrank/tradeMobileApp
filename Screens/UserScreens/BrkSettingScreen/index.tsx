@@ -54,30 +54,28 @@ const RowElement = ({
   second,
   third,
   setListData,
-  listData,
   checkBox,
+  selectAll,
+  setSelectAll,
 }: any) => {
   const clickCheckBox = (val: any) => {
-    if (second === "Script Name" && listData && listData.length > 0) {
-      setListData((oldValue: any) =>
-        oldValue.map((mapItem: any) => {
-          return { ...mapItem, checkBox: val };
-        })
-      );
-    } else {
-      setListData((oldValue: any) =>
-        oldValue.map((mapItem: any) => {
-          return mapItem.identifier !== second.replaceAll(" ", "_")
-            ? mapItem
-            : { ...mapItem, checkBox: val };
-        })
-      );
-    }
+    setListData((oldValue: any) =>
+      oldValue.map((mapItem: any) => {
+        return mapItem.identifier !== second.replaceAll(" ", "_")
+          ? mapItem
+          : { ...mapItem, checkBox: val };
+      })
+    );
   };
   return (
     <View style={styles.rowElementStyle}>
       <View style={[styles.box, { flex: 1 }]}>
-        <CheckBoxComponent value={checkBox} setValue={clickCheckBox} />
+        <CheckBoxComponent
+          value={second === "Script Name" ? selectAll : checkBox}
+          setValue={(val: boolean) =>
+            second === "Script Name" ? setSelectAll(val) : clickCheckBox(val)
+          }
+        />
       </View>
       <View
         style={[
@@ -100,6 +98,7 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
   const [currentSelection, setCurrentSelection]: any =
     useState("TURNOVER WISE");
   const [exchangeValue, setExchangeValue]: any = useState("");
+  const [selectAll, setSelectAll]: any = useState(false);
   const [amountVal, setAmountVal]: any = useState("");
   const [listData, setListData]: any = useState([]);
   const [loading, setLoading]: any = useState(false);
@@ -110,6 +109,14 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
     setExchangeValue("");
     setAmountVal("");
   };
+
+  useEffect(() => {
+    setListData((oldValue: any) =>
+      oldValue.map((mapItem: any) => {
+        return { ...mapItem, checkBox: selectAll };
+      })
+    );
+  }, [selectAll]);
 
   useEffect(() => {
     if (exchangeValue && exchangeValue != "") {
@@ -256,6 +263,8 @@ const BrkSettingScreen = ({ navigation, route }: any) => {
               third="Brk"
               listData={listData}
               setListData={setListData}
+              selectAll={selectAll}
+              setSelectAll={setSelectAll}
             />
           </>
         }
