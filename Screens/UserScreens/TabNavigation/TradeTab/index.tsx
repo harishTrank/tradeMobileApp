@@ -149,7 +149,7 @@ export const TradeCustomTab = ({
           setParticularCoinHistory(res);
           viewModalizeRef.current?.open();
         })
-        .catch((err: any) => setLoading(false));
+        .catch(() => setLoading(false));
     }
   }, [selectTradeId]);
 

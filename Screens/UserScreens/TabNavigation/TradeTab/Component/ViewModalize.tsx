@@ -14,6 +14,7 @@ const ViewModalize = () => {
     buy_sell_user__user_name: particularCoinHistory?.user,
     coin_name: particularCoinHistory?.response?.coin_name,
     created_at: particularCoinHistory?.response?.updated_at,
+    trade_type: particularCoinHistory?.response?.trade_type,
   };
 
   return (
