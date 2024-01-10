@@ -204,6 +204,7 @@ const CreateNewUsersScreen = ({ navigation }: any) => {
                     key={index}
                     exchangeAllowance={exchangeAllowance}
                     setExchangeAllowance={setExchangeAllowance}
+                    setTradeLimit={setTradeLimit}
                     type={mapItem.toLowerCase()}
                   />
                 );

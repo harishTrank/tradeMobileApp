@@ -22,13 +22,7 @@ const RowElements = ({
   return (
     <View style={styles.rowStyle}>
       <View style={[styles.boxStyle, { width: 120 }]}>
-        <Text style={styles.boxText}>
-          {first === "Symbol"
-            ? first
-            : exchangeValue === "NSE"
-            ? first
-            : first.split("_")[1]}
-        </Text>
+        <Text style={styles.boxText}>{first}</Text>
       </View>
       <View style={styles.boxStyle}>
         <Text

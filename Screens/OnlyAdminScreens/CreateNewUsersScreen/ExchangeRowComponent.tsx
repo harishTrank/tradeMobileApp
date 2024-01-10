@@ -9,8 +9,9 @@ const ExchangeRowComponent = ({
   exchangeAllowance,
   type,
   setExchangeAllowance,
+  setTradeLimit,
 }: any) => {
-  const exchangeAllowanceHandler = (key: any, type: any) => {
+  const exchangeAllowanceHandler = (key: any, type: any, val: boolean) => {
     setExchangeAllowance((oldValue: any) => {
       return type === "first"
         ? {
@@ -37,27 +38,36 @@ const ExchangeRowComponent = ({
             },
           };
     });
+    setTradeLimit((oldValue: any) => {
+      return { ...oldValue, ...{ [key]: val } };
+    });
   };
   return (
     <View style={styles.tableRow}>
       <View style={[styles.center, { flexDirection: "row" }]}>
         <CheckBoxComponent
           value={exchangeAllowance[type].first}
-          setValue={() => exchangeAllowanceHandler(type, "first")}
+          setValue={(val: boolean) =>
+            exchangeAllowanceHandler(type, "first", val)
+          }
         />
         <Text style={styles.exchangeRowText}>{type.toUpperCase()}</Text>
       </View>
       <View style={styles.centerSecond}>
         <CheckBoxComponent
           value={exchangeAllowance[type].second}
-          setValue={() => exchangeAllowanceHandler(type, "second")}
+          setValue={(val: boolean) =>
+            exchangeAllowanceHandler(type, "second", val)
+          }
           disabled={!exchangeAllowance[type].first}
         />
       </View>
       <View style={styles.centerSecond}>
         <CheckBoxComponent
           value={exchangeAllowance[type].third}
-          setValue={() => exchangeAllowanceHandler(type, "third")}
+          setValue={(val: boolean) =>
+            exchangeAllowanceHandler(type, "third", val)
+          }
           disabled={!exchangeAllowance[type].first}
         />
       </View>
