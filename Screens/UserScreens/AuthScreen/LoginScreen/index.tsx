@@ -71,7 +71,14 @@ const LoginScreen = ({ navigation }: any) => {
                 type: "success",
                 text1: response?.responsemessage,
               });
-              navigation.navigate("TabNavigation");
+              if (res?.data?.change_password) {
+                navigation.navigate("ChangePasswordScreen", {
+                  user_id: res?.data?.id,
+                  tab: "TabNavigation",
+                });
+              } else {
+                navigation.navigate("TabNavigation");
+              }
             })
             ?.catch((err: any) => console.log("err", err));
         } else {

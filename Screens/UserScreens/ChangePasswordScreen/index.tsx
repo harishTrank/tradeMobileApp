@@ -42,7 +42,11 @@ const ChangePasswordScreen = ({ navigation, route }: any) => {
       })
       ?.then((res: any) => {
         setLoader(false);
-        navigation.goBack();
+        if (route?.params?.tab) {
+          navigation.navigate(route?.params?.tab);
+        } else {
+          navigation.goBack();
+        }
         return Toast.show({
           type: "success",
           text1: "Password updated successfully.",
@@ -96,7 +100,6 @@ const ChangePasswordScreen = ({ navigation, route }: any) => {
               value={values.newPassword}
               onChangeText={handleChange("newPassword")}
               onBlur={handleBlur("newPassword")}
-              keyboardType="numeric"
               placeholder="Please Enter New Password"
               mode="outlined"
               style={{ marginBottom: 5 }}
