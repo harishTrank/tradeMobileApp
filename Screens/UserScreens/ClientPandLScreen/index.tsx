@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -11,10 +11,23 @@ import { Entypo } from "@expo/vector-icons";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
 import SmallBtnComponent from "../../ReUseComponents/SmallBtnComponent";
+import { usePositionHeaderApi } from "../../../hooks/User/query";
+import { UseGetAllPosition } from "../../../hooks/TradeCoin/query";
+import {
+  getFilterData,
+  getFilterOff,
+  subscribeToFilterData,
+} from "../../../utils/socket/SocketService";
+import { getAllCoinsPosition } from "../../../store/Services/TradeCoin";
 
 const { width } = Dimensions.get("window");
 
-const ClientDropDownComp = ({ dropDownOpen, setDropDownOpen }: any) => {
+const ClientDropDownComp = ({
+  dropDownOpen,
+  setDropDownOpen,
+  positionHeaderApiCall,
+  totalBalance,
+}: any) => {
   return (
     <View style={styles.mainDropContainer}>
       <TouchableOpacity
@@ -23,13 +36,50 @@ const ClientDropDownComp = ({ dropDownOpen, setDropDownOpen }: any) => {
       >
         <View style={styles.totalBox2}>
           {dropDownOpen ? (
-            <Entypo name="chevron-up" size={25} color={theme.colors.danger} />
+            <Entypo
+              name="chevron-up"
+              size={25}
+              color={
+                totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0
+                  ? "green"
+                  : theme.colors.danger
+              }
+            />
           ) : (
-            <Entypo name="chevron-down" size={25} color={theme.colors.danger} />
+            <Entypo
+              name="chevron-down"
+              size={25}
+              color={
+                totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0
+                  ? "green"
+                  : theme.colors.danger
+              }
+            />
           )}
-          <Text style={styles.headerText}>Total</Text>
+          <Text
+            style={[
+              styles.headerText,
+              totalBalance + positionHeaderApiCall?.data?.release_p_and_l >
+                0 && {
+                color: "green",
+              },
+            ]}
+          >
+            Total
+          </Text>
         </View>
-        <Text style={styles.headerText}>0</Text>
+        <Text
+          style={[
+            styles.headerText,
+            totalBalance + positionHeaderApiCall?.data?.release_p_and_l > 0 && {
+              color: "green",
+            },
+          ]}
+        >
+          {(
+            totalBalance + positionHeaderApiCall?.data?.release_p_and_l
+          ).toFixed(2)}
+        </Text>
       </TouchableOpacity>
 
       {dropDownOpen && (
@@ -38,11 +88,13 @@ const ClientDropDownComp = ({ dropDownOpen, setDropDownOpen }: any) => {
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
           >
             <Text style={styles.basicText}>M2M P&L:</Text>
-            <Text style={styles.basicText}>{0}</Text>
+            <Text style={styles.basicText}>{totalBalance?.toFixed(2)}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.basicText}>Realised P&L:</Text>
-            <Text style={styles.basicText}>{0}</Text>
+            <Text style={styles.basicText}>
+              {positionHeaderApiCall?.data?.release_p_and_l?.toFixed(2) || 0}
+            </Text>
           </View>
           <View
             style={[styles.row, { backgroundColor: theme.colors.lightGrey }]}
@@ -58,10 +110,82 @@ const ClientDropDownComp = ({ dropDownOpen, setDropDownOpen }: any) => {
 
 const ClientPandLScreen = ({ navigation }: any) => {
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
+  const [searchFinalValue, setSearchFinalValue]: any = useState("");
   const [dropDownOpen, setDropDownOpen]: any = useState(false);
+  const [totalBalance, setTotalBalance]: any = useState(0);
+  const [socketResponse, setSocketResponse]: any = useState([]);
 
-  const searchBtnHandler = () => {};
-  const resetHandler = () => {};
+  const positionHeaderApiCall: any = usePositionHeaderApi({
+    query: { user_name: searchFinalValue ? searchFinalValue : "" },
+  });
+  const positionListApi: any = UseGetAllPosition({
+    query: { user_name: searchFinalValue ? searchFinalValue : "" },
+  });
+
+  const refreshHandler = () => {
+    positionListApi?.refetch();
+    positionHeaderApiCall?.refetch();
+    getAllCoinsPosition({
+      query: { user_name: searchFinalValue ? searchFinalValue : "" },
+    })
+      .then((res: any) => {
+        getFilterData({ identifier: res.response });
+      })
+      ?.catch((err: any) => console.log("err", err));
+  };
+
+  const updateTotalPrice = () => {
+    const result = positionListApi.data?.response
+      .map((item: any) => {
+        const findSocketVal = socketResponse.find(
+          (findObject: any) =>
+            findObject?.InstrumentIdentifier === item?.identifer
+        );
+        return (
+          item?.total_quantity > 0
+            ? (findSocketVal?.BuyPrice - item?.avg_buy_price) *
+              item?.total_quantity *
+              findSocketVal?.QuotationLot
+            : (item?.avg_sell_price - findSocketVal?.SellPrice) *
+              Math.abs(item?.total_quantity) *
+              findSocketVal?.QuotationLot
+        ).toFixed(2);
+      })
+      .reduce((partialSum: any, a: any) => Number(partialSum) + Number(a), 0);
+    setTotalBalance(isNaN(result) ? 0.0 : result);
+  };
+
+  useEffect(() => {
+    updateTotalPrice();
+  }, [positionListApi.data?.response, socketResponse]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      subscribeToFilterData((data: any) => {
+        setSocketResponse(data);
+      });
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    return navigation.addListener("focus", () => {
+      refreshHandler();
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    return navigation.addListener("blur", () => {
+      getFilterOff();
+    });
+  }, [navigation]);
+
+  const searchBtnHandler = () => {
+    setSearchFinalValue(userDropDownVal);
+  };
+  const resetHandler = () => {
+    setSearchFinalValue("");
+    setUserDropDownVal("");
+  };
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"Client P & L"} />
@@ -94,6 +218,8 @@ const ClientPandLScreen = ({ navigation }: any) => {
       <ClientDropDownComp
         dropDownOpen={dropDownOpen}
         setDropDownOpen={setDropDownOpen}
+        totalBalance={totalBalance}
+        positionHeaderApiCall={positionHeaderApiCall}
       />
     </View>
   );

@@ -10,8 +10,9 @@ import { useAtom } from "jotai";
 import { currentUserData } from "../../../JotaiStore";
 import axios from "axios";
 import { nodeURL } from "../../../utils/socket/SocketService";
+import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const HearderBox = ({ text, value }: any) => {
   return (
@@ -94,6 +95,7 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   const [submitResponse, setSubmitResponse]: any = useState("");
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
   const [m2mListUserWise, setM2MListUserWise]: any = useState([]);
+  const [loading, setLoading]: any = useState(true);
   const [m2mTotal, setm2mTotal]: any = useState(0);
 
   const getweeklyAdmin: any = useGetWeeklyAdmin({
@@ -104,12 +106,14 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   });
 
   const totalReleaseP_L: any = useMemo(() => {
-    return getweeklyAdmin?.data?.release_p_and_l.length !== 1
+    return getweeklyAdmin?.data?.release_p_and_l.length > 1
       ? getweeklyAdmin?.data?.release_p_and_l
           ?.reduce((a: any, b: any) => a.total_amount + b.total_amount)
           ?.toFixed(2) || 0
+      : getweeklyAdmin?.data?.release_p_and_l.length === 0
+      ? 0
       : getweeklyAdmin?.data?.release_p_and_l?.[0]?.total_amount?.toFixed(2) ||
-          0;
+        0;
   }, [getweeklyAdmin?.data?.release_p_and_l]);
 
   const searchBtnHandler = () => {
@@ -121,6 +125,7 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (getweeklyAdmin?.data?.result) {
       axios
         .post(`${nodeURL}/api/tradeCoin/weekly`, {
@@ -153,8 +158,9 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
               ];
             });
           });
+          setLoading(false);
         })
-        .catch((err: any) => console.log("err", err));
+        .catch((err: any) => setLoading(false));
     }
   }, [getweeklyAdmin?.data?.result]);
 
@@ -175,6 +181,7 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"% Weekly Admin"} />
+      <FullScreenLoader loading={loading} />
       <View style={styles.btnStyleBox}>
         <View style={{ width: "45%", marginLeft: 10 }}>
           <UserListDropDown
@@ -224,6 +231,11 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
               )}
             />
           )}
+          ListEmptyComponent={
+            <View style={styles.emptyDataBox}>
+              <Text style={styles.emptyText}>No Record found!</Text>
+            </View>
+          }
         />
       )}
     </View>
@@ -275,6 +287,16 @@ const styles = StyleSheet.create({
   },
   amountStyle: {
     ...theme.font.fontSemiBold,
+  },
+  emptyDataBox: {
+    height: height * 0.55,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyText: {
+    color: theme.colors.danger,
+    ...theme.font.fontMedium,
+    fontSize: 15,
   },
 });
 
