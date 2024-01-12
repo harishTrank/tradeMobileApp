@@ -208,36 +208,34 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
         </>
       </View>
 
-      {getweeklyAdmin?.data && (
-        <FlatList
-          data={getweeklyAdmin?.data?.release_p_and_l || []}
-          ListHeaderComponent={
-            <View style={styles.rowStyle}>
-              <HearderBox text={"Realised P&L"} value={totalReleaseP_L} />
-              <HearderBox text={"M2M P&L"} value={m2mTotal} />
-              <HearderBox
-                text={"Total P&L"}
-                value={(Number(totalReleaseP_L) + Number(m2mTotal)).toFixed(2)}
-              />
-            </View>
-          }
-          style={styles.flatlistStyle}
-          keyExtractor={(item: any) => item.user_summary__id}
-          renderItem={({ item }: any) => (
-            <RenderItem
-              item={item}
-              m2mVal={m2mListUserWise.filter(
-                (f: any) => f?.user_id === item?.user_summary__id
-              )}
+      <FlatList
+        data={getweeklyAdmin?.data?.release_p_and_l || []}
+        ListHeaderComponent={
+          <View style={styles.rowStyle}>
+            <HearderBox text={"Realised P&L"} value={totalReleaseP_L} />
+            <HearderBox text={"M2M P&L"} value={m2mTotal} />
+            <HearderBox
+              text={"Total P&L"}
+              value={(Number(totalReleaseP_L) + Number(m2mTotal)).toFixed(2)}
             />
-          )}
-          ListEmptyComponent={
-            <View style={styles.emptyDataBox}>
-              <Text style={styles.emptyText}>No Record found!</Text>
-            </View>
-          }
-        />
-      )}
+          </View>
+        }
+        style={styles.flatlistStyle}
+        keyExtractor={(item: any) => item.user_summary__id}
+        renderItem={({ item }: any) => (
+          <RenderItem
+            item={item}
+            m2mVal={m2mListUserWise.filter(
+              (f: any) => f?.user_id === item?.user_summary__id
+            )}
+          />
+        )}
+        ListEmptyComponent={
+          <View style={styles.emptyDataBox}>
+            <Text style={styles.emptyText}>No Record found!</Text>
+          </View>
+        }
+      />
     </View>
   );
 };

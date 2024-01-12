@@ -148,11 +148,11 @@ export const boxData = {
       title: "Open Position",
       screenName: "OpenPositionScreen",
     },
-    {
-      icon: <Fontisto name="graphql" size={20} color={theme.colors.black} />,
-      title: "% Open Position",
-      screenName: "PercentOpenPositionScreen",
-    },
+    // {
+    //   icon: <Fontisto name="graphql" size={20} color={theme.colors.black} />,
+    //   title: "% Open Position",
+    //   screenName: "PercentOpenPositionScreen",
+    // },
     {
       icon: (
         <Foundation name="page-delete" size={20} color={theme.colors.black} />

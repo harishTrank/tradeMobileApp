@@ -15,7 +15,7 @@ const PercentOpenPositionScreen = ({ navigation }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [selectScript, setSelectScript]: any = useState("");
-  const userCoinListApi: any = useUserCoinList();
+  const userCoinListApi: any = useUserCoinList({});
   const [userDropDownVal, setUserDropDownVal]: any = useState("");
   const searchBtnHandler = () => {};
   const resetHandler = () => {};

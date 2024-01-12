@@ -20,7 +20,9 @@ const RanderComponent = ({
   user_id,
 }: any) => {
   const modalizerOpen = () => {
-    setTradeCoinSelected(socketResponse);
+    if (setTradeCoinSelected) {
+      setTradeCoinSelected(socketResponse);
+    }
     modalizeRef.current?.open();
   };
 
@@ -41,7 +43,7 @@ const RanderComponent = ({
     <TouchableOpacity
       disabled={user_id ? true : false}
       style={styles.itemContainer}
-      onPress={modalizerOpen}
+      onPress={() => user_id && modalizerOpen()}
     >
       <View style={styles.itemFirstRow}>
         <Text style={styles.itemText}>
