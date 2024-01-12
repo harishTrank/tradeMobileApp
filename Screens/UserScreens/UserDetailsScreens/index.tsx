@@ -49,11 +49,13 @@ const UserDetailsScreens = ({ navigation, route }: any) => {
           component={UserPositionScreen}
           initialParams={{ user_id: route.params?.user_id }}
         />
-        <Tab.Screen
-          name="Userlist"
-          component={UserListScreen}
-          initialParams={{ user_id: route.params?.user_id }}
-        />
+        {route?.params?.user_type === "Master" && (
+          <Tab.Screen
+            name="Userlist"
+            component={UserListScreen}
+            initialParams={{ user_id: route.params?.user_id }}
+          />
+        )}
       </Tab.Navigator>
       <Modalize ref={viewModalizeRef} modalHeight={height * 0.5}>
         <ViewModalize />

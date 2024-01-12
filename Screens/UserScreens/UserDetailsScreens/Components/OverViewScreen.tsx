@@ -23,6 +23,9 @@ const OverViewScreen = ({ route, navigation }: any) => {
   });
   const [statusToggle, setStatusToggle]: any = useState(undefined);
   const [closeOnlyToggle, setCloseOnlyToggle]: any = useState(undefined);
+  const [betToggle, setBetToggle]: any = useState(undefined);
+  const [marginSqToggle, setMarginSqToggle]: any = useState(undefined);
+
   const [accountLimitModal, setAccountLimitModal]: any = useState(false);
   const [adminRightModal, setAdminRightModal]: any = useState(false);
   const [marketTradeRight, setMarketTradeRight]: any = useState(false);
@@ -43,8 +46,12 @@ const OverViewScreen = ({ route, navigation }: any) => {
   };
 
   useEffect(() => {
-    setStatusToggle(userDetailsApi?.data?.data?.status);
-    setCloseOnlyToggle(userDetailsApi?.data?.data?.close_only);
+    if (userDetailsApi?.data?.data) {
+      setStatusToggle(userDetailsApi?.data?.data?.status);
+      setCloseOnlyToggle(userDetailsApi?.data?.data?.close_only);
+      setBetToggle(userDetailsApi?.data?.data?.bet);
+      setMarginSqToggle(userDetailsApi?.data?.data?.margin_sq);
+    }
   }, [userDetailsApi?.data?.data]);
 
   useEffect(() => {
@@ -54,10 +61,22 @@ const OverViewScreen = ({ route, navigation }: any) => {
   }, [statusToggle]);
 
   useEffect(() => {
-    if (statusToggle !== undefined) {
+    if (closeOnlyToggle !== undefined) {
       userPermissionHandler("close_only", closeOnlyToggle);
     }
   }, [closeOnlyToggle]);
+
+  useEffect(() => {
+    if (betToggle !== undefined) {
+      userPermissionHandler("bet", betToggle);
+    }
+  }, [betToggle]);
+
+  useEffect(() => {
+    if (marginSqToggle !== undefined) {
+      userPermissionHandler("margin_sq", marginSqToggle);
+    }
+  }, [marginSqToggle]);
 
   useEffect(() => {
     return navigation.addListener("focus", () => {
@@ -204,11 +223,33 @@ const OverViewScreen = ({ route, navigation }: any) => {
         />
       </View>
 
+      {userDetailsApi?.data?.data?.user_type === "Client" && (
+        <>
+          <View style={styles.defaultBcg}>
+            <Text style={styles.defaultText}>BET</Text>
+            <ToggleBtnComponent value={betToggle} onToggle={setBetToggle} />
+          </View>
+
+          <View style={styles.defaultBcg}>
+            <Text style={styles.defaultText}>Margin Square Off</Text>
+            <ToggleBtnComponent
+              value={marginSqToggle}
+              onToggle={setMarginSqToggle}
+            />
+          </View>
+        </>
+      )}
+
       <View style={styles.defaultBcg}>
         <Text style={styles.defaultText}>Credit</Text>
         <Text style={styles.defaultText}>
           {userDetailsApi?.data?.data?.credit || ""}
         </Text>
+      </View>
+
+      <View style={styles.defaultBcg}>
+        <Text style={styles.defaultText}>Margin Square-off Settings</Text>
+        <Text style={styles.defaultText}>{"100%"}</Text>
       </View>
 
       {/* <TouchableOpacity
@@ -236,6 +277,21 @@ const OverViewScreen = ({ route, navigation }: any) => {
         <Text style={styles.defaultText}>Brokerage Settings</Text>
         <AntDesign name="right" size={20} color="black" />
       </TouchableOpacity>
+
+      {userDetailsApi?.data?.data?.user_type === "Client" && (
+        <TouchableOpacity
+          style={styles.defaultBcg}
+          onPress={() =>
+            navigation.navigate("IntradaySquareOffScreen", {
+              exchange: userDetailsApi?.data?.data?.exchange,
+              user_id: route.params?.user_id,
+            })
+          }
+        >
+          <Text style={styles.defaultText}>Intraday SquareOff</Text>
+          <AntDesign name="right" size={20} color="black" />
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
         style={styles.defaultBcg}
@@ -271,33 +327,33 @@ const OverViewScreen = ({ route, navigation }: any) => {
       </TouchableOpacity>
 
       {userDetailsApi?.data?.data?.user_type === "Master" && (
-        <TouchableOpacity
-          style={styles.defaultBcg}
-          onPress={() => setAccountLimitModal(true)}
-        >
-          <Text style={styles.defaultText}>Account Limit</Text>
-          <AntDesign name="right" size={20} color="black" />
-        </TouchableOpacity>
+        <>
+          <TouchableOpacity
+            style={styles.defaultBcg}
+            onPress={() => setAccountLimitModal(true)}
+          >
+            <Text style={styles.defaultText}>Account Limit</Text>
+            <AntDesign name="right" size={20} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.defaultBcg}
+            onPress={() => setAdminRightModal(true)}
+          >
+            <Text style={styles.defaultText}>Admin Rights</Text>
+            <AntDesign name="right" size={20} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.defaultBcg,
+              { marginBottom: useSafeAreaInsets().bottom + 5 },
+            ]}
+            onPress={() => setMarketTradeRight(true)}
+          >
+            <Text style={styles.defaultText}>Market trade right</Text>
+            <AntDesign name="right" size={20} color="black" />
+          </TouchableOpacity>
+        </>
       )}
-
-      <TouchableOpacity
-        style={styles.defaultBcg}
-        onPress={() => setAdminRightModal(true)}
-      >
-        <Text style={styles.defaultText}>Admin Rights</Text>
-        <AntDesign name="right" size={20} color="black" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[
-          styles.defaultBcg,
-          { marginBottom: useSafeAreaInsets().bottom + 5 },
-        ]}
-        onPress={() => setMarketTradeRight(true)}
-      >
-        <Text style={styles.defaultText}>Market trade right</Text>
-        <AntDesign name="right" size={20} color="black" />
-      </TouchableOpacity>
     </ScrollView>
   );
 };

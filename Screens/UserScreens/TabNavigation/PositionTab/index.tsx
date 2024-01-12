@@ -24,7 +24,10 @@ import {
 } from "../../../../utils/socket/SocketService";
 import { getAllCoinsPosition } from "../../../../store/Services/TradeCoin";
 import { useAtom } from "jotai";
-import { tradeSelectedCoinGlobal } from "../../../../JotaiStore";
+import {
+  currentUserData,
+  tradeSelectedCoinGlobal,
+} from "../../../../JotaiStore";
 import FullScreenLoader from "../../../ReUseComponents/FullScreenLoader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ExtraOptionRow from "./Component/ExtraOptionRow";
@@ -51,6 +54,7 @@ const PositionTab = ({ navigation, user_id }: any) => {
   const [insufficientFlag, setInsufficientFlag]: any = useState(false);
   const messageModalize = useRef<Modalize>(null);
   const modalizeRef = useRef<Modalize>(null);
+  const [currentUserDetails]: any = useAtom(currentUserData);
   const [, setTradeCoinSelected]: any = useAtom(tradeSelectedCoinGlobal);
   const positionHeaderApiCall: any = usePositionHeaderApi({
     query: { user_id: user_id ? user_id : "" },
@@ -206,7 +210,7 @@ const PositionTab = ({ navigation, user_id }: any) => {
         positionHeaderApiCall={positionHeaderApiCall}
       />
 
-      {!user_id ? (
+      {!user_id && currentUserDetails.user_type !== "Master" ? (
         <ExtraOptionRow
           setSearchText={setSearchText}
           searchText={searchText}

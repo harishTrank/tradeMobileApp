@@ -108,4 +108,27 @@ export const tradeCoinEndpoints = {
       uri: "/trademargin-all-setting-api/",
     },
   },
+
+  getIntradaySquareOff: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/intraday-squareoff-check/",
+    },
+  },
+  postIntradaySquareOff: {
+    v1: {
+      ...defaults.methods.POST,
+      ...defaults.versions.v1,
+      uri: "/intraday-squareoff-check/",
+    },
+  },
+
+  getWeeklyAdmin: {
+    v1: {
+      ...defaults.methods.GET,
+      ...defaults.versions.v1,
+      uri: "/weekly-admin-api/",
+    },
+  },
 };

@@ -48,13 +48,13 @@ export const boxData = {
       title: "Generate Bill",
       screenName: "GenerateBillScreen",
     },
-    {
-      icon: (
-        <MaterialIcons name="history" size={20} color={theme.colors.black} />
-      ),
-      title: "Intraday History",
-      screenName: "IntradayHistoryScreen",
-    },
+    // {
+    //   icon: (
+    //     <MaterialIcons name="history" size={20} color={theme.colors.black} />
+    //   ),
+    //   title: "Intraday History",
+    //   screenName: "IntradayHistoryScreen",
+    // },
     {
       icon: (
         <FontAwesome
@@ -100,13 +100,13 @@ export const boxData = {
       title: "Weekly Admin",
       screenName: "WeeklyAdminScreen",
     },
-    {
-      icon: (
-        <MaterialIcons name="history" size={20} color={theme.colors.black} />
-      ),
-      title: "Intraday History",
-      screenName: "IntradayHistoryScreen",
-    },
+    // {
+    //   icon: (
+    //     <MaterialIcons name="history" size={20} color={theme.colors.black} />
+    //   ),
+    //   title: "Intraday History",
+    //   screenName: "IntradayHistoryScreen",
+    // },
     {
       icon: <AntDesign name="barschart" size={20} color={theme.colors.black} />,
       title: "P & L",
@@ -244,13 +244,13 @@ export const boxData = {
       title: "Generate Bill",
       screenName: "GenerateBillScreen",
     },
-    {
-      icon: (
-        <MaterialIcons name="history" size={20} color={theme.colors.black} />
-      ),
-      title: "Intraday History",
-      screenName: "IntradayHistoryScreen",
-    },
+    // {
+    //   icon: (
+    //     <MaterialIcons name="history" size={20} color={theme.colors.black} />
+    //   ),
+    //   title: "Intraday History",
+    //   screenName: "IntradayHistoryScreen",
+    // },
     {
       icon: (
         <FontAwesome

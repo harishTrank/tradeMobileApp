@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { addTradeCoin, buySellTradeCoin, deleteTradeCoin, postAllTradeMarginSettings, postBrkSettings, postTradeMarginSettings } from "../../store/Services/TradeCoin";
+import { addTradeCoin, buySellTradeCoin, deleteTradeCoin, postAllTradeMarginSettings, postBrkSettings, postIntradaySquareOff, postTradeMarginSettings } from "../../store/Services/TradeCoin";
 
 export const useAddTradeCoin = () => {
     return useMutation((payload) => addTradeCoin(payload));
@@ -24,3 +24,8 @@ export const usePostTradeMarginSettings = () => {
 export const usePostAllTradeMarginSettings = () => {
     return useMutation((payload) => postAllTradeMarginSettings(payload));
 };
+
+export const usePostIntradaySquareOff = () => {
+    return useMutation((payload) => postIntradaySquareOff(payload));
+};
+

@@ -96,6 +96,32 @@ const ChangePasswordScreen = ({ navigation, route }: any) => {
         }) => (
           <View style={{ marginHorizontal: 20, marginTop: 10 }}>
             <TextInput
+              label="Current Password"
+              value={values.currentPassword}
+              onChangeText={handleChange("currentPassword")}
+              onBlur={handleBlur("currentPassword")}
+              placeholder="Please Enter Current Password"
+              mode="outlined"
+              style={{ marginBottom: 5 }}
+              secureTextEntry={eyePassword.currentPasswordEye}
+              theme={{ roundness: 10 }}
+              right={
+                <TextInput.Icon
+                  color={theme.colors.secondary}
+                  onPress={() =>
+                    manageEyeHandler({
+                      currentPasswordEye: !eyePassword.currentPasswordEye,
+                    })
+                  }
+                  icon={eyePassword.currentPasswordEye ? "eye-off" : "eye"}
+                />
+              }
+            />
+            {touched.currentPassword && errors.currentPassword && (
+              <Text style={{ color: "red" }}>{errors.currentPassword}</Text>
+            )}
+
+            <TextInput
               label="New Password"
               value={values.newPassword}
               onChangeText={handleChange("newPassword")}
@@ -145,32 +171,6 @@ const ChangePasswordScreen = ({ navigation, route }: any) => {
             />
             {touched.confirmPassword && errors.confirmPassword && (
               <Text style={{ color: "red" }}>{errors.confirmPassword}</Text>
-            )}
-
-            <TextInput
-              label="Current Password"
-              value={values.currentPassword}
-              onChangeText={handleChange("currentPassword")}
-              onBlur={handleBlur("currentPassword")}
-              placeholder="Please Enter Current Password"
-              mode="outlined"
-              style={{ marginBottom: 5 }}
-              secureTextEntry={eyePassword.currentPasswordEye}
-              theme={{ roundness: 10 }}
-              right={
-                <TextInput.Icon
-                  color={theme.colors.secondary}
-                  onPress={() =>
-                    manageEyeHandler({
-                      currentPasswordEye: !eyePassword.currentPasswordEye,
-                    })
-                  }
-                  icon={eyePassword.currentPasswordEye ? "eye-off" : "eye"}
-                />
-              }
-            />
-            {touched.currentPassword && errors.currentPassword && (
-              <Text style={{ color: "red" }}>{errors.currentPassword}</Text>
             )}
 
             <CustomButton

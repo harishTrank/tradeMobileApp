@@ -39,6 +39,7 @@ import GroupQuantityScreen from "./GroupQuantityScreen";
 import ViewGroupQuantityScreen from "./ViewGroupQuantityScreen";
 import TradeMarginScreen from "./TradeMarginScreen";
 import BrkSettingScreen from "./BrkSettingScreen";
+import IntradaySquareOffScreen from "./IntradaySquareOffScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -134,7 +135,10 @@ const UserScreens = () => {
       />
       <Stack.Screen name="TradeMarginScreen" component={TradeMarginScreen} />
       <Stack.Screen name="BrkSettingScreen" component={BrkSettingScreen} />
-      
+      <Stack.Screen
+        name="IntradaySquareOffScreen"
+        component={IntradaySquareOffScreen}
+      />
     </Stack.Navigator>
   );
 };

@@ -18,7 +18,10 @@ const RenderItem = ({ item, navigation }: any) => {
     <TouchableOpacity
       style={styles.itemContainer}
       onPress={() =>
-        navigation.push("UserDetailsScreens", { user_id: item.id })
+        navigation.push("UserDetailsScreens", {
+          user_id: item.id,
+          user_type: item.user_type,
+        })
       }
     >
       <View>

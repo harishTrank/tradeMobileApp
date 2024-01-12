@@ -83,3 +83,22 @@ export const postAllTradeMarginSettings = ({ body }: any) =>
     uriEndPoint: tradeCoinEndpoints.postAllTradeMarginSettings.v1,
     body,
   });
+
+export const getIntradaySquareOff = ({ query }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.getIntradaySquareOff.v1,
+    query,
+  });
+
+export const postIntradaySquareOff = ({ body, query }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.postIntradaySquareOff.v1,
+    body,
+    query,
+  });
+
+export const getWeeklyAdmin = ({ query }: any) =>
+  callApi({
+    uriEndPoint: tradeCoinEndpoints.getWeeklyAdmin.v1,
+    query,
+  });
