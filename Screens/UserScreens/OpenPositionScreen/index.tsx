@@ -174,10 +174,14 @@ const OpenPositionScreen = ({ navigation }: any) => {
           item?.total_quantity > 0
             ? (findSocketVal?.BuyPrice - item?.avg_buy_price) *
               item?.total_quantity *
-              findSocketVal?.QuotationLot
+              (findSocketVal?.QuotationLot > 0
+                ? findSocketVal?.QuotationLot
+                : 1)
             : (item?.avg_sell_price - findSocketVal?.SellPrice) *
               Math.abs(item?.total_quantity) *
-              findSocketVal?.QuotationLot
+              (findSocketVal?.QuotationLot > 0
+                ? findSocketVal?.QuotationLot
+                : 1)
         ).toFixed(2);
       })
       .reduce((partialSum: any, a: any) => Number(partialSum) + Number(a), 0);

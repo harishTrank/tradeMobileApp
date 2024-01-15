@@ -66,9 +66,11 @@ export const ListItemCard = ({
   item,
   viewModalizeRef = null,
   setSelectTradeId,
+  setTabHandler,
 }: any) => {
   const particularObjectPress = () => {
     setSelectTradeId(item?.id);
+    setTabHandler((oldValue: any) => !oldValue);
   };
   return (
     <TouchableOpacity
@@ -134,6 +136,7 @@ export const TradeCustomTab = ({
   const [selectTradeId, setSelectTradeId]: any = useState(0);
   const [, setParticularCoinHistory]: any = useAtom(particularTradeTabCoin);
   const queryClient: any = useQueryClient();
+  const [tabHandler, setTabHandler]: any = useState(false);
 
   useEffect(() => {
     if (selectTradeId !== 0) {
@@ -151,7 +154,7 @@ export const TradeCustomTab = ({
         })
         .catch(() => setLoading(false));
     }
-  }, [selectTradeId]);
+  }, [selectTradeId, tabHandler]);
 
   const [dateRange, setDateRange]: any = useState({
     startDate: "",
@@ -246,6 +249,7 @@ export const TradeCustomTab = ({
             setSelectTradeId={setSelectTradeId}
             viewModalizeRef={viewModalizeRef}
             item={item}
+            setTabHandler={setTabHandler}
           />
         )}
         ListEmptyComponent={
