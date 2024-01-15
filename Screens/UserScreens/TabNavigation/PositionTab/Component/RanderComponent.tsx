@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -31,10 +31,10 @@ const RanderComponent = ({
       item?.total_quantity > 0
         ? (socketResponse?.BuyPrice - item?.avg_buy_price) *
           item?.total_quantity *
-          socketResponse?.QuotationLot
+          (socketResponse?.QuotationLot > 0 ? socketResponse?.QuotationLot : 1)
         : (item?.avg_sell_price - socketResponse?.SellPrice) *
           Math.abs(item?.total_quantity) *
-          socketResponse?.QuotationLot
+          (socketResponse?.QuotationLot > 0 ? socketResponse?.QuotationLot : 1)
     ).toFixed(2);
   };
 
@@ -43,7 +43,7 @@ const RanderComponent = ({
     <TouchableOpacity
       disabled={user_id ? true : false}
       style={styles.itemContainer}
-      onPress={() => user_id && modalizerOpen()}
+      onPress={() => modalizeRef && modalizerOpen()}
     >
       <View style={styles.itemFirstRow}>
         <Text style={styles.itemText}>

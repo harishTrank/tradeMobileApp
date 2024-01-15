@@ -31,10 +31,10 @@ const RenderSquareItem = ({
       item?.total_quantity > 0
         ? (socketResponse?.BuyPrice - item?.avg_buy_price) *
           item?.total_quantity *
-          socketResponse?.QuotationLot
+          (socketResponse?.QuotationLot > 0 ? socketResponse?.QuotationLot : 1)
         : (item?.avg_sell_price - socketResponse?.SellPrice) *
           Math.abs(item?.total_quantity) *
-          socketResponse?.QuotationLot
+          (socketResponse?.QuotationLot > 0 ? socketResponse?.QuotationLot : 1)
     ).toFixed(2);
   };
 
