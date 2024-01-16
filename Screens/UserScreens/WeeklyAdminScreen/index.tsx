@@ -1,5 +1,12 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet, Dimensions, FlatList, Text } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import theme from "../../../utils/theme";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
 import UserListDropDown from "../AccountSummaryScreen/Components/UserListDropDown";
@@ -38,11 +45,16 @@ const RenderItem = ({ item, m2mVal }: any) => {
     m2mVal && m2mVal.length === 0
       ? 0
       : m2mVal.length === 1
-      ? m2mVal?.[0]?.m2mTotal
+      ? m2mVal?.[0]?.m2mTotal?.toFixed(2)
       : m2mVal?.reduce((a: any, b: any) => a?.m2mTotal + b?.m2mTotal)
   )?.toFixed(2);
+  const [openAdminResult, setOpenAdminResult]: any = useState(false);
+
   return (
-    <View style={styles.itemBox}>
+    <TouchableOpacity
+      onPress={() => setOpenAdminResult((oldValue: any) => !oldValue)}
+      style={styles.itemBox}
+    >
       <Text style={styles.userText}>
         {item?.user_summary__user_name}({item?.user_summary__user_type})
       </Text>
@@ -88,7 +100,26 @@ const RenderItem = ({ item, m2mVal }: any) => {
           </Text>
         </View>
       </View>
-    </View>
+
+      {openAdminResult && (
+        <View style={styles.adminBox}>
+          <View>
+            <Text style={styles.adminHeadText}>Admin Profit</Text>
+            <Text style={styles.adminValText}>0.00</Text>
+          </View>
+
+          <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Text style={styles.adminHeadText}>Admin Brk</Text>
+            <Text style={styles.adminValText}>0.0</Text>
+          </View>
+
+          <View style={{ alignItems: "flex-end", justifyContent: "center" }}>
+            <Text style={styles.adminHeadText}>Total Admin Profit</Text>
+            <Text style={styles.adminValText}>0.00</Text>
+          </View>
+        </View>
+      )}
+    </TouchableOpacity>
   );
 };
 
@@ -172,7 +203,7 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
         m2mListUserWise && m2mListUserWise.length === 0
           ? 0
           : m2mListUserWise.length === 1
-          ? m2mListUserWise?.[0]?.m2mTotal
+          ? m2mListUserWise?.[0]?.m2mTotal?.toFixed(2)
           : m2mListUserWise?.reduce(
               (accumulator: number, currentValue: any) =>
                 accumulator + currentValue?.m2mTotal,
@@ -298,6 +329,21 @@ const styles = StyleSheet.create({
     color: theme.colors.danger,
     ...theme.font.fontMedium,
     fontSize: 15,
+  },
+  adminBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  adminHeadText: {
+    ...theme.font.fontSemiBold,
+    fontSize: 13,
+    color: theme.colors.greyText,
+  },
+  adminValText: {
+    ...theme.font.fontSemiBold,
+    fontSize: 13,
+    color: theme.colors.danger,
   },
 });
 

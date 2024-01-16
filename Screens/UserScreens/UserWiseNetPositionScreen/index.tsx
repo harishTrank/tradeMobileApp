@@ -93,7 +93,7 @@ const UserWiseNetPositionScreen = ({ navigation, route }: any) => {
         ).toFixed(2);
       })
       .reduce((partialSum: any, a: any) => Number(partialSum) + Number(a), 0);
-    setTotalBalance(isNaN(result) ? 0.0 : result?.toFixed(2));
+    setTotalBalance(isNaN(result) ? 0.0 : result);
   };
 
   useEffect(() => {

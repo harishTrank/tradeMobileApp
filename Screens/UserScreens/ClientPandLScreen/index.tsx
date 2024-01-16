@@ -287,7 +287,7 @@ const ClientPandLScreen = ({ navigation }: any) => {
             currentM2M && currentM2M.length === 0
               ? 0
               : currentM2M.length === 1
-              ? currentM2M?.[0]?.m2mTotal
+              ? currentM2M?.[0]?.m2mTotal?.toFixed(2)
               : currentM2M?.reduce(
                   (a: any, b: any) => a?.m2mTotal + b?.m2mTotal
                 )
