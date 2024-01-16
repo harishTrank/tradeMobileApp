@@ -6,6 +6,7 @@ import {
   TextInput,
   Text,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import theme from "../../../utils/theme";
 import BasicHeader from "../../ReUseComponents/BasicHeader";
@@ -30,7 +31,7 @@ import FullScreenLoader from "../../ReUseComponents/FullScreenLoader";
 
 const { width, height } = Dimensions.get("window");
 
-const RenderItem = ({ item, socketResponse }: any) => {
+const RenderItem = ({ item, socketResponse, navigation }: any) => {
   const profitLossHandler = () => {
     return (
       item?.total_quantity > 0
@@ -46,7 +47,14 @@ const RenderItem = ({ item, socketResponse }: any) => {
   const finalProfitLoss: any = profitLossHandler();
 
   return (
-    <View style={styles.itemBox}>
+    <TouchableOpacity
+      style={styles.itemBox}
+      onPress={() =>
+        navigation.navigate("UserWiseNetPositionScreen", {
+          coin_name: item?.coin_name,
+        })
+      }
+    >
       <View style={styles.firstRow}>
         <Text style={styles.coinText}>{item?.coin_name || ""}</Text>
         <View style={styles.extraBox}>
@@ -129,7 +137,7 @@ const RenderItem = ({ item, socketResponse }: any) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 const OpenPositionScreen = ({ navigation }: any) => {
@@ -347,6 +355,7 @@ const OpenPositionScreen = ({ navigation }: any) => {
         renderItem={({ item }: any) => (
           <RenderItem
             item={item}
+            navigation={navigation}
             socketResponse={socketResponse.find(
               (findObject: any) =>
                 findObject?.InstrumentIdentifier === item?.identifer

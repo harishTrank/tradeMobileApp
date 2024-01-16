@@ -35,9 +35,11 @@ const HearderBox = ({ text, value }: any) => {
 
 const RenderItem = ({ item, m2mVal }: any) => {
   const m2mFinal: any = Number(
-    m2mVal && m2mVal.length !== 0
-      ? m2mVal?.reduce((a: any, b: any) => a?.m2mTotal + b?.m2mTotal) || 0
-      : 0
+    m2mVal && m2mVal.length === 0
+      ? 0
+      : m2mVal.length === 1
+      ? m2mVal?.[0]?.m2mTotal
+      : m2mVal?.reduce((a: any, b: any) => a?.m2mTotal + b?.m2mTotal)
   )?.toFixed(2);
   return (
     <View style={styles.itemBox}>
@@ -167,17 +169,18 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   useEffect(() => {
     setm2mTotal(
       Number(
-        m2mListUserWise && m2mListUserWise.length !== 0
-          ? m2mListUserWise?.reduce(
+        m2mListUserWise && m2mListUserWise.length === 0
+          ? 0
+          : m2mListUserWise.length === 1
+          ? m2mListUserWise?.[0]?.m2mTotal
+          : m2mListUserWise?.reduce(
               (accumulator: number, currentValue: any) =>
                 accumulator + currentValue?.m2mTotal,
               0
             ) || 0
-          : 0
       )?.toFixed(2)
     );
   }, [m2mListUserWise]);
-
   return (
     <View style={styles.screen}>
       <BasicHeader navigation={navigation} title={"% Weekly Admin"} />

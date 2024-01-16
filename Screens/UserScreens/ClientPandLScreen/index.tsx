@@ -284,11 +284,13 @@ const ClientPandLScreen = ({ navigation }: any) => {
             (f: any) => f?.user_id === item?.user_summary__id
           );
           const m2mFinal: any = Number(
-            currentM2M && currentM2M.length !== 0
-              ? currentM2M?.reduce(
+            currentM2M && currentM2M.length === 0
+              ? 0
+              : currentM2M.length === 1
+              ? currentM2M?.[0]?.m2mTotal
+              : currentM2M?.reduce(
                   (a: any, b: any) => a?.m2mTotal + b?.m2mTotal
-                ) || 0
-              : 0
+                )
           )?.toFixed(2);
           return (
             <View style={styles.itemBox}>

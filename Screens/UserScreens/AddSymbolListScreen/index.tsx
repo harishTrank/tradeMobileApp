@@ -45,6 +45,7 @@ const AddSymbolListScreen = ({ navigation }: any) => {
       screenFocusedCase();
     });
   }, [navigation]);
+
   return (
     <View
       style={[styles.screen, { paddingBottom: useSafeAreaInsets().bottom }]}

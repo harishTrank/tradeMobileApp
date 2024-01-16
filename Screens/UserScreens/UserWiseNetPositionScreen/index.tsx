@@ -31,7 +31,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get("window");
 
-const UserWiseNetPositionScreen = ({ navigation }: any) => {
+const UserWiseNetPositionScreen = ({ navigation, route }: any) => {
   const [currentUser]: any = useAtom(currentUserData);
   const [exchangeValue, setExchangeValue]: any = useState("");
   const [selectScript, setSelectScript]: any = useState("");
@@ -47,6 +47,14 @@ const UserWiseNetPositionScreen = ({ navigation }: any) => {
     script: "",
     user_name: "",
   });
+
+  useEffect(() => {
+    if (route.params?.coin_name) {
+      setSearchBtnHitState((oldVAlue: any) => {
+        return { ...oldVAlue, script: route.params?.coin_name };
+      });
+    }
+  }, [route.params?.coin_name]);
 
   // data manager cases...
   const positionHeaderApiCall: any = usePositionHeaderApi({
@@ -85,7 +93,7 @@ const UserWiseNetPositionScreen = ({ navigation }: any) => {
         ).toFixed(2);
       })
       .reduce((partialSum: any, a: any) => Number(partialSum) + Number(a), 0);
-    setTotalBalance(isNaN(result) ? 0.0 : result);
+    setTotalBalance(isNaN(result) ? 0.0 : result?.toFixed(2));
   };
 
   useEffect(() => {
