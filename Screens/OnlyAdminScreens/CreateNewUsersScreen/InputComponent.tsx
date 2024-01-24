@@ -14,7 +14,8 @@ const InputComponent = ({
     setPersonalDetails((oldValue: any) => {
       return {
         ...oldValue,
-        [currentKey]: text,
+        [currentKey]:
+          currentKey === "userName" ? text.replaceAll(" ", "") : text,
       };
     });
   };

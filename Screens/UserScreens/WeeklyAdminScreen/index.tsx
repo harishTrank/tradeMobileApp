@@ -43,11 +43,12 @@ const HearderBox = ({ text, value }: any) => {
 const RenderItem = ({ item, m2mVal }: any) => {
   const m2mFinal: any = Number(
     m2mVal && m2mVal.length === 0
-      ? 0
+      ? "0.00"
       : m2mVal.length === 1
-      ? m2mVal?.[0]?.m2mTotal?.toFixed(2)
-      : m2mVal?.reduce((a: any, b: any) => a?.m2mTotal + b?.m2mTotal)
+      ? m2mVal[0]?.m2mTotal?.toFixed(2) || 0
+      : m2mVal.reduce((a: any, b: any) => a + (b?.m2mTotal || 0), 0)
   )?.toFixed(2);
+
   const [openAdminResult, setOpenAdminResult]: any = useState(false);
 
   return (
@@ -76,11 +77,14 @@ const RenderItem = ({ item, m2mVal }: any) => {
             style={[
               styles.amountStyle,
               {
-                color: m2mFinal > 0 ? "green" : "red",
+                color:
+                  (isNaN(m2mFinal) ? 0 : Number(m2mFinal)) > 0
+                    ? "green"
+                    : "red",
               },
             ]}
           >
-            {m2mFinal}
+            {isNaN(m2mFinal) ? "0.00" : Number(m2mFinal)}
           </Text>
         </View>
         <View>
@@ -90,13 +94,18 @@ const RenderItem = ({ item, m2mVal }: any) => {
               styles.amountStyle,
               {
                 color:
-                  Number(m2mFinal) + Number(item?.total_amount) > 0
+                  (isNaN(m2mFinal) ? 0 : Number(m2mFinal)) +
+                    Number(item?.total_amount) >
+                  0
                     ? "green"
                     : "red",
               },
             ]}
           >
-            {(Number(m2mFinal) + Number(item?.total_amount)).toFixed(2)}
+            {(
+              (isNaN(m2mFinal) ? 0 : Number(m2mFinal)) +
+              Number(item?.total_amount)
+            ).toFixed(2)}
           </Text>
         </View>
       </View>
@@ -139,14 +148,18 @@ const WeeklyAdminScreen = ({ navigation }: any) => {
   });
 
   const totalReleaseP_L: any = useMemo(() => {
-    return getweeklyAdmin?.data?.release_p_and_l.length > 1
-      ? getweeklyAdmin?.data?.release_p_and_l
-          ?.reduce((a: any, b: any) => a.total_amount + b.total_amount)
-          ?.toFixed(2) || 0
-      : getweeklyAdmin?.data?.release_p_and_l.length === 0
-      ? 0
-      : getweeklyAdmin?.data?.release_p_and_l?.[0]?.total_amount?.toFixed(2) ||
-        0;
+    const releasePAndL = getweeklyAdmin?.data?.release_p_and_l;
+    if (!releasePAndL || releasePAndL.length === 0) {
+      return 0;
+    }
+    if (releasePAndL.length === 1) {
+      return releasePAndL[0]?.total_amount?.toFixed(2) || 0;
+    }
+    const totalAmount = releasePAndL.reduce(
+      (a: any, b: any) => a + (b.total_amount || 0),
+      0
+    );
+    return totalAmount.toFixed(2);
   }, [getweeklyAdmin?.data?.release_p_and_l]);
 
   const searchBtnHandler = () => {
