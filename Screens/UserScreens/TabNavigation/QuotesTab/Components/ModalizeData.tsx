@@ -145,6 +145,8 @@ const ModalizeData = ({
       lot_size: selectedCoinData.QuotationLot,
       stop_loss: currentPrice,
       is_cancel: false,
+      high: selectedCoinData.High,
+      low: selectedCoinData.Low
     };
 
     if (currentButtonState.toUpperCase() === "LIMIT") {

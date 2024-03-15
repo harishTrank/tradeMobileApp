@@ -152,6 +152,8 @@ const PositionTab = ({ navigation, user_id }: any) => {
         ip_address: currentMobileIP,
         order_method: Platform.OS,
         lot_size: socketItem.QuotationLot,
+        high: socketItem.High,
+        low: socketItem.Low
       };
 
       buySellApiCall

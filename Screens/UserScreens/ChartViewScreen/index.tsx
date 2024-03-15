@@ -10,7 +10,7 @@ const ChartViewScreen = ({ route }: any) => {
   );
 
   useEffect(() => {
-    if (route.params?.selectedCoinData.Exchange?.toUpperCase() === "MCX") {
+    if (route.params?.selectedCoinData.Exchange?.toUpperCase() !== "NSE") {
       setCurrentCoin(
         `${
           route.params?.selectedCoinData?.InstrumentIdentifier?.split("_")?.[1]
